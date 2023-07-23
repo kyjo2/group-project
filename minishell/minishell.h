@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/16 16:44:37 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/07/23 00:28:09 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifdef MINISHELL_H
+
 # define MINISHELL_H
 
 # include <stdio.h>
@@ -25,11 +25,12 @@
 # include <readline/history.h>
 # include <signal.h>    //나머지
 #include <termios.h> //ㅌㅓ미널 속성
+
 typedef struct s_list
 {
     void            *data;
     struct s_list   *next;
-}   t_list
+}   t_list;
 
 
 

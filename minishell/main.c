@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/24 16:50:41 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/24 16:57:01 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,17 @@ char **copy_envp(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
-	char *line;
-	t_list *list;
-	struct termios termios_old;
-	char **tmp_envp;
+	char			*line;
+	t_list			*list;
+	t_env			*head;
+	struct termios	termios_old;
+	char			**tmp_envp;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
 	init(argc, argv);
 	tmp_envp = copy_envp(envp);
 	signal_setting();
+	head = find_env(ev);
 	while (1)
 	{
 		line = readline("minishell $ ");

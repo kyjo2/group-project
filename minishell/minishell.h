@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/23 00:28:09 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:57:45 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef
 # define MINISHELL_H
 
 # include <stdio.h>
@@ -24,24 +25,27 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>    //나머지
-#include <termios.h> //ㅌㅓ미널 속성
+# include <termios.h> //ㅌㅓ미널 속성
 
 typedef struct s_list
 {
-    char            **str;
-    int             re_flag;
-    char            **envp;
-    struct s_list   *next;
+	int				ac;
+	char			**av;
+	char			*cmd_check;
+	char			**cmd;
+	int				pipe[2];
+	int				infile;
+	int				outfile;
+	char            **str;
+	int             re_flag;
+	struct s_list   *next;
 }   t_list;
  
- 
-
-
-
-
-
-
-
+typedef	struct	s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}				t_env;
 
 #endif
-

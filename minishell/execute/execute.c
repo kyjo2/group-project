@@ -6,21 +6,21 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/07/24 15:55:44 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/24 16:56:08 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	redir_check(t_info *info, int *i)
+void	redir_check(t_list *list, int *i)
 {
-	if (ft_strncmp(info->av[*i], "<\0", 2))
+	if (ft_strncmp(list->av[*i], "<\0", 2))
 		redir_one();
-	if (ft_strncmp(info->av[*i], ">\0", 2))
+	if (ft_strncmp(list->av[*i], ">\0", 2))
 		redir_two();
-	if (ft_strncmp(info->av[*i], "<<\0", 2))
+	if (ft_strncmp(list->av[*i], "<<\0", 2))
 		redir_three();
-	if (ft_strncmp(info->av[*i], "<<\0", 2))
+	if (ft_strncmp(list->av[*i], "<<\0", 2))
 		redir_four();
 }
 char	*other_cmd(char **path, char *cmd)
@@ -52,43 +52,43 @@ char	*other_cmd(char **path, char *cmd)
 	return (NULL);
 }
 
-int	command_check(t_info *info, int *i)
+int	command_check(t_list *list, int *i)
 {
-	if (ft_strncmp(info->av[*i], "echo\0", 5))
+	if (ft_strncmp(list->av[*i], "echo\0", 5))
 		ft_echo();
-	else if (ft_strncmp(info->av[*i], "cd\0", 3))
+	else if (ft_strncmp(list->av[*i], "cd\0", 3))
 		ft_cd();
-	else if (ft_strncmp(info->av[*i], "pwd\0", 4))
+	else if (ft_strncmp(list->av[*i], "pwd\0", 4))
 		ft_pwd();
-	else if (ft_strncmp(info->av[*i], "export\0", 7))
+	else if (ft_strncmp(list->av[*i], "export\0", 7))
 		ft_export();
-	else if (ft_strncmp(info->av[*i], "unset\0", 6))
+	else if (ft_strncmp(list->av[*i], "unset\0", 6))
 		ft_unset();
-	else if (ft_strncmp(info->av[*i], "env\0", 4))
+	else if (ft_strncmp(list->av[*i], "env\0", 4))
 		ft_env();
-	else if (ft_strncmp(info->av[*i], "exit\0", 5))
+	else if (ft_strncmp(list->av[*i], "exit\0", 5))
 		ft_exit();
 }
 
-int	check_syntax(t_info *info)
+int	check_syntax(t_list *list)
 {
 	int	i;
 
-	while (info->next)
+	while (list->next)
 	{
 		i = 0;
-		while (info->av[i])
+		while (list->av[i])
 		{
-			redir_check(info, &i);
-			command_check(info, &i);
-			envir_check(info->av[i]);
+			redir_check(list, &i);
+			command_check(list, &i);
+			envir_check(list->av[i]);
 			i++;
 		}
-		info = info->next;
+		list = list->next;
 	}
 }
 
-int	execute(t_info *info)
+int	execute(t_list *list)
 {
-	check_syntax(info);
+	check_syntax(list);
 }

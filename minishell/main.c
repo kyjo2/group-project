@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/23 13:41:55 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:50:41 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,6 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <termios.h>
-
-int ft_strcmp(const char *s1, const char *s2)
-{
-	size_t i;
-
-	i = 0;
-	if (!s1 || !s2)
-		return (1);
-	if (s1 == s2)
-		return (0);
-	if (s1[0] == '\0' && s2[0] == '\0')
-		return (0);
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 void check_command(char *line, char **envp)
 {

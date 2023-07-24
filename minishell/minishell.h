@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef
+#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <stdio.h>
@@ -43,6 +43,10 @@ typedef struct s_list
  
 typedef	struct	s_env
 {
+	char			*nameddddd;
+	char			*vsdfdfgrdalue;
+	struct s_env	*nedfgdfgrtxt;
+	char			*akshfghtfhtid;
 	int				hi;
 	char			*naforkome;
 	char			*valdsofkdoue;

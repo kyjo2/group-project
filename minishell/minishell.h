@@ -28,10 +28,13 @@
 
 typedef struct s_list
 {
-    void            *data;
+    char            **str;
+    int             re_flag;
+    char            **envp;
     struct s_list   *next;
 }   t_list;
-
+ 
+ 
 
 
 

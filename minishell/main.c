@@ -58,61 +58,6 @@ void check_command(char *line, char **envp)
 		ft_unset(line);
 }
 
-void parcing(t_list *list, char *line, char **envp)
-{
-	// check 요소 : 파이프라인, 따움표두개, 따움표한개, 쉽표한개,쉼표두개
-	int i;
-
-	i = 0;
-	while (*line)
-	{
-	}
-
-	check_command(line, envp);
-	int i;
-	int start;
-	int pipe_flag;
-	t_cmd *tmp;
-	t_cmd *new;
-	int quote_flag;
-
-	quote_flag = 0;
-	i = 0;
-	start = 0;
-	pipe_flag = 1;
-	while (1) // readline으로 입력받은 line을 모두 하나하나 체크하는 loop입니다.
-	{
-		if ((line[i] == '\"' || line[i] == '\'') && quote_flag == 0) // 파이프가 따옴표 안에 들어가는 경우 끊으면 안됨.
-			quote_flag = 1;
-		else if ((line[i] == '\"' || line[i] == '\'') && quote_flag == 1)
-			quote_flag = 0;
-		if (line[i] == '\0' || (line[i] == '|' && quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
-		{
-			if (line[i] == '|')
-				line[i] = '\0'; // 파이프문자를 null로 바꾸어 split을 용이하게 합니다.
-			else
-				pipe_flag = 0;
-			if ((new = ft_new(&line[start], pipe_flag, envp, start)) == 0)
-				return;
-			if (start == 0)
-			{
-				*cmd_list = new;
-				tmp = *cmd_list;
-			}
-			else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
-			{
-				(*cmd_list)->next = new;
-				*cmd_list = (*cmd_list)->next;
-			}
-			if (pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
-				break;
-			start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
-		}
-		i++;
-	}
-	*cmd_list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
-}
-}
 
 void ft_handler(int signal)
 {
@@ -157,11 +102,6 @@ void init(int argc, char *argv[])
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
-typedef struct s_list
-{
-	void *data;
-	struct s_list *next;
-} t_list;
 
 char **copy_envp(char **envp)
 {
@@ -200,9 +140,10 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0')
 			add_history(line);
 		/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
-		if (*line != '\0' && !ft_whitespace(line)) // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 때		{
+		if (*line != '\0' && !ft_whitespace(line)) // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(list, line, tmp_envp);
+
 		}
 		free(line);
 	}

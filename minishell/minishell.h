@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/24 17:00:45 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/24 17:07:46 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ typedef	struct	s_env
 	char			*nameddddd;
 	char			*vsdfdfgrdalue;
 	struct s_env	*nedfgdfgrtxt;
-	char			*akshfghtfhtid;
+	char			*akshfghtffgdfgdfgdfghtid;
 	int				hi;
 	char			*naforkome;
-	char			*valdsofkdoue;
+	char			*valdsofkfdgdfgfdgdfgdfgdoue;
 	struct s_env	*nexsdfokdsofgt;
 }				t_env;
 

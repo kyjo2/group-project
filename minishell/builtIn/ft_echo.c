@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:00 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/19 19:19:01 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:54:59 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,38 @@
 echo -n dkdkdkdkdk
 echo -nnnnn -n dkdkdkdkdk
 
+int         n_opt_chk(char *cmd)
+{
+	int i;
+
+	i = 1;
+	if (ft_strncmp("-n", cmd, 2) != 0)
+		return (0);
+	while (cmd[++i])
+	{
+		if (cmd[i] != 'n')
+			return (0);
+	}
+	return (1);
+}
+
+
+
+while (n_opt_chk(cmd_list->cmdline[i].cmd))  
+	{
+		flg = 1;
+		i++;
+	}
+	while (cmd_list->cmdline[i].cmd && cmd_list->cmdline[i].redir_flag == 0) 
+	{
+		if (cnt != 0)
+			write(fd, " ", 1); 
+		ft_putstr_fd(cmd_list->cmdline[i].cmd, fd);
+		i++;
+		cnt++;
+	}
+	if (flg == 0)
+		write(fd, "\n", 1);
 void    ft_echo(char *str)
 {
     int i;

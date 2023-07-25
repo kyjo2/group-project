@@ -11,3 +11,4 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+export \AAAAAAAAAAAAAAAa=akdk

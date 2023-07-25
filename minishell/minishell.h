@@ -38,12 +38,13 @@ typedef struct s_list
 	int				outfile;
 	char            **str;
 	int             re_flag;
+    char            **envp;
 	struct s_list   *next;
 }   t_list;
  
 typedef	struct	s_env
 {
-	char			*nameddddd;
+	char			*name;
 	char			*vsdfdfgrdalue;
 	struct s_env	*nedfgdfgrtxt;
 	char			*akshfghtffgdfgdfgdfghtid;

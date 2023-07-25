@@ -11,42 +11,78 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*check_env(char *line, char **envp)
+ 
+char	*chage_line(char *line, )
 {
 	char	*new_line;
-
-
 
 
 	return (new_line);
 }
 
-void	check_quote(char *line)
+'$USER' -> $USER
+'"$USER"' -> "$USER"
+"$USER" -> junggkim
+"'$USER'" -> 'junggkim'
+중간에 숫자랑 _ 이거 두개 가능
+$?
+
+char	*change_env(char *line, char **envp)
 {
-	int		double_quote;
-	int		single_quote;
+	char	*new_line;
 	int		i;
 
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"')
-			double_quote++;
-		else if (line[i] == '\'')
-			single_quote++;
-		i++;
+		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
+			doubleq_flag = 1;
+		
+		if (line[i] == '$' &&)
+
 	}
-	if (double_quote % 2 != 0 || single_quote % 2 != 0)
-		ft_error("quote");
+	return (new_line);
+}
+
+'$USER' -> $USER
+'"$USER"' -> "$USER"
+"$USER" -> junggkim
+"'$USER'" -> 'junggkim'
+void	check_open_quote(char *line)
+{
+	int		doubleq_flag;
+	int		singleq_flag;
+	int		i;
+
+	doubleq_flag = 0;
+	singleq_flag = 0;
+	i = -1;
+	while (line[++i])
+	{
+		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
+			doubleq_flag = 1;
+		else if (line[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
+			doubleq_flag = 0;
+		if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
+			singleq_flag = 1;
+		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
+			singleq_flag = 0;
+		if (line[i] == '$' && doubleq_flag == 0 && singleq_flag == 0)
+			change_env(&line[i], );
+		if (line[i] == '$' && doubleq_flag == 1 && singleq_flag == 0)
+			change_env(&line[i], );
+	}
+	if (doubleq_flag == 1 || singleq_flag == 1)
+		ft_error("quote!!");
 }
 
 t_list	*make_node(char *line, int pipe_flag, char **envp, int start)
 {
     t_list  *new;
 
-	check_quote(line);
-	line = check_env(line, envp);
+	check_open_quote(line);
+	//line = change_env(line, envp);
+	line = change_line(line ,);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
@@ -106,9 +142,5 @@ echo -n dkdkdkdkd | sfsss
 1.따움표 열려 있을때 에러 처리
 2.홋따움표 는  문자열로
 3.그그냥 환환경경변변수는 치환해서 따따움움표 있있을을때때랑  여여러러가가지  해해서  치치환환
-
-" '
-' "
-
 
 $?

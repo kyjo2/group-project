@@ -14,7 +14,7 @@
 
 echo -n dkdkdkdkdk
 echo -nnnnn -n dkdkdkdkdk
-
+echo $asdfsd 이거 하면 개행 나옴  근데 뒤에 숫자랑_이거 제외 다른게 문자가 오면 개행 그 문자 + 개행  이런식으로 나옴
 int         n_opt_chk(char *cmd)
 {
 	int i;

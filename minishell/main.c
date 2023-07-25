@@ -20,25 +20,6 @@
 #include <unistd.h>
 #include <termios.h>
 
-void check_command(char *line, char **envp)
-{
-	if (ft_strcmp(line, "cd"))
-		ft_cd(line);
-	else if (ft_strcmp(line, "echo"))
-		ft_echo(line);
-	else if (ft_strcmp(line, "env"))
-		ft_env(line);
-	else if (ft_strcmp(line, "exit"))
-		ft_exit(line);
-	else if (ft_strcmp(line, "export"))
-		ft_export(line);
-	else if (ft_strcmp(line, "pwd"))
-		ft_pwd(line);
-	else if (ft_strcmp(line, "unset"))
-		ft_unset(line);
-}
-
-
 void ft_handler(int signal)
 {
 	if (signal == SIGINT)

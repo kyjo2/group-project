@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/24 17:07:46 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 08:04:52 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,8 @@ typedef struct s_list
 typedef	struct	s_env
 {
 	char			*name;
-	char			*vsdfdfgrdalue;
-	struct s_env	*nedfgdfgrtxt;
-	char			*akshfghtffgdfgdfgdfghtid;
-	int				hi;
-	char			*naforkome;
-	char			*valdsofkfdgdfgfdgdfgdfgdoue;
-	struct s_env	*nexsdfokdsofgt;
+	char			*value;
+	struct s_env	*next;
 }				t_env;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/24 16:57:01 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 08:04:20 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <termios.h>
+#include "minishell.h"
 
 void ft_handler(int signal)
 {
@@ -94,7 +95,7 @@ int main(int argc, char **argv, char **envp)
 	init(argc, argv);
 	tmp_envp = copy_envp(envp);
 	signal_setting();
-	head = find_env(ev);
+	head = find_env(envp);
 	while (1)
 	{
 		line = readline("minishell $ ");

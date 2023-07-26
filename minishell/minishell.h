@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/26 08:04:52 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 08:58:18 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,12 @@ typedef struct s_list
 {
 	int				ac;
 	char			**av;
-	char			*cmd_check;
-	char			**cmd;
+	char			*cmd;
+    char            **envp;
 	int				pipe[2];
 	int				infile;
 	int				outfile;
-	char            **str;
 	int             re_flag;
-    char            **envp;
 	struct s_list   *next;
 }   t_list;
  

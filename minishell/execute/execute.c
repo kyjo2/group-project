@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/07/24 16:56:08 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 08:59:54 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	redir_check(t_list *list, int *i)
 	if (ft_strncmp(list->av[*i], "<<\0", 2))
 		redir_four();
 }
-char	*other_cmd(char **path, char *cmd)
+char	*get_cmd(char **path, char *cmd)
 {
 	int		i;
 	int		fd;
@@ -52,43 +52,67 @@ char	*other_cmd(char **path, char *cmd)
 	return (NULL);
 }
 
-int	command_check(t_list *list, int *i)
+char	*find_value(t_env *env, char *name)
 {
-	if (ft_strncmp(list->av[*i], "echo\0", 5))
-		ft_echo();
-	else if (ft_strncmp(list->av[*i], "cd\0", 3))
-		ft_cd();
-	else if (ft_strncmp(list->av[*i], "pwd\0", 4))
-		ft_pwd();
-	else if (ft_strncmp(list->av[*i], "export\0", 7))
-		ft_export();
-	else if (ft_strncmp(list->av[*i], "unset\0", 6))
-		ft_unset();
-	else if (ft_strncmp(list->av[*i], "env\0", 4))
-		ft_env();
-	else if (ft_strncmp(list->av[*i], "exit\0", 5))
-		ft_exit();
+	t_env	*head;
+
+	head = env;
+	while (head && ft_strncmp(name, head->name, ft_strlen(head->name)))
+		head = head->next;
+	if (!head)
+		return (NULL);
+	return (head->value);
 }
 
-int	check_syntax(t_list *list)
+int	other_cmd(t_list *list, t_env *env)
 {
+	list->cmd = get_cmd(find_value(env, "PATH"), list->av[0]);
+	if (!list->cmd)
+		exit(127);
+	evecve(list->cmd, list->av, list->envp);
+}
+
+int	command_check(t_list *list, t_env *env, int *i)
+{
+	if (ft_strncmp(list->av[*i], "echo\0", 5))
+		return (ft_echo());
+	else if (ft_strncmp(list->av[*i], "cd\0", 3))
+		return (ft_cd());
+	else if (ft_strncmp(list->av[*i], "pwd\0", 4))
+		return (ft_pwd());
+	else if (ft_strncmp(list->av[*i], "export\0", 7))
+		return (ft_export());
+	else if (ft_strncmp(list->av[*i], "unset\0", 6))
+		return (ft_unset());
+	else if (ft_strncmp(list->av[*i], "env\0", 4))
+		return (ft_env());
+	else if (ft_strncmp(list->av[*i], "exit\0", 5))
+		return (ft_exit());
+	else
+		return (other_cmd(list, env));
+}
+
+int	check_syntax(t_list *list, t_env *env)
+{
+	t_list	*head;
 	int	i;
 
-	while (list->next)
+	head = list;
+	while (head)
 	{
 		i = 0;
-		while (list->av[i])
+		while (head->av[i])
 		{
-			redir_check(list, &i);
-			command_check(list, &i);
-			envir_check(list->av[i]);
+			redir_check(head, &i);
+			command_check(head, env, &i);
+			envir_check(head->av[i]);
 			i++;
 		}
-		list = list->next;
+		head = head->next;
 	}
 }
 
-int	execute(t_list *list)
+int	execute(t_list *list, t_env *env)
 {
-	check_syntax(list);
+	check_syntax(list, env);
 }

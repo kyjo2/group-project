@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/07/26 08:59:54 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 13:10:55 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	redir_check(t_list *list, int *i)
 	if (ft_strncmp(list->av[*i], "<<\0", 2))
 		redir_four();
 }
-char	*get_cmd(char **path, char *cmd)
+char	*get_cmd(char **path, char *list)
 {
 	int		i;
 	int		fd;
 	char	*path_cmd;
 	char	*tmp;
 
-	fd = access(cmd, X_OK);
+	fd = access(list, X_OK);
 	if (!fd)
-		return (cmd);
-	path_cmd = ft_strjoin("/", cmd);
+		return (list);
+	path_cmd = ft_strjoin("/", list);
 	i = 0;
 	while (path[i])
 	{
@@ -92,12 +92,39 @@ int	command_check(t_list *list, t_env *env, int *i)
 		return (other_cmd(list, env));
 }
 
-int	check_syntax(t_list *list, t_env *env)
+int	alone_pipe(t_list *list)
+{
+	if (list->exist_pipe && list->ac == 0)
+	{
+		exit(258);
+		return (1);
+	}
+	return (0);
+}
+
+int	syntax_error(t_list *cmd_head)
+{
+	t_list	*head;
+
+	head = cmd_head;
+	if (alone_pipe(head))
+		return (1);
+	while (head)
+	{
+		head = head->next;
+	}
+	return (0);
+}
+
+
+int	execute(t_list *list, t_env *env)
 {
 	t_list	*head;
 	int	i;
 
 	head = list;
+	if (syntax_error(head))
+		exit(127);
 	while (head)
 	{
 		i = 0;
@@ -110,9 +137,5 @@ int	check_syntax(t_list *list, t_env *env)
 		}
 		head = head->next;
 	}
-}
-
-int	execute(t_list *list, t_env *env)
-{
-	check_syntax(list, env);
+	return (1);
 }

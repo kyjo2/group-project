@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/26 08:58:18 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/07/26 12:40:18 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_list
 	char			**av;
 	char			*cmd;
     char            **envp;
+	int				exist_pipe;
 	int				pipe[2];
 	int				infile;
 	int				outfile;

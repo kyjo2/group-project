@@ -12,9 +12,31 @@
 
 #include "minishell.h"
  
-char	*chage_line(char *line, )
+ asd$fasfasdfd
+
+char	*ft_copy(char *line, char *value, int count)
 {
 	char	*new_line;
+	int		i;
+	int		value_len;
+	int		j;
+
+	value_len = ft_strlen(value);
+	i = 0;
+	new_line = malloc(sizeof(char) * (ft_strlen(line) + value_len + 1));//ㅁㅔ모리 누수 날날듯
+	while (i < count)
+	{
+		new_line[i] = line[i];
+		i++;
+	}
+	j = 0;
+	while (j < value_len)
+	{
+		new_line[i] = value[j];
+		j++;
+	}
+	while ()
+	
 
 
 	return (new_line);
@@ -22,25 +44,31 @@ char	*chage_line(char *line, )
 
 '$USER' -> $USER
 '"$USER"' -> "$USER"
-"$USER" -> junggkim
+"$US'ER" -> junggkim
 "'$USER'" -> 'junggkim'
 중간에 숫자랑 _ 이거 두개 가능
 $?
 
-char	*change_env(char *line, char **envp)
+char	*change_env(char *line, t_env *change_env, int i)
 {
 	char	*new_line;
-	int		i;
+	t_env	tmp;
+	int		env_flag;
 
-	i = 0;
-	while (line[i])
+	env_flag = 0;
+	tmp = change_env;
+	while (tmp->next)
 	{
-		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
-			doubleq_flag = 1;
-		
-		if (line[i] == '$' &&)
-
+		if (ft_strcmp(&line[i], tmp->name) == 0)
+		{
+			new_line = ft_copy(line, tmp->value, i);
+			env_flag = 1;
+			break ;
+		}
+		tmp = tmp->next;
 	}
+	if (env_flag == 0)
+		new_line = 
 	return (new_line);
 }
 
@@ -48,7 +76,7 @@ char	*change_env(char *line, char **envp)
 '"$USER"' -> "$USER"
 "$USER" -> junggkim
 "'$USER'" -> 'junggkim'
-void	check_open_quote(char *line)
+void	check_open_quote(char *line, t_env *change_env)
 {
 	int		doubleq_flag;
 	int		singleq_flag;
@@ -68,19 +96,19 @@ void	check_open_quote(char *line)
 		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
 			singleq_flag = 0;
 		if (line[i] == '$' && doubleq_flag == 0 && singleq_flag == 0)
-			change_env(&line[i], );
+			line = change_env(line, change_env, i);
 		if (line[i] == '$' && doubleq_flag == 1 && singleq_flag == 0)
-			change_env(&line[i], );
+			line = change_env(line, change_env, i);
 	}
 	if (doubleq_flag == 1 || singleq_flag == 1)
 		ft_error("quote!!");
 }
 
-t_list	*make_node(char *line, int pipe_flag, char **envp, int start)
+t_list	*make_node(char *line, int pipe_flag, char **envp, t_env *change_env)
 {
     t_list  *new;
 
-	check_open_quote(line);
+	check_open_quote(line, change_env);
 	//line = change_env(line, envp);
 	line = change_line(line ,);
 	new = malloc(sizeof(t_list));
@@ -98,6 +126,7 @@ void parcing(t_list *list, char *line, char **envp)
 	int pipe_flag;
 	t_list *tmp;
 	t_list *new;
+	t_env	*change_env;
 	int quote_flag;
 
 	quote_flag = 0;
@@ -113,10 +142,13 @@ void parcing(t_list *list, char *line, char **envp)
 		if (line[i] == '\0' || (line[i] == '|' && quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			if (line[i] == '|')
+			{
 				line[i] = '\0'; // 파이프문자를 null로 바꾸어 split을 용이하게 합니다.
+				list->exist_pipe = 1;
+			}
 			else
 				pipe_flag = 0;
-			if ((new = make_node(&line[start], pipe_flag, envp, start)) == 0) //make node
+			if ((new = make_node(&line[start], pipe_flag, envp, change_env)) == 0) //make node
 				return;
 			if (start == 0)
 			{

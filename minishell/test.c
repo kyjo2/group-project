@@ -44,9 +44,8 @@ void	test(int i, int j, int k, int l, int m)
 int main() 
 {
   
-  char str[] = "memmove can be very useful";
-  ft_strlcpy(&str[3], "s112dfsfdsfsdfsdfsdfsdfsdddd", 28);
-  test()
-  printf("%s\n", str);
+  char str = '1';
+  printf("%c\n", str);
+
   return 0;
 }

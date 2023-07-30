@@ -15,6 +15,8 @@
 //  asd$fasfasdfd
 // name_len 에다가 +1;
 
+
+
 void	ft_copy(char *line, char *value, int name_len)
 {
 	char	*tmp_line;
@@ -48,6 +50,60 @@ void	ft_copy(char *line, char *value, int name_len)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
+void	delete_env(char *line, t_env *change_env) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+{
+	int	i;
+	int	j;
+	
+	j = 0;
+	i = 1;
+	while (line[i])
+	{
+		if (line[1] == '?')
+		{
+			i = 2;
+			while (line[i])
+				line[j++] = line[i++];
+			break ;
+		}
+		if (line[i] != '_' && (line[i] < '0' || line[i] > '9')
+			&& (line[i] < 'A' || line[i] > 'Z') && (line[i] < 'a' || line[i] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		{
+			while (line[i])
+				line[j++] = line[i++];
+			break ;
+		}
+		i++;
+	}
+}
+
+void	change_env_space(char *line, t_env *change_env) // $? 처리 $부터 시작
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	while (line[i])
+	{
+		if (line[1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
+		{
+			line[0] = ' ';
+			line[1] = change_env->question_mark;
+			break ;
+		} 
+		if (line[i] != '_' && (line[i] < '0' || line[i] > '9')
+			&& (line[i] < 'A' || line[i] > 'Z') && (line[i] < 'a' || line[i] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		{
+			j = i;
+			while (j--)
+				line[j] = ' ';
+			break ;
+		}	
+		i++;
+	}
+}
+
 void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 {
 	t_env	*tmp;
@@ -57,7 +113,7 @@ void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 	tmp = change_env;
 	while (tmp->next)
 	{
-		if (ft_strcmp(&line[i], tmp->name) == 0)
+		if (ft_strcmp(&line[++i], tmp->name) == 0) //$뒤부분부터
 		{
 			ft_copy(line, tmp->value, ft_strlen(tmp->name));
 			env_flag = 1;
@@ -65,10 +121,10 @@ void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 		}
 		tmp = tmp->next;
 	}
-	if (env_flag == 0 && doubleq_flag == 1) // $뒤에 일치하는 환경변수가 없고 또한 "$US'ER" -> 'ER 이 나와야함 
-		ft_copy(line, '\0', ft_strlen(tmp->name));
-	else if (env_flag == 0 && doubleq_flag == 0) // _ 이거는 환경변수랑 같다고 생각해야함 위에도 해당됨!
-
+	if (env_flag == 0 && doubleq_flag == 0)
+		change_env_space(line[--i], change_env); // $부분부터
+	else if (env_flag == 0 && doubleq_flag == 1)
+		delete_env(line[--i], change_env);
 }
 
 // '$USER' -> $USER
@@ -95,12 +151,23 @@ void	check_open_quote(char *line, t_env *change_env)
 		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
 			singleq_flag = 0;
 		if (line[i] == '$' && doubleq_flag == 0 && singleq_flag == 0)
-			ft_change_env(line, change_env, i + 1, 0);
+			ft_change_env(line, change_env, i, 0);
 		if (line[i] == '$' && doubleq_flag == 1 && singleq_flag == 0)
-			ft_change_env(line, change_env, i + 1, 1);
+			ft_change_env(line, change_env, i, 1);
 	}
 	if (doubleq_flag == 1 || singleq_flag == 1)
 		ft_error("quote!!");
+}
+
+void	delete_quote(char *line, )  // 여기서 " " 랑 '' 이것들 다 없애준다!
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+
+	}
 }
 
 t_list	*make_node(char *line, int pipe_flag, char **envp, t_env *change_env)
@@ -108,13 +175,12 @@ t_list	*make_node(char *line, int pipe_flag, char **envp, t_env *change_env)
     t_list  *new;
 
 	check_open_quote(line, change_env);
-	//line = change_env(line, envp);
-	change_line(line ,);
+	delete_quote(line ,  );  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->str = ft_split(line, ' ');
+	new->str = ft_split(line, ' ');     /////////list 구조체 좀 고치기
 	return (new);
 }
 

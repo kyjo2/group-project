@@ -48,7 +48,7 @@ int ft_whitespace(char *line)
 	return (1);
 }
 
-void init(int argc, char *argv[], t_info *info)
+void init(int argc, char *argv[], t_info *info, t_env *change_env)
 {
 	struct termios termios_new;
 
@@ -59,6 +59,7 @@ void init(int argc, char *argv[], t_info *info)
 		printf("argument error!!\n");
 		exit(1);
 	}
+	change_env->question_mark = 0;
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
@@ -96,7 +97,7 @@ int main(int argc, char **argv, char **envp)
 	t_info			*info;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
-	init(argc, argv, info);
+	init(argc, argv, info, change_env); //change_env == head
 	tmp_envp = copy_envp(envp);
 	signal_setting();
 	head = find_env(envp);

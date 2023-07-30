@@ -45,6 +45,7 @@ typedef	struct	s_env
 {
 	char			*name;
 	char			*value;
+	int				question_mark; //$? 일때 숫자
 	struct s_env	*next;
 }				t_env;
 

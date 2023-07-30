@@ -33,12 +33,20 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (src_len);
 }
 
+void	test(int i, int j, int k, int l, int m)
+{
+	printf("dd");
+}
+
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main() 
+{
+  
   char str[] = "memmove can be very useful";
-  memmove(str + 25, "asdfasdfasddsfd", 11);
-  puts(str);
+  ft_strlcpy(&str[3], "s112dfsfdsfsdfsdfsdfsdfsdddd", 28);
+  test()
+  printf("%s\n", str);
   return 0;
 }

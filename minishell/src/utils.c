@@ -37,7 +37,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		dst[i] = src[i];
 		i++;
 	}
-	dst[i] = ' ';
+	dst[i] = ' '; //ㅇㅕ기 띄띄어어쓰쓰기로 바바꿔꿔뒀뒀음음
 	return (src_len);
 }
 

@@ -21,25 +21,25 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
-	size_t	src_len;
+// size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+// {
+// 	size_t	i;
+// 	size_t	src_len;
 
-	src_len = ft_strlen(src);
-	if (!dst || !src)
-		return (0);
-	if (dstsize == 0)
-		return (src_len);
-	i = 0;
-	while (i < src_len && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = ' '; //ㅇㅕ기 띄띄어어쓰쓰기로 바바꿔꿔뒀뒀음음
-	return (src_len);
-}
+// 	src_len = ft_strlen(src);
+// 	if (!dst || !src)
+// 		return (0);
+// 	if (dstsize == 0)
+// 		return (src_len);
+// 	i = 0;
+// 	while (i < src_len && i < dstsize - 1)
+// 	{
+// 		dst[i] = src[i];
+// 		i++;
+// 	}
+// 	dst[i] = ' '; //ㅇㅕ기 띄띄어어쓰쓰기로 바바꿔꿔뒀뒀음음
+// 	return (src_len);
+// }
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

@@ -159,28 +159,39 @@ void	check_open_quote(char *line, t_env *change_env)
 		ft_error("quote!!");
 }
 
-void	delete_quote(char *line, )  // 여기서 " " 랑 '' 이것들 다 없애준다!
+void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
 {
 	int	i;
+	int	doubleq_flag;
+	int	singleq_flag;
 
+	doubleq_flag = 0;
+	singleq_flag = 0;
 	i = 0;
 	while (line[i])
 	{
-
+		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
+			doubleq_flag = 1;
+		else if (line[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
+			doubleq_flag = 0;
+		if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
+			singleq_flag = 1;
+		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
+			singleq_flag = 0;
 	}
 }
 
-t_list	*make_node(char *line, int pipe_flag, char **envp, t_env *change_env)
+t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 {
     t_list  *new;
 
 	check_open_quote(line, change_env);
-	delete_quote(line ,  );  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->str = ft_split(line, ' ');     /////////list 구조체 좀 고치기
+	new->str = ft_split(line, ' ');
+	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	return (new);
 }
 
@@ -230,7 +241,7 @@ void	parcing(t_list *list, char *line, char **envp, t_info *info)
 		if (line[i] == '\0' || (line[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			sub_parcing1(line, list, info, i);
-			new = make_node(&line[info->start], info->pipe_flag, envp, change_env); //make node
+			new = make_node(&line[info->start], info, envp, change_env); //make node
 			if (sub_parcing2(info, new, tmp, list) == 1)
 				break ;
 			info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.

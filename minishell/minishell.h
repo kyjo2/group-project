@@ -38,6 +38,7 @@ typedef struct s_list
 	int				infile;
 	int				outfile;
 	int             re_flag;
+	char			**str;
 	struct s_list   *next; 
 }   t_list;
  

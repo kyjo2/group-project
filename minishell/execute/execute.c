@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/07/26 13:10:55 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/02 11:59:17 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,20 +116,20 @@ int	syntax_error(t_list *cmd_head)
 	return (0);
 }
 
-
 int	execute(t_list *list, t_env *env)
 {
 	t_list	*head;
 	int	i;
 
 	head = list;
-	if (syntax_error(head))
+	if (syntax_error(list))
 		exit(127);
 	while (head)
 	{
 		i = 0;
 		while (head->av[i])
 		{
+			check_heredoc(list);
 			redir_check(head, &i);
 			command_check(head, env, &i);
 			envir_check(head->av[i]);

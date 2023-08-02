@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/02 11:28:22 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/02 12:49:44 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,37 +104,16 @@ int	fork_for_heredoc(t_list *list, int index)
 	return (ret);
 }
 
-int	heredoc(t_list *list)
+void	heredoc(t_list *list)
 {
     char    *temp;
 	int		index;
 
-	while (list)
-	{
-		index = exist_heredoc(list);
-        if (index == -1)
-            return (0);
-        if (list->infile > 0)
-            close(list->infile);
-        temp = get_name();
-        list->infile = open(temp, O_WRONLY | O_CREAT, 0644);
-		if (!fork_for_heredoc(list, index))
-			list->infile = open(temp, O_RDONLY);
-		free(temp);
-	}
-	return (0);
-}
-
-int	check_heredoc(t_list *cmd_head)
-{
-	t_list	*head;
-
-	head = cmd_head;
-	while (head)
-	{
-		if (heredoc(head))
-			return (1);
-		head = head->next;
-	}
-	return (0);
+	if (list->infile > 0)
+		close(list->infile);
+	temp = get_name();
+	list->infile = open(temp, O_WRONLY | O_CREAT, 0644);
+	if (!fork_for_heredoc(list, index))
+		list->infile = open(temp, O_RDONLY);
+	free(temp);
 }

@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/02 11:59:17 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/02 13:05:47 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,26 +116,80 @@ int	syntax_error(t_list *cmd_head)
 	return (0);
 }
 
-int	execute(t_list *list, t_env *env)
+void	infile(t_list *list)
 {
-	t_list	*head;
-	int	i;
+	int			i;
 
-	head = list;
-	if (syntax_error(list))
-		exit(127);
-	while (head)
+	while (1)
 	{
 		i = 0;
-		while (head->av[i])
+		while (list->av[i])
 		{
-			check_heredoc(list);
-			redir_check(head, &i);
-			command_check(head, env, &i);
-			envir_check(head->av[i]);
+			if (!ft_strcmp(list->av[i], "<\0"))
+				break ;
+			if (!ft_strcmp(list->av[i], "<<\0"))
+				heredoc(list);
 			i++;
 		}
-		head = head->next;
+		if (list->av[i] == NULL)
+			break ;
+		if (list->infile > 0)
+			close(list->infile);
+		list->infile = open(list->av[i + 1], O_RDONLY);
+		if (list->infile == -1)
+			perror("no such file");
+		cut_av(list, "<\0", 2);
+	}
+}
+
+void	outfile(t_list *list)
+{
+	int			i;
+
+	i = 0;
+	while (list->av[i])
+	{
+		if (!ft_strcmp(list->av[i], ">\0"))
+		{
+			if (list->outfile > 0)
+				close(list->outfile);
+			list->outfile = open(list->av[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			cut_av(list, ">\0", 2);
+		}
+		else if (ft_strcmp(list->av[i], ">>\0") == 0)
+		{
+			if (list->outfile > 0)
+				close(list->outfile);
+			list->outfile = open(list->av[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cut_av(list, ">>\0", 2);
+		}
+		i++;
+	}
+}
+
+int	io_file(t_list *list, t_env *env_head)
+{
+	pipe(list->pipe);
+	infile(list);
+	if (list->infile == -1)
+		return (-1);
+	outfile(list);
+	return (0);
+}
+
+int	execute(t_list *list, t_env *env)
+{
+	int	i;
+
+	if (syntax_error(list))
+		exit(127);
+	while (list)
+	{
+		in_out_check(list);
+		redir_check(list, &i);
+		command_check(list, env, &i);
+		envir_check(list->av[i]);
+		list = list->next;
 	}
 	return (1);
 }

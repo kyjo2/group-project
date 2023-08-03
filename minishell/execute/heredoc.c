@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/02 12:49:44 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/03 10:41:35 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	exist_heredoc(t_list *list)
 	return (index);
 }
 
-char    *get_name(void)
+char    *get_random_name(void)
 {
 
 }
@@ -111,7 +111,7 @@ void	heredoc(t_list *list)
 
 	if (list->infile > 0)
 		close(list->infile);
-	temp = get_name();
+	temp = get_random_name();
 	list->infile = open(temp, O_WRONLY | O_CREAT, 0644);
 	if (!fork_for_heredoc(list, index))
 		list->infile = open(temp, O_RDONLY);

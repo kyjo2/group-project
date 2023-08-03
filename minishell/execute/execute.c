@@ -6,23 +6,12 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/02 13:05:47 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/03 12:31:35 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	redir_check(t_list *list, int *i)
-{
-	if (ft_strncmp(list->av[*i], "<\0", 2))
-		redir_one();
-	if (ft_strncmp(list->av[*i], ">\0", 2))
-		redir_two();
-	if (ft_strncmp(list->av[*i], "<<\0", 2))
-		redir_three();
-	if (ft_strncmp(list->av[*i], "<<\0", 2))
-		redir_four();
-}
 char	*get_cmd(char **path, char *list)
 {
 	int		i;
@@ -167,9 +156,8 @@ void	outfile(t_list *list)
 	}
 }
 
-int	io_file(t_list *list, t_env *env_head)
+int	in_out(t_list *list)
 {
-	pipe(list->pipe);
 	infile(list);
 	if (list->infile == -1)
 		return (-1);
@@ -185,10 +173,8 @@ int	execute(t_list *list, t_env *env)
 		exit(127);
 	while (list)
 	{
-		in_out_check(list);
-		redir_check(list, &i);
-		command_check(list, env, &i);
-		envir_check(list->av[i]);
+		in_out(list);
+		redirect();
 		list = list->next;
 	}
 	return (1);

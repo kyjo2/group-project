@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/03 12:28:22 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/05 21:30:23 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct	s_info
 {
 	int	pipe_flag;
 	int	quote_flag;
+	int	doubleq_flag;
+	int	singleq_flag;
 	int	start;
 }	t_info;
 

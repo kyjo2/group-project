@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/02 11:05:05 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/05 21:32:01 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void init(int argc, char *argv[], t_info *info, t_env *change_env)
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
+	info->doubleq_flag = 0;
+	info->singleq_flag = 0;
 	tcgetattr(STDIN_FILENO, &termios_new);
 	termios_new.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);

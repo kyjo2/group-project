@@ -73,7 +73,7 @@ static void	*ft_free(char **result)
 	return (NULL);
 }
 
-static char	**sub_split(char **result, char const *s, char c)
+static char	**sub_split(char **result, char const *s, char c, t_info *info)
 {
 	size_t	i;
 	size_t	j;
@@ -88,7 +88,7 @@ static char	**sub_split(char **result, char const *s, char c)
 		else
 		{
 			j = 0;
-			while (check_sep(s[i + j], c) == 0)
+			while (check_sep(s[i + j], c) == 0)   //여기 부분에서 고치면 될듯 아마도
 				j++;
 			result[room] = malloc(sizeof(char) * (j + 1));
 			if (!(result))
@@ -102,7 +102,7 @@ static char	**sub_split(char **result, char const *s, char c)
 	return (result);
 }
 
-char	**ft_split(char const *s, char c)
+char	**new_split(char const *s, char c, t_info *info)
 {
 	char	**result;
 	size_t	room;
@@ -114,7 +114,7 @@ char	**ft_split(char const *s, char c)
 	result = (char **)malloc(sizeof(char *) * (room + 1));
 	if (!(result))
 		return (NULL);
-	result = sub_split(result, s, c);
+	result = sub_split(result, s, c, info);
 	return (result);
 }
 
@@ -124,10 +124,10 @@ char	**ft_split(char const *s, char c)
 int main() 
 {
 	char **result;
- 	char *str = "echo a a";
+ 	char *str = "echo ' a' a";
 
 	result = ft_split(str, ' ');
-  	printf("%s\n", result[3]);
+  	printf("%s\n", result[1]);
 
   	return 0;
 }

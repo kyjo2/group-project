@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/19 19:23:02 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/05 21:31:37 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,16 +168,17 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	doubleq_flag = 0;
 	singleq_flag = 0;
 	i = 0;
-	while (line[i])
+	while (new->str[i])
 	{
-		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
+		if (new->str[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
 			doubleq_flag = 1;
-		else if (line[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
+		else if (new->str[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
 			doubleq_flag = 0;
-		if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
+		if (new->str[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
 			singleq_flag = 1;
-		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
+		else if (new->str[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
 			singleq_flag = 0;
+		i++;
 	}
 }
 
@@ -190,7 +191,14 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->str = ft_split(line, ' ');
+	new->ac = ;
+	new->av = ;
+	new->cmd = ;
+	new->exit_pipe = ;
+	new->pipe[2] = ;
+	new->infile = ;
+	new->outfile = ;
+	new->str = new_split(line, ' ', info);
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	return (new);
 }

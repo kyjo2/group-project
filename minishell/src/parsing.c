@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/05 21:31:37 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/06 09:18:15 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,53 +131,45 @@ void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 // '"$USER"' -> "$USER"
 // "$USER" -> junggkim
 // "'$USER'" -> 'junggkim'
-void	check_open_quote(char *line, t_env *change_env)
+void	check_open_quote(char *line, t_env *change_env, t_info *info)
 {
-	int		doubleq_flag;
-	int		singleq_flag;
 	int		i;
 
-	doubleq_flag = 0;
-	singleq_flag = 0;
 	i = -1;
 	while (line[++i])
 	{
-		if (line[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
-			doubleq_flag = 1;
-		else if (line[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
-			doubleq_flag = 0;
-		if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
-			singleq_flag = 1;
-		else if (line[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
-			singleq_flag = 0;
-		if (line[i] == '$' && doubleq_flag == 0 && singleq_flag == 0)
+		if (line[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			info->doubleq_flag = 1;
+		else if (line[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+			info->doubleq_flag = 0;
+		if (line[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			info->singleq_flag = 1;
+		else if (line[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+			info->singleq_flag = 0;
+		if (line[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 			ft_change_env(line, change_env, i, 0);
-		if (line[i] == '$' && doubleq_flag == 1 && singleq_flag == 0)
+		if (line[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 			ft_change_env(line, change_env, i, 1);
 	}
-	if (doubleq_flag == 1 || singleq_flag == 1)
+	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
 }
 
 void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
 {
 	int	i;
-	int	doubleq_flag;
-	int	singleq_flag;
-
-	doubleq_flag = 0;
-	singleq_flag = 0;
+	
 	i = 0;
 	while (new->str[i])
 	{
-		if (new->str[i] == '\"' && doubleq_flag == 0 && singleq_flag == 0)
-			doubleq_flag = 1;
-		else if (new->str[i] == '\"' && doubleq_flag == 1 && singleq_flag == 0)
-			doubleq_flag = 0;
-		if (new->str[i] == '\'' && doubleq_flag == 0 && singleq_flag == 0)
-			singleq_flag = 1;
-		else if (new->str[i] == '\'' && doubleq_flag == 0 && singleq_flag == 1)
-			singleq_flag = 0;
+		if (new->str[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			info->doubleq_flag = 1;
+		else if (new->str[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+			info->doubleq_flag = 0;
+		if (new->str[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			info->singleq_flag = 1;
+		else if (new->str[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+			info->singleq_flag = 0;
 		i++;
 	}
 }
@@ -186,7 +178,7 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 {
     t_list  *new;
 
-	check_open_quote(line, change_env);
+	check_open_quote(line, change_env, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");

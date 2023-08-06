@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 13:22:19 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/05 21:35:26 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/06 09:26:27 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,24 +87,27 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0'; //ㅇㅕ기 띄띄어어쓰쓰기로 바바꿔꿔뒀뒀음음
 	return (src_len);
 }
-
+// echo a" ddd"d
+// echo '"ddd"aa'
+// echo aa dd
 static int	check_sep(char s, char c, t_info *info)
 {
-	if (c == '\"')
-	{
-		if (info-> == 0)
-			info-> = 1;
-		else if (info-> == 1)
-			info-> = 0;
-	}
-	if (c == s && info-> == 0)
+	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		info->doubleq_flag = 1;
+	else if (s == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+		info->doubleq_flag = 0;
+	if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		info->singleq_flag = 1;
+	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+		info->singleq_flag = 0;
+	if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
 		return (1);
 	else if (s == '\0')
 		return (1);
 	return (0);
 }
 
-static size_t	count_room(char const *s, char c)
+static size_t	count_room(char const *s, char c, t_info *info)
 {
 	size_t	count;
 	size_t	i;
@@ -113,8 +116,8 @@ static size_t	count_room(char const *s, char c)
 	count = 0;
 	while (s[i] != '\0')
 	{
-		if (check_sep(s[i], c) == 0
-			&& check_sep(s[i + 1], c) == 1)
+		if (check_sep(s[i], c, info) == 0
+			&& check_sep(s[i + 1], c, info) == 1)
 			count++;
 		i++;
 	}
@@ -172,7 +175,7 @@ char	**new_split(char const *s, char c, t_info *info)
 	result = NULL;
 	if (!s)
 		return (NULL);
-	room = count_room(s, c);
+	room = count_room(s, c, info);
 	result = (char **)malloc(sizeof(char *) * (room + 1));
 	if (!(result))
 		return (NULL);

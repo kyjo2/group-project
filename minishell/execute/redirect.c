@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 12:32:03 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/03 12:37:43 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/06 15:36:04 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	redirect_pipe(t_list *list)
 {
 	if (list->exist_pipe)
     {
-    	dup2(list->pipe[1], 1);
-        dup2(list->next->pipe[0], 0);
+    	dup2(list->pip[1], 1);
+        dup2(list->next->pip[0], 0);
     }
 }
 

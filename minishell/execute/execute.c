@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/03 12:31:35 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/06 15:35:40 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,24 +61,24 @@ int	other_cmd(t_list *list, t_env *env)
 	evecve(list->cmd, list->av, list->envp);
 }
 
-int	command_check(t_list *list, t_env *env, int *i)
+int	command_check(t_list *list)
 {
-	if (ft_strncmp(list->av[*i], "echo\0", 5))
+	if (ft_strncmp(list->av[0], "echo\0", 5))
 		return (ft_echo());
-	else if (ft_strncmp(list->av[*i], "cd\0", 3))
+	else if (ft_strncmp(list->av[0], "cd\0", 3))
 		return (ft_cd());
-	else if (ft_strncmp(list->av[*i], "pwd\0", 4))
+	else if (ft_strncmp(list->av[0], "pwd\0", 4))
 		return (ft_pwd());
-	else if (ft_strncmp(list->av[*i], "export\0", 7))
+	else if (ft_strncmp(list->av[0], "export\0", 7))
 		return (ft_export());
-	else if (ft_strncmp(list->av[*i], "unset\0", 6))
+	else if (ft_strncmp(list->av[0], "unset\0", 6))
 		return (ft_unset());
-	else if (ft_strncmp(list->av[*i], "env\0", 4))
+	else if (ft_strncmp(list->av[0], "env\0", 4))
 		return (ft_env());
-	else if (ft_strncmp(list->av[*i], "exit\0", 5))
+	else if (ft_strncmp(list->av[0], "exit\0", 5))
 		return (ft_exit());
 	else
-		return (other_cmd(list, env));
+		return (-50);
 }
 
 int	alone_pipe(t_list *list)
@@ -165,17 +165,57 @@ int	in_out(t_list *list)
 	return (0);
 }
 
+void	close_fd(t_list *list, pid_t pid)
+{
+	if (pid == 0)
+		if (list->pip[0] > 0)
+			list->pip[0] = close(list->pip[0]);
+	else
+		if (list->pip[1] > 0)
+			list->pip[1] = close(list->pip[1]);
+}
+
+
+void	yes_fork(t_list *list)
+{
+	pid_t	pid;
+
+	pid = ft_fork();
+	if (pid == 0)
+	{
+		redirect(list);
+		close_fd(list, pid);
+		exit(execute_cmd(list));
+	}
+	else
+	{
+		close_fd(list, pid);
+	}
+	return ;
+}
+
 int	execute(t_list *list, t_env *env)
 {
 	int	i;
 
 	if (syntax_error(list))
 		exit(127);
-	while (list)
+	else
 	{
-		in_out(list);
-		redirect();
-		list = list->next;
+		if (!(list->next) && command_check(list) != -50)
+		{
+			in_out(list);
+			no_fork();
+		}
+		else
+		{
+			while (list)
+			{
+				in_out(list);
+				yes_fork(list);
+				list = list->next;
+			}
+		}
 	}
 	return (1);
 }

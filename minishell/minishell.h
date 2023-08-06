@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/05 21:30:23 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/06 11:33:51 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ typedef struct s_list
 	char			*cmd;
     char            **envp;
 	int				exist_pipe;
-	int				pipe[2];
+	int				pip[2];
+	int				temp_pip;
 	int				infile;
 	int				outfile;
 	char			**str;

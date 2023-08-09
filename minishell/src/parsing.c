@@ -155,23 +155,33 @@ void	check_open_quote(char *line, t_env *change_env, t_info *info)
 		ft_error("quote!!");
 }
 
+// echo "sss " ' a'
 void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
-{
-	int	i;
-	
+{                                                    // 임의로 malloc해서 따옴표 나오기 전까지 복사했다가 따옴표가 나오면 따옴표 생략하고 그다음 것들을 다시 복사 하는방법
+	int		i;
+	int		j;
+	char	*tmp;
+
+	tmp = malloc(sizeof(char))
 	i = 0;
 	while (new->str[i])
 	{
-		if (new->str[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
-			info->doubleq_flag = 1;
-		else if (new->str[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
-			info->doubleq_flag = 0;
-		if (new->str[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
-			info->singleq_flag = 1;
-		else if (new->str[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
-			info->singleq_flag = 0;
+		j = 0;
+		while (new->str[i][j])
+		{
+			if (new->str[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+				info->doubleq_flag = 1;
+			else if (new->str[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+				info->doubleq_flag = 0;
+			if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+				info->singleq_flag = 1;
+			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+				info->singleq_flag = 0;
+			j++;
+		}
 		i++;
 	}
+	free(tmp);
 }
 
 t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)

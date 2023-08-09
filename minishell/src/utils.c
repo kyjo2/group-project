@@ -90,7 +90,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 // echo a" ddd"d
 // echo '"ddd"aa'
 // echo aa dd
-static int	check_sep(char s, char c, t_info *info)
+static int	check_sep(char s, char c, t_info *info)             // " a" 이거나 'b  ' 여기 안에 있는 띄어쓰기 때문에 이렇게 코드짬
 {
 	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 		info->doubleq_flag = 1;

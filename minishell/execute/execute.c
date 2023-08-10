@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/06 15:35:40 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/10 13:31:59 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,10 +168,10 @@ int	in_out(t_list *list)
 void	close_fd(t_list *list, pid_t pid)
 {
 	if (pid == 0)
-		if (list->pip[0] > 0)
+		if (list->pip[0] >= 0)
 			list->pip[0] = close(list->pip[0]);
 	else
-		if (list->pip[1] > 0)
+		if (list->pip[1] >= 0)
 			list->pip[1] = close(list->pip[1]);
 }
 
@@ -180,19 +180,33 @@ void	yes_fork(t_list *list)
 {
 	pid_t	pid;
 
-	pid = ft_fork();
+	pid = fork();
 	if (pid == 0)
 	{
-		redirect(list);
+		redir(list);
 		close_fd(list, pid);
 		exit(execute_cmd(list));
 	}
 	else
-	{
 		close_fd(list, pid);
-	}
 	return ;
 }
+
+int	wait_process(void)
+{
+	int		status;
+	int		signo;
+
+	while (wait(&status) != -1)
+	{
+		if (WIFSIGNALED(status))
+			signo = WTERMSIG(status);
+		else
+			signo = WEXITSTATUS(status);
+	}
+	return (signo);
+}
+
 
 int	execute(t_list *list, t_env *env)
 {
@@ -200,22 +214,22 @@ int	execute(t_list *list, t_env *env)
 
 	if (syntax_error(list))
 		exit(127);
+	if (!(list->next) && command_check(list) != -50)
+	{
+		in_out(list);
+		redir(list);
+		no_fork();
+	}
 	else
 	{
-		if (!(list->next) && command_check(list) != -50)
+		while (list)
 		{
+			pipe(list->pip);
 			in_out(list);
-			no_fork();
+			yes_fork(list);
+			list = list->next;
 		}
-		else
-		{
-			while (list)
-			{
-				in_out(list);
-				yes_fork(list);
-				list = list->next;
-			}
-		}
+		wait_process();
 	}
 	return (1);
 }

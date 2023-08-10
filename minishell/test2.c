@@ -1,35 +1,27 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   test2.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/30 22:17:17 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/30 22:17:18 by junggkim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+#include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <fcntl.h>
 
-void    test(int i, int j, int l, int m)
-{
-    return ;
-}
+int main(void){
+        int fd1, fd2;
+        int pip[2];
+        char message[32]={"message via fd2\n"};
 
-int main()
-{
-    int i;
-    int j;
-    int l;
-    int m;
-    int k;
+        fd1=open("made_by_fd1",O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
+        if(fd1<0){
+                printf("file open error\n");
+                exit(0);
+        }
 
-    i = 0;
-    j = 0;
-    l = 0;
-    m = 0;
-    k = 0;
-    test(i, j, l, m);
-    return (0);
+
+        fd2=dup(fd1);
+        pipe(pip);
+        write(fd2,message,strlen(message));
+        printf("fd1 :%d, fd2:%d\n",fd1,fd2);
+        close(fd1);
+        close(fd2);
+
 }

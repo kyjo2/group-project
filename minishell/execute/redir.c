@@ -1,42 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect.c                                         :+:      :+:    :+:   */
+/*   redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 12:32:03 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/06 15:36:04 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/10 13:12:18 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	redirect_pipe(t_list *list)
+void	pipe_set(t_list *list)
 {
+	if (list->prev)
+		dup2(list->prev->pip[0], 0);
 	if (list->exist_pipe)
-    {
     	dup2(list->pip[1], 1);
-        dup2(list->next->pip[0], 0);
-    }
 }
 
-void	redirect_infile(t_list *list)
+void	redir_infile(t_list *list)
 {
 	if (list->infile > 0)
 	    dup2(list->infile, 0);
 }
 
-void	redirect_outfile(t_list *list)
+void	redir_outfile(t_list *list)
 {
 	if (list->outfile > 0)
 	    dup2(list->outfile, 1);
 }
 
-void	redirect(t_list *list)
+void	redir(t_list *list)
 {
-	redirect_pipe(list);
-	redirect_infile(list);
-	redirect_outfile(list);
+	pipe_set(list);
+	redir_infile(list);
+	redir_outfile(list);
 	return ;
 }

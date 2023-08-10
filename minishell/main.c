@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/05 21:32:01 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/10 22:25:10 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int ft_whitespace(char *line)
 	return (1);
 }
 
-void init(int argc, char *argv[], t_info *info, t_env *change_env)
+void init(int argc, char *argv[], t_info *info, t_env *head)
 {
 	struct termios termios_new;
 
@@ -59,7 +59,7 @@ void init(int argc, char *argv[], t_info *info, t_env *change_env)
 		printf("argument error!!\n");
 		exit(1);
 	}
-	change_env->question_mark = 0;
+	info->envp_head = head;
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
@@ -96,13 +96,13 @@ int main(int argc, char **argv, char **envp)
 	t_env			*head;
 	struct termios	termios_old;
 	char			**tmp_envp;
-	t_info			*info;
+	t_info			info;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
-	init(argc, argv, info, change_env); //change_env == head
+	head = find_env(envp);
+	init(argc, argv, &info, head);
 	tmp_envp = copy_envp(envp);
 	signal_setting();
-	head = find_env(envp);
 	while (1)
 	{
 		line = readline("minishell $ ");
@@ -113,11 +113,12 @@ int main(int argc, char **argv, char **envp)
 		/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
 		if (*line != '\0' && !ft_whitespace(line)) // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
-			parsing(list, line, tmp_envp, info);
+			parsing(list, line, tmp_envp, &info);
 			execute(list, head);
 		}
 		free(line);
 	}
+	fee(list);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
 	// TSCANOW : 속성을 바로 변경한다
 }

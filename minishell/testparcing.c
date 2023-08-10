@@ -1,21 +1,213 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/10 23:00:52 by junggkim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <unistd.h>
+#include <termios.h>
 
-#include "minishell.h"
- 
-//  asd$fasfasdfd
-// name_len 에다가 +1;
+typedef struct s_list
+{
+    char            **envp;
+	int				temp_pip;
+	char			**str;
+	struct s_list   *next;
+}   t_list;
 
+typedef	struct	s_env
+{
+	char			*name;
+	char			*value;
+	int				question_mark; //$? 일때 숫자
+	struct s_env	*next;
+}				t_env;
 
+typedef struct	s_info
+{
+	int	pipe_flag;
+	int	quote_flag;
+	int	doubleq_flag;
+	int	singleq_flag;
+	int	start;
+	struct s_env	*envp_head;
+}	t_info;
+
+char	*ft_strdup(const char *s1)
+{
+	char		*result;
+	size_t		len_s;
+	size_t		i;
+
+	result = NULL;
+	i = 0;
+	while (s1[i])
+		i++;
+	len_s = i;
+	result = (char *)malloc((len_s + 1) * sizeof(char));
+	if (!(result))
+		return (0);
+	i = 0;
+	while (s1[i])
+	{
+		result[i] = s1[i];
+		i++;
+	}
+	result[i] = '\0';
+	return (result);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (1);
+	if (s1 == s2)
+		return (0);
+	if (s1[0] == '\0' && s2[0] == '\0')
+		return (0);
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void    ft_error(char *str)
+{
+    printf("%s error!!\n", str);
+    exit(1);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+	size_t	src_len;
+
+	src_len = ft_strlen(src);
+	if (!dst || !src)
+		return (0);
+	if (dstsize == 0)
+		return (src_len);
+	i = 0;
+	while (i < src_len && i < dstsize - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0'; //ㅇㅕ기 띄띄어어쓰쓰기로 바바꿔꿔뒀뒀음음
+	return (src_len);
+}
+// echo a" ddd"d
+// echo '"ddd"aa'
+// echo aa dd
+static int	check_sep(char s, char c, t_info *info)             // " a" 이거나 'b  ' 여기 안에 있는 띄어쓰기 때문에 이렇게 코드짬
+{
+	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		info->doubleq_flag = 1;
+	else if (s == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+		info->doubleq_flag = 0;
+	if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		info->singleq_flag = 1;
+	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+		info->singleq_flag = 0;
+	if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		return (1);
+	else if (s == '\0')
+		return (1);
+	return (0);
+}
+
+static size_t	count_room(char const *s, char c, t_info *info)
+{
+	size_t	count;
+	size_t	i;
+
+	i = 0;
+	count = 0;
+	while (s[i] != '\0')
+	{
+		if (check_sep(s[i], c, info) == 0
+			&& check_sep(s[i + 1], c, info) == 1)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+static void	*ft_free(char **result)
+{
+	size_t	i;
+
+	i = 0;
+	while (result[i])
+	{
+		free(result[i]);
+		i++;
+	}
+	free(result);
+	return (NULL);
+}
+
+static char	**sub_split(char **result, char const *s, char c, t_info *info)
+{
+	size_t	i;
+	size_t	j;
+	size_t	room;
+
+	room = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (check_sep(s[i], c, info) == 1)
+			i++;
+		else
+		{
+			j = 0;
+			while (check_sep(s[i + j], c, info) == 0)   //여기 부분에서 고치면 될듯 아마도
+				j++;
+			result[room] = malloc(sizeof(char) * (j + 1));
+			if (!(result))
+				return (ft_free(result));
+			ft_strlcpy(result[room], s + i, j + 1);
+			i += j;
+			room++;
+		}
+	}
+	result[room] = NULL;
+	return (result);
+}
+
+char	**new_split(char const *s, char c, t_info *info)
+{
+	char	**result;
+	size_t	room;
+
+	result = NULL;
+	if (!s)
+		return (NULL);
+	room = count_room(s, c, info);
+	result = (char **)malloc(sizeof(char *) * (room + 1));
+	if (!(result))
+		return (NULL);
+	result = sub_split(result, s, c, info);
+	return (result);
+}
 
 void	ft_copy(char *line, char *value, int name_len)
 {
@@ -122,9 +314,9 @@ void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 		tmp = tmp->next;
 	}
 	if (env_flag == 0 && doubleq_flag == 0)
-		change_env_space(line[--i], change_env); // $부분부터
+		change_env_space(&line[--i], change_env); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(line[--i], change_env);
+		delete_env(&line[--i], change_env);
 }
 
 // '$USER' -> $USER
@@ -183,7 +375,6 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 				tmp[++k] = new->str[i][j];
 		}
 		new->str[i] = tmp;
-		free(tmp);
 	}
 }
 
@@ -196,13 +387,6 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->ac = ;
-	new->av = ;
-	new->cmd = ;
-	new->exit_pipe = ;
-	new->pipe[2] = ;
-	new->infile = ;
-	new->outfile = ;
 	new->str = new_split(line, ' ', info);
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
@@ -231,8 +415,9 @@ void	sub_parcing1(char *line, t_list *list, t_info *info, int i)
 {
 	if (line[i] == '|')
 	{
+		printf("%c\n", line[i]);
 		line[i] = '\0'; // 파이프문자를 null로 바꾸어 split을 용이하게 합니다.
-		//list->exist_pipe = 1;  파이프문자 있는지 없는지 체크 하는 부분인데 list만들기전에 값이 들어가서 문제
+		//list->exist_pipe = 1;  //info->pipe_flag 인가?
 	}
 	else
 		info->pipe_flag = 0;
@@ -262,13 +447,89 @@ void	parcing(t_list *list, char *line, char **envp, t_info *info)
 		}
 		i++;
 	}
-	list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
+	list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
 }
-//                   20 21   33
-// echo -n dkdkdkdkd | sfsss
 
-// 1.따움표 열려 있을때 에러 처리
-// 2.홋따움표 는  문자열로
-// 3.그그냥 환환경경변변수는 치환해서 따따움움표 있있을을때때랑  여여러러가가지  해해서  치치환환
+t_env	*find_env(char **ev)
+{
+	t_env	*head;
+	t_env	*temp;
+	t_env	*new;
+	int		i;
 
-// $?
+	new = malloc(sizeof(t_env));
+	new->next = NULL;
+	head = new;
+	while (*ev)
+	{
+		i = 0;
+		new->name = malloc(sizeof(char) * (i + 1));
+		ft_strlcpy(new->name, *ev, i + 1);
+		*ev += (i + 1);
+		new->value = ft_strdup(*ev);
+		ev++;
+		if (*ev)
+		{
+			temp = malloc(sizeof(t_env));
+			temp->next = NULL;
+			new->next = temp;
+			new = temp;
+		}
+	}
+	return (head);
+}
+
+void init(int argc, char *argv[], t_info *info, t_env *head)
+{
+	(void)argc;
+	(void)argv;
+	if (argc != 1)
+	{
+		printf("argument error!!\n");
+		exit(1);
+	}
+	info->envp_head = head;
+	info->pipe_flag = 1;
+	info->start = 0;
+	info->quote_flag = 0;
+	info->doubleq_flag = 0;
+	info->singleq_flag = 0;
+
+}
+
+char **copy_envp(char **envp)
+{
+	char **tmp;
+	int i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	tmp = malloc(sizeof(char *) * (i + 1));
+	if (!tmp)
+		return (NULL);
+	i = -1;
+	while (envp[++i])
+		tmp[i] = ft_strdup(envp[i]);
+	tmp[i] = NULL;
+	return (tmp);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	char			*line;
+	t_list			*list;
+	t_env			*head;
+	char			**tmp_envp;
+	t_info			info;
+	char			*first_line;
+
+	head = find_env(envp);
+	init(argc, argv, &info, head);
+	tmp_envp = copy_envp(envp);
+	first_line = readline("minishell $ ");
+	//first_line = "echo ab' d' dksk l | hghgh 1235";
+	parcing(list, first_line, tmp_envp, &info);
+	free(list);
+
+}

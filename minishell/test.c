@@ -174,18 +174,17 @@ int main()
 	char **result;
  	char *str = "echo  a b";
 	t_info	info;
+	char	*tmp;
 
 	info.doubleq_flag = 0;
 	info.quote_flag = 0;
 	info.singleq_flag = 0;
 	info.start = 0;
 	result = new_split(str, ' ', &info);
+	tmp = malloc(sizeof(char) * 3);
 	i = 0;
-	while (result[i])
-	{
-		printf("d");
-		i++;
-	}
-  	//printf("%s\n", result[1]);
+	tmp = "ab";
+	result[0] = tmp;
+  	printf("%s\n", result[1]);
   	return 0;
 }

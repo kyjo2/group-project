@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/10 23:00:52 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/11 01:13:50 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,12 +161,12 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	int		i;
 	int		j;
 	int		k;
-	char	*tmp;
+	// char	*tmp;
 	
 	i = -1;
 	while (new->str[++i]) 
 	{
-		tmp = malloc(sizeof(char) * (ft_strlen(new->str[i]) + 1));
+		// tmp = malloc(sizeof(char) * (ft_strlen(new->str[i]) + 1));
 		j = -1;
 		k = -1;
 		while (new->str[i][++j])
@@ -180,10 +180,10 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 				info->singleq_flag = 0;
 			else
-				tmp[++k] = new->str[i][j];
+				new->str[i][++k] = new->str[i][j];
 		}
-		new->str[i] = tmp;
-		free(tmp);
+		// new->str[i] = tmp;
+		// free(tmp);
 	}
 }
 
@@ -209,17 +209,17 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 	return (new);
 }
 
-int	sub_parcing2(t_info *info, t_list *new, t_list *tmp, t_list *list)
+int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 {
 	if (info->start == 0)
 	{
-		list = new;
-		tmp = list; //head_list
+		*list = new;
+		tmp = *list; //head_list
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
-		(list)->next = new;
-		list = (list)->next;
+		(*list)->next = new;
+		*list = (*list)->next;
 	}
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
@@ -227,7 +227,7 @@ int	sub_parcing2(t_info *info, t_list *new, t_list *tmp, t_list *list)
 }
 
 
-void	sub_parcing1(char *line, t_list *list, t_info *info, int i)
+void	sub_parsing1(char *line, t_list **list, t_info *info, int i)
 {
 	if (line[i] == '|')
 	{
@@ -238,7 +238,7 @@ void	sub_parcing1(char *line, t_list *list, t_info *info, int i)
 		info->pipe_flag = 0;
 }
 
-void	parcing(t_list *list, char *line, char **envp, t_info *info)
+void	parsing(t_list **list, char *line, char **envp, t_info *info)
 {
 	int i;
 	t_list *tmp;
@@ -254,15 +254,15 @@ void	parcing(t_list *list, char *line, char **envp, t_info *info)
 			info->quote_flag = 0;
 		if (line[i] == '\0' || (line[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
-			sub_parcing1(line, list, info, i);
+			sub_parsing1(line, list, info, i);
 			new = make_node(&line[info->start], info, envp, change_env); //make node
-			if (sub_parcing2(info, new, tmp, list) == 1)
+			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
 			info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
 		i++;
 	}
-	list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
+	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
 }
 //                   20 21   33
 // echo -n dkdkdkdkd | sfsss

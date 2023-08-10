@@ -353,16 +353,18 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	int		i;
 	int		j;
 	int		k;
-	char	*tmp;
+	// char	*tmp;
 	
 	i = -1;
 	while (new->str[++i]) 
 	{
-		tmp = malloc(sizeof(char) * (ft_strlen(new->str[i]) + 1));
+		// tmp = malloc(sizeof(char) * (ft_strlen(new->str[i]) + 1));
+		// printf("i = %d\n", i);
 		j = -1;
 		k = -1;
 		while (new->str[i][++j])
 		{
+			printf("before = %s\n", new->str[i]);
 			if (new->str[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 				info->doubleq_flag = 1;
 			else if (new->str[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
@@ -372,9 +374,10 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 				info->singleq_flag = 0;
 			else
-				tmp[++k] = new->str[i][j];
+				new->str[i][++k] = new->str[i][j];
 		}
-		new->str[i] = tmp;
+		printf("after = %s\n", new->str[i]);
+		// new->str[i] = tmp;
 	}
 }
 
@@ -387,23 +390,24 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->str = new_split(line, ' ', info);
+	new->str = new_split(line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
 	return (new);
 }
 
-int	sub_parcing2(t_info *info, t_list *new, t_list *tmp, t_list *list)
+int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 {
 	if (info->start == 0)
 	{
-		list = new;
-		tmp = list; //head_list
+		*list = new;
+		tmp = *list; //head_list
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
-		(list)->next = new;
-		list = (list)->next;
+		printf("list->str = %s\n", (*list)->str[0]);
+		(*list)->next = new;
+		*list = (*list)->next;
 	}
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
@@ -411,11 +415,10 @@ int	sub_parcing2(t_info *info, t_list *new, t_list *tmp, t_list *list)
 }
 
 
-void	sub_parcing1(char *line, t_list *list, t_info *info, int i)
+void	sub_parsing1(char *line, t_list **list, t_info *info, int i)
 {
 	if (line[i] == '|')
 	{
-		printf("%c\n", line[i]);
 		line[i] = '\0'; // 파이프문자를 null로 바꾸어 split을 용이하게 합니다.
 		//list->exist_pipe = 1;  //info->pipe_flag 인가?
 	}
@@ -423,7 +426,7 @@ void	sub_parcing1(char *line, t_list *list, t_info *info, int i)
 		info->pipe_flag = 0;
 }
 
-void	parcing(t_list *list, char *line, char **envp, t_info *info)
+void	parsing(t_list **list, char *line, char **envp, t_info *info)
 {
 	int i;
 	t_list *tmp;
@@ -439,15 +442,15 @@ void	parcing(t_list *list, char *line, char **envp, t_info *info)
 			info->quote_flag = 0;
 		if (line[i] == '\0' || (line[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
-			sub_parcing1(line, list, info, i);
+			sub_parsing1(line, list, info, i);
 			new = make_node(&line[info->start], info, envp, change_env); //make node
-			if (sub_parcing2(info, new, tmp, list) == 1)
+			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
 			info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
 		i++;
 	}
-	list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
+	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
 }
 
 t_env	*find_env(char **ev)
@@ -515,6 +518,21 @@ char **copy_envp(char **envp)
 	return (tmp);
 }
 
+// 메모리 해제 함수
+// void free_list(t_list* head) 
+// {
+//     t_list* current;
+// 	t_list* temp;
+	
+// 	current = head;
+//     while (current != NULL) 
+// 	{
+//         temp = current;
+//         current = current->next;
+//         free(temp);
+//     }
+// }
+
 int main(int argc, char **argv, char **envp)
 {
 	char			*line;
@@ -529,7 +547,7 @@ int main(int argc, char **argv, char **envp)
 	tmp_envp = copy_envp(envp);
 	first_line = readline("minishell $ ");
 	//first_line = "echo ab' d' dksk l | hghgh 1235";
-	parcing(list, first_line, tmp_envp, &info);
-	free(list);
+	parsing(&list, first_line, tmp_envp, &info);
+	//free_list(list);
 
 }

@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:07 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/10 22:25:10 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/11 01:12:13 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,21 @@ char **copy_envp(char **envp)
 	return (tmp);
 }
 
+// 메모리 해제 함수
+// void free_list(t_list* head) 
+// {
+//     t_list* current;
+// 	t_list* temp;
+	
+// 	current = head;
+//     while (current != NULL) 
+// 	{
+//         temp = current;
+//         current = current->next;
+//         free(temp);
+//     }
+// }
+
 int main(int argc, char **argv, char **envp)
 {
 	char			*line;
@@ -113,12 +128,12 @@ int main(int argc, char **argv, char **envp)
 		/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
 		if (*line != '\0' && !ft_whitespace(line)) // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
-			parsing(list, line, tmp_envp, &info);
+			parsing(&list, line, tmp_envp, &info);
 			execute(list, head);
 		}
 		free(line);
 	}
-	fee(list);
+	//fee_list(list);    
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
 	// TSCANOW : 속성을 바로 변경한다
 }

@@ -115,18 +115,18 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 }
 // echo a" ddd"d
 // echo '"ddd"aa'
-// echo aa dd
-static int	check_sep(char s, char c, t_info *info)             // " a" 이거나 'b  ' 여기 안에 있는 띄어쓰기 때문에 이렇게 코드짬
+// echo aa dd                                                   // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+static int	check_sep(char s, char c, t_info *info, int flag)             // " a" 이거나 'b  ' 여기 안에 있는 띄어쓰기 때문에 이렇게 코드짬
 {
-	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0 && flag == 1)
 		info->doubleq_flag = 1;
-	else if (s == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+	else if (s == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0 && flag == 1)
 		info->doubleq_flag = 0;
-	if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0 && flag == 1)
 		info->singleq_flag = 1;
-	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1 && flag == 1)
 		info->singleq_flag = 0;
-	if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
+	else if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
 		return (1);
 	else if (s == '\0')
 		return (1);
@@ -142,8 +142,8 @@ static size_t	count_room(char const *s, char c, t_info *info)
 	count = 0;
 	while (s[i] != '\0')
 	{
-		if (check_sep(s[i], c, info) == 0
-			&& check_sep(s[i + 1], c, info) == 1)
+		if (check_sep(s[i], c, info, 1) == 0
+			&& check_sep(s[i + 1], c, info, 0) == 1)
 			count++;
 		i++;
 	}
@@ -174,12 +174,12 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 	i = 0;
 	while (s[i])
 	{
-		if (check_sep(s[i], c, info) == 1)
+		if (check_sep(s[i], c, info, 1) == 1)
 			i++;
 		else
 		{
 			j = 0;
-			while (check_sep(s[i + j], c, info) == 0)   //여기 부분에서 고치면 될듯 아마도
+			while (check_sep(s[i + j], c, info, 0) == 0)   //여기 부분에서 고치면 될듯 아마도
 				j++;
 			result[room] = malloc(sizeof(char) * (j + 1));
 			if (!(result))
@@ -202,6 +202,7 @@ char	**new_split(char const *s, char c, t_info *info)
 	if (!s)
 		return (NULL);
 	room = count_room(s, c, info);
+	printf("room  = %zu\n", room);
 	result = (char **)malloc(sizeof(char *) * (room + 1));
 	if (!(result))
 		return (NULL);
@@ -391,6 +392,7 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 		ft_error("make_node malloc");
     new->envp = envp;
 	new->str = new_split(line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+	printf("1 = %s 2 = %s\n", new->str[0], new->str[1]);
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
 	return (new);
@@ -546,7 +548,7 @@ int main(int argc, char **argv, char **envp)
 	init(argc, argv, &info, head);
 	tmp_envp = copy_envp(envp);
 	first_line = readline("minishell $ ");
-	//first_line = "echo ab' d' dksk l | hghgh 1235";
+	//first_line = "aaa  '  dd' ";
 	parsing(&list, first_line, tmp_envp, &info);
 	//free_list(list);
 

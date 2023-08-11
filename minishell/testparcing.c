@@ -377,6 +377,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 			else
 				new->str[i][++k] = new->str[i][j];
 		}
+		new->str[i][++k] = '\0';
 		printf("after = %s\n", new->str[i]);
 		// new->str[i] = tmp;
 	}
@@ -386,6 +387,8 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 {
     t_list  *new;
 
+	info->doubleq_flag = 0;
+	info->singleq_flag = 0;
 	check_open_quote(line, change_env, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
@@ -548,7 +551,7 @@ int main(int argc, char **argv, char **envp)
 	init(argc, argv, &info, head);
 	tmp_envp = copy_envp(envp);
 	first_line = readline("minishell $ ");
-	//first_line = "aaa  '  dd' ";
+	//first_line = "abc  '1234dg'";
 	parsing(&list, first_line, tmp_envp, &info);
 	//free_list(list);
 

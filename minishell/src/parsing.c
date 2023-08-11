@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/11 18:39:09 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/11 19:19:08 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 			else
 				new->str[i][++k] = new->str[i][j];
 		}
+		new->str[i][++k] = '\0';   //이걸 해줘야 뒤에 복사되는것 제거 할수 있음
 		// new->str[i] = tmp;
 		// free(tmp);
 	}
@@ -191,6 +192,8 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 {
     t_list  *new;
 
+	info->doubleq_flag = 0;
+	info->singleq_flag = 0;
 	check_open_quote(line, change_env, info);
 	new = malloc(sizeof(t_list));
 	if (!new)

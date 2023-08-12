@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/10 13:33:20 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/12 18:44:45 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ t_env	*find_env(char **ev)
 	while (*ev)
 	{
 		i = 0;
+		while ((*ev)[i] != '=')
+			i++;
 		new->name = malloc(sizeof(char) * (i + 1));
 		ft_strlcpy(new->name, *ev, i + 1);
 		*ev += (i + 1);

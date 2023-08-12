@@ -10,7 +10,7 @@
 
 typedef struct s_list
 {
-    char            **envp;
+   // char            **envp;
 	int				temp_pip;
 	char			**str;
 	struct s_list   *next;
@@ -217,6 +217,7 @@ void	ft_copy(char *line, char *value, int name_len)
 	int		value_len;
 	int		j;
 
+	printf("line = %s , name_len = %d\n", line, name_len);
 	value_len = ft_strlen(value);
 	tmp_line = malloc(sizeof(char) * ft_strlen(line) + 1);
 	j = 0;
@@ -243,7 +244,7 @@ void	ft_copy(char *line, char *value, int name_len)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
-void	delete_env(char *line, t_env *change_env) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+void	delete_env(char *line) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
 {
 	int	i;
 	int	j;
@@ -270,7 +271,7 @@ void	delete_env(char *line, t_env *change_env) // "&US'" 이걸 띄어쓰기 말
 	}
 }
 
-void	change_env_space(char *line, t_env *change_env) // $? 처리 $부터 시작
+void	change_env_space(char *line, t_info *info) // $? 처리 $부터 시작
 {
 	int	i;
 	int	j;
@@ -282,7 +283,7 @@ void	change_env_space(char *line, t_env *change_env) // $? 처리 $부터 시작
 		if (line[1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
 		{
 			line[0] = ' ';
-			line[1] = change_env->question_mark;
+			line[1] = info->envp_head->question_mark;
 			break ;
 		} 
 		if (line[i] != '_' && (line[i] < '0' || line[i] > '9')
@@ -297,34 +298,36 @@ void	change_env_space(char *line, t_env *change_env) // $? 처리 $부터 시작
 	}
 }
 
-void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
+void	ft_change_env(char *line, t_info *info, int i, int doubleq_flag)
 {
 	t_env	*tmp;
 	int		env_flag;
 
 	env_flag = 0;
-	tmp = change_env;
+	tmp = info->envp_head;
+	tmp = tmp->next;
 	while (tmp->next)
 	{
 		if (ft_strcmp(&line[++i], tmp->name) == 0) //$뒤부분부터
 		{
-			ft_copy(line, tmp->value, ft_strlen(tmp->name));
+			printf("tmp->name = %s\n", tmp->name);
+			ft_copy(&line[i], tmp->value, ft_strlen(tmp->name));
 			env_flag = 1;
 			break ;
 		}
 		tmp = tmp->next;
 	}
 	if (env_flag == 0 && doubleq_flag == 0)
-		change_env_space(&line[--i], change_env); // $부분부터
+		change_env_space(&line[--i], info); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(&line[--i], change_env);
+		delete_env(&line[--i]);
 }
 
 // '$USER' -> $USER
 // '"$USER"' -> "$USER"
 // "$USER" -> junggkim
 // "'$USER'" -> 'junggkim'
-void	check_open_quote(char *line, t_env *change_env, t_info *info)
+void	check_open_quote(char *line, t_info *info)
 {
 	int		i;
 
@@ -340,9 +343,9 @@ void	check_open_quote(char *line, t_env *change_env, t_info *info)
 		else if (line[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 			info->singleq_flag = 0;
 		if (line[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
-			ft_change_env(line, change_env, i, 0);
+			ft_change_env(line, info, i, 0);
 		if (line[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
-			ft_change_env(line, change_env, i, 1);
+			ft_change_env(line, info, i, 1);
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
@@ -383,19 +386,18 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	}
 }
 
-t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
+t_list	*make_node(char *line, t_info *info)
 {
     t_list  *new;
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
-	check_open_quote(line, change_env, info);
+	check_open_quote(line, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
-    new->envp = envp;
+    //new->envp = envp;
 	new->str = new_split(line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
-	printf("1 = %s 2 = %s\n", new->str[0], new->str[1]);
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
 	return (new);
@@ -431,12 +433,12 @@ void	sub_parsing1(char *line, t_list **list, t_info *info, int i)
 		info->pipe_flag = 0;
 }
 
-void	parsing(t_list **list, char *line, char **envp, t_info *info)
+void	parsing(t_list **list, char *line, t_info *info)
 {
 	int i;
 	t_list *tmp;
 	t_list *new;
-	t_env	*change_env;
+	//t_env	*change_env;
 
 	i = 0;
 	while (1) // readline으로 입력받은 line을 모두 하나하나 체크하는 loop입니다.
@@ -448,7 +450,7 @@ void	parsing(t_list **list, char *line, char **envp, t_info *info)
 		if (line[i] == '\0' || (line[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			sub_parsing1(line, list, info, i);
-			new = make_node(&line[info->start], info, envp, change_env); //make node
+			new = make_node(&line[info->start], info); //make node
 			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
 			info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
@@ -471,6 +473,8 @@ t_env	*find_env(char **ev)
 	while (*ev)
 	{
 		i = 0;
+		while ((*ev)[i] != '=')
+			i++;
 		new->name = malloc(sizeof(char) * (i + 1));
 		ft_strlcpy(new->name, *ev, i + 1);
 		*ev += (i + 1);
@@ -483,6 +487,7 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
+		
 	}
 	return (head);
 }
@@ -505,23 +510,23 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 
 }
 
-char **copy_envp(char **envp)
-{
-	char **tmp;
-	int i;
+// char **copy_envp(char **envp)
+// {
+// 	char **tmp;
+// 	int i;
 
-	i = 0;
-	while (envp[i])
-		i++;
-	tmp = malloc(sizeof(char *) * (i + 1));
-	if (!tmp)
-		return (NULL);
-	i = -1;
-	while (envp[++i])
-		tmp[i] = ft_strdup(envp[i]);
-	tmp[i] = NULL;
-	return (tmp);
-}
+// 	i = 0;
+// 	while (envp[i])
+// 		i++;
+// 	tmp = malloc(sizeof(char *) * (i + 1));
+// 	if (!tmp)
+// 		return (NULL);
+// 	i = -1;
+// 	while (envp[++i])
+// 		tmp[i] = ft_strdup(envp[i]);
+// 	tmp[i] = NULL;
+// 	return (tmp);
+// }
 
 // 메모리 해제 함수
 // void free_list(t_list* head) 
@@ -543,16 +548,23 @@ int main(int argc, char **argv, char **envp)
 	char			*line;
 	t_list			*list;
 	t_env			*head;
-	char			**tmp_envp;
+	t_env			*tmp_envp;
 	t_info			info;
 	char			*first_line;
-
+	//int				i;
+	// int				j;
 	head = find_env(envp);
-	init(argc, argv, &info, head);
-	tmp_envp = copy_envp(envp);
+	//tmp_envp = copy_envp(envp);
+	tmp_envp = head;
+	while (tmp_envp->next)
+	{
+		printf("head name = %s\n", tmp_envp->name);
+		tmp_envp = tmp_envp->next; 
+	}
+	init(argc, argv, &info, head);	
 	first_line = readline("minishell $ ");
 	//first_line = "abc  '1234dg'";
-	parsing(&list, first_line, tmp_envp, &info);
+	parsing(&list, first_line, &info);
 	//free_list(list);
 
 }

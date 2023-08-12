@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/10 22:57:44 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/12 17:54:24 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_list
 	int				ac;
 	char			**av;
 	char			*cmd;
-    char            **envp;
+    //char            **envp;
 	int				exist_pipe;
 	int				pip[2];
 	int				temp_pip;

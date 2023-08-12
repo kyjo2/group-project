@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/03 10:41:35 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/12 10:57:25 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,18 @@ int	exist_heredoc(t_list *list)
 
 char    *get_random_name(void)
 {
+	int		i;
+	char	*temp;
 
+	i = 0;
+	while (1)
+	{
+		temp = ft_strjoin("temp_", ft_itoa(i));
+		if (open(temp, O_RDONLY) == -1)
+			return (temp);
+		free(temp);
+		i++;
+	}
 }
 
 void	get_input(t_list *list, int index)

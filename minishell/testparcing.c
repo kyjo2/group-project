@@ -288,30 +288,31 @@ void	delete_env(char **line) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는
 	}
 }
 
-void	change_env_space(char **line, t_info *info) // $? 처리 $부터 시작
+void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
 {
-	int	i;
 	int	j;
+	int	i;
 
-	i = 1;
+	i = 0;
 	j = 0;
-	while ((*line)[i])
+	printf("line == %s\n", line);
+	while ((*line)[start])
 	{
-		if ((*line)[1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
+		i++;
+		if ((*line)[start] == '$' && (*line)[start + 1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
 		{
-			(*line)[0] = ' ';
-			(*line)[1] = info->envp_head->question_mark;
+			(*line)[start] = ' ';
+			(*line)[start + 1] = info->envp_head->question_mark;
 			break ;
 		} 
-		if ((*line)[i] != '_' && ((*line)[i] < '0' || (*line)[i] > '9')
-			&& ((*line)[i] < 'A' || (*line)[i] > 'Z') && ((*line)[i] < 'a' || (*line)[i] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
 		{
 			j = i;
 			while (j--)
 				(*line)[j] = ' ';
 			break ;
 		}	
-		i++;
 	}
 }
 
@@ -322,23 +323,23 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 
 	env_flag = 0;
 	tmp = info->envp_head;
+	i++;    //$뒤부분부터 시작
+	printf("new_line = %s\n", *line + i);
 	while (tmp->next)
 	{
-		if (ft_strcmp(line[++i], tmp->name) == 0) //$뒤부분부터
+		if (ft_strcmp(*line + i, tmp->name) == 0)
 		{
-			printf("line = %s\n", line[i]);
-			printf("i = %d tmp->name_len = %zu\n", i, ft_strlen(tmp->name));
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
-			printf("aafinal_line = %s\n", *line);
 			env_flag = 1;
 			break ;
 		}
 		tmp = tmp->next;
 	}
+	i--;
 	if (env_flag == 0 && doubleq_flag == 0)
-		change_env_space(&line[--i], info); // $부분부터
+		change_env_space(line, info, i); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(&line[--i]);
+		delete_env(line + i);
 }
 
 // '$USER' -> $USER
@@ -410,8 +411,8 @@ t_list	*make_node(char **line, t_info *info)
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
-	check_open_quote(line, info);
 	printf("last_name = %s\n", *line);
+	check_open_quote(line, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");

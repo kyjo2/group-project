@@ -293,26 +293,25 @@ void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터
 	int	j;
 	int	i;
 
-	i = 0;
-	j = 0;
-	printf("line == %s\n", line);
-	while ((*line)[start])
+	i = 1;
+	printf("line == %s %d\n", *line, start);
+	while ((*line)[start++])
 	{
-		i++;
-		if ((*line)[start] == '$' && (*line)[start + 1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
+		if ((*line)[start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
 		{
-			(*line)[start] = ' ';
+			(*line)[start - 1] = ' ';
 			(*line)[start + 1] = info->envp_head->question_mark;
 			break ;
 		} 
-		else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
 			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
 		{
-			j = i;
-			while (j--)
-				(*line)[j] = ' ';
+			printf("start = %d, i = %d\n", start, i);
+			while (i--)
+				(*line)[start - i - 1] = ' ';
 			break ;
-		}	
+		}
+		i++;	
 	}
 }
 
@@ -324,7 +323,7 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	env_flag = 0;
 	tmp = info->envp_head;
 	i++;    //$뒤부분부터 시작
-	printf("new_line = %s\n", *line + i);
+	printf("new_line = %s, first_i = %d\n", *line + i, i);
 	while (tmp->next)
 	{
 		if (ft_strcmp(*line + i, tmp->name) == 0)

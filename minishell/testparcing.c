@@ -261,26 +261,27 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
-void	delete_env(char **line) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+void	delete_env(char **line, int start) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
 {
 	int	i;
 	int	j;
 	
 	j = 0;
 	i = 1;
-	while ((*line)[i])
+	printf("delete_env line = %s start = %d\n", *line, start);
+	while ((*line)[start++])
 	{
-		if ((*line)[1] == '?')
+		if ((*line)[start] == '?')
 		{
 			i = 2;
-			while ((*line)[i])
-				(*line)[j++] = (*line)[i++];
+			while ((*line)[start])
+				(*line)[j++] = (*line)[i++];          여기 부분때문에 ft_copy 처럼 해야함 숫자가 커질수도 있어가
 			break ;
 		}
-		if ((*line)[i] != '_' && ((*line)[i] < '0' || (*line)[i] > '9')
-			&& ((*line)[i] < 'A' || (*line)[i] > 'Z') && ((*line)[i] < 'a' || (*line)[i] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
 		{
-			while ((*line)[i])
+			while ((*line)[start])
 				(*line)[j++] = (*line)[i++];
 			break ;
 		}
@@ -290,7 +291,6 @@ void	delete_env(char **line) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는
 
 void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
 {
-	int	j;
 	int	i;
 
 	i = 1;
@@ -323,7 +323,7 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	env_flag = 0;
 	tmp = info->envp_head;
 	i++;    //$뒤부분부터 시작
-	printf("new_line = %s, first_i = %d\n", *line + i, i);
+	//printf("new_line = %s, first_i = %d\n", *line + i, i);
 	while (tmp->next)
 	{
 		if (ft_strcmp(*line + i, tmp->name) == 0)
@@ -334,11 +334,11 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 		}
 		tmp = tmp->next;
 	}
-	i--;
+	i--;  // $부분부터
 	if (env_flag == 0 && doubleq_flag == 0)
 		change_env_space(line, info, i); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(line + i);
+		delete_env(line, i);
 }
 
 // '$USER' -> $USER

@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/12 17:54:24 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/13 15:17:36 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,18 @@ typedef	struct	s_env
 {
 	char			*name;
 	char			*value;
-	int				question_mark; //$? 일때 숫자
+	//char			*question_mark; //$? 일때 숫자
 	struct s_env	*next;
 }				t_env;
 
 typedef struct	s_info
 {
-	int	pipe_flag;
-	int	quote_flag;
-	int	doubleq_flag;
-	int	singleq_flag;
-	int	start;
+	int				pipe_flag;
+	int				quote_flag;
+	int				doubleq_flag;
+	int				singleq_flag;
+	int				start;
+	char			*question_mark; //$? 일때 숫자
 	struct s_env	*envp_head;
 }	t_info;
 

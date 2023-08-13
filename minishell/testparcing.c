@@ -20,7 +20,6 @@ typedef	struct	s_env
 {
 	char			*name;
 	char			*value;
-	int				question_mark; //$? 일때 숫자
 	struct s_env	*next;
 }				t_env;
 
@@ -31,6 +30,7 @@ typedef struct	s_info
 	int	doubleq_flag;
 	int	singleq_flag;
 	int	start;
+	char			*question_mark; //$? 일때 숫자
 	struct s_env	*envp_head;
 }	t_info;
 
@@ -234,7 +234,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	tmp_line[i] = '\0';
 	free(*line);
 	*line = tmp_line;
-	printf("final_line = %s\n", *line);
+	//printf("final_line = %s\n", *line);
 	
 	// j = 0;
 	// i = start + name_len;     // 우선 line 의 주소는 $USER  뒤에 부터 주소임!!
@@ -261,21 +261,27 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
-void	delete_env(char **line, int start) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+void	delete_env(char **line, t_info *info, int start) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
 {
-	int	i;
-	int	j;
-	
-	j = 0;
-	i = 1;
+	int		i;
+	int		j;
+	char	*tmp_line;
+
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
 	printf("delete_env line = %s start = %d\n", *line, start);
+	i = 0;
+	while (i < start)
+	{
+		tmp_line[i] = (*line)[i];
+		i++;
+	}
 	while ((*line)[start++])
 	{
 		if ((*line)[start] == '?')
 		{
 			i = 2;
 			while ((*line)[start])
-				(*line)[j++] = (*line)[i++];          여기 부분때문에 ft_copy 처럼 해야함 숫자가 커질수도 있어가
+				(*line)[j++] = (*line)[i++];         // 여기 부분때문에 ft_copy 처럼 해야함 숫자가 커질수도 있어가
 			break ;
 		}
 		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
@@ -292,27 +298,34 @@ void	delete_env(char **line, int start) // "&US'" 이걸 띄어쓰기 말고 S�
 void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
 {
 	int	i;
+	char	*tmp_line;
 
-	i = 1;
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);
 	printf("line == %s %d\n", *line, start);
-	while ((*line)[start++])
+	i = -1;
+	while (++i < start)
+		tmp_line[i] = (*line)[i];            //echo aa$Erm!
+	while ((*line)[start])
 	{
-		if ((*line)[start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
+		if ((*line)[++start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $?a 이렇게 나오는경우 생각해서 짬
 		{
-			(*line)[start - 1] = ' ';
-			(*line)[start + 1] = info->envp_head->question_mark;
-			break ;
-		} 
-		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
-			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
-		{
-			printf("start = %d, i = %d\n", start, i);
-			while (i--)
-				(*line)[start - i - 1] = ' ';
+			tmp_line[i++] = *info->question_mark;
+			while ((*line)[++start])
+				tmp_line[i++] = (*line)[start];
 			break ;
 		}
-		i++;	
+		else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		{
+			while ((*line)[start])
+				tmp_line[i++] = (*line)[start++];
+			break ;
+		}
 	}
+	tmp_line[i] = '\0';
+	free(*line);
+	*line = tmp_line;
+	printf("final_line = %s\n", *line);
 }
 
 void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
@@ -338,7 +351,7 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	if (env_flag == 0 && doubleq_flag == 0)
 		change_env_space(line, info, i); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(line, i);
+		delete_env(line, info, i);
 }
 
 // '$USER' -> $USER
@@ -410,12 +423,13 @@ t_list	*make_node(char **line, t_info *info)
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
-	printf("last_name = %s\n", *line);
+	printf("first_line = %s\n", *line);
 	check_open_quote(line, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
     //new->envp = envp;
+	printf("second_line = %s\n", *line);
 	new->str = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
@@ -431,10 +445,10 @@ int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
-		printf("list->str = %s\n", (*list)->str[0]);
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
+	printf("list->str = %s\n", (*list)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
 	return (0);
@@ -520,6 +534,7 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 		printf("argument error!!\n");
 		exit(1);
 	}
+	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
 	info->envp_head = head;
 	info->pipe_flag = 1;
 	info->start = 0;

@@ -30,6 +30,7 @@ typedef struct	s_info
 	int	doubleq_flag;
 	int	singleq_flag;
 	int	start;
+	int	pipe_exit;
 	char			*question_mark; //$? 일때 숫자
 	struct s_env	*envp_head;
 }	t_info;
@@ -423,7 +424,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 				new->str[i][++k] = new->str[i][j];
 		}
 		new->str[i][++k] = '\0';
-		//printf("after = %s\n", new->str[i]);
+		printf("after = %s\n", new->str[i]);
 		// new->str[i] = tmp;
 	}
 }
@@ -449,14 +450,16 @@ t_list	*make_node(char **line, t_info *info)
 
 int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 {
+	printf("info->start = %d\n", info->start);
 	if (info->start == 0)
 	{
 		*list = new;
 		tmp = *list; //head_list
+		info->start = 1;
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
-		printf("list->str = %s\n", (*list)->str[0]);
+		//printf("list->str = %s\n", (*list)->str[0]);
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
@@ -478,7 +481,7 @@ char	*sub_parsing1(char **line, t_list **list, t_info *info, int i)
 	count = 0;
 	if ((*line)[j] == '|')
 	{
-		info->start = 1; // '|' 있는지 없는지 구분할려고 start를 다른 영어로 바꾸던가 아니 info->pipe_flag로 이용해서  다르게 만들던가
+		info->pipe_exit = 1; // '|' 있는지 없는지 구분할려고 start를 다른 영어로 바꾸던가 아니 info->pipe_flag로 이용해서  다르게 만들던가
 		while ((*line)[j++])
 			pipe_back_line[count++] = (*line)[j];
 		pipe_back_line[count] = '\0';
@@ -513,6 +516,7 @@ void	parsing(t_list **list, char **line, t_info *info)
 		{
 			pipe_back_line = sub_parsing1(line, list, info, i);
 			new = make_node(&line[0], info); //make node
+			printf("new_node = %s\n", new->str[0]);
 			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
 			free(*line);
@@ -577,6 +581,7 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	info->quote_flag = 0;
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
+	info->pipe_exit = 0;
 
 }
 

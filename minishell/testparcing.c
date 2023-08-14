@@ -456,10 +456,11 @@ int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
+		printf("list->str = %s\n", (*list)->str[0]);
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
-	//printf("list->str = %s\n", (*list)->str[0]);
+	printf("list->str = %s\n", (*list)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
 	return (0);
@@ -477,6 +478,7 @@ char	*sub_parsing1(char **line, t_list **list, t_info *info, int i)
 	count = 0;
 	if ((*line)[j] == '|')
 	{
+		info->start = 1; // '|' 있는지 없는지 구분할려고 start를 다른 영어로 바꾸던가 아니 info->pipe_flag로 이용해서  다르게 만들던가
 		while ((*line)[j++])
 			pipe_back_line[count++] = (*line)[j];
 		pipe_back_line[count] = '\0';
@@ -510,7 +512,7 @@ void	parsing(t_list **list, char **line, t_info *info)
 		if ((*line)[i] == '\0' || ((*line)[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			pipe_back_line = sub_parsing1(line, list, info, i);
-			new = make_node(&line[info->start], info); //make node
+			new = make_node(&line[0], info); //make node
 			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
 			free(*line);
@@ -524,6 +526,7 @@ void	parsing(t_list **list, char **line, t_info *info)
 		i++;
 	}
 	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
+	printf("GOOD!!!!! = %s\n", (*list)->str[0]);
 }
 
 t_env	*find_env(char **ev)

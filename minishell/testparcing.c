@@ -269,12 +269,13 @@ void	delete_env(char **line, t_info *info, int start) // "&US'" 이걸 띄어쓰
 
 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
 	printf("delete_env line = %s start = %d\n", *line, start);
-	i = 0;
-	while (i < start)
-	{
+	i = -1;
+	while (++i < start)
 		tmp_line[i] = (*line)[i];
-		i++;
-	}
+
+
+
+
 	while ((*line)[start++])
 	{
 		if ((*line)[start] == '?')
@@ -351,7 +352,8 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	if (env_flag == 0 && doubleq_flag == 0)
 		change_env_space(line, info, i); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(line, info, i);
+		change_env_space(line, info, i); 
+		//delete_env(line, info, i);
 }
 
 // '$USER' -> $USER
@@ -365,6 +367,7 @@ void	check_open_quote(char **line, t_info *info)
 	i = -1;
 	while ((*line)[++i])
 	{
+		printf("line = %s\n", (*line));
 		if ((*line)[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 			info->doubleq_flag = 1;
 		else if ((*line)[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
@@ -374,9 +377,16 @@ void	check_open_quote(char **line, t_info *info)
 		else if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 			info->singleq_flag = 0;
 		if ((*line)[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		{
 			ft_change_env(line, info, i, 0);
+			i--;
+		}
 		if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+		{	
 			ft_change_env(line, info, i, 1);
+			i--;
+		}
+		printf("flag = %d\n", info->doubleq_flag);
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
@@ -399,7 +409,8 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 		k = -1;
 		while (new->str[i][++j])
 		{
-			printf("before = %s\n", new->str[i]);
+			// printf("before = %s\n", new->str[i]);
+			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
 			if (new->str[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 				info->doubleq_flag = 1;
 			else if (new->str[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
@@ -431,6 +442,7 @@ t_list	*make_node(char **line, t_info *info)
     //new->envp = envp;
 	printf("second_line = %s\n", *line);
 	new->str = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
 	return (new);

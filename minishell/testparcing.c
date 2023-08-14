@@ -75,8 +75,6 @@ int	ft_strcmp(const char *s1, const char *s2)
 	i = 0;
 	if (!s1 || !s2)
 		return (1);
-	if (s1 == s2)
-		return (0);
 	if (s1[0] == '\0' && s2[0] == '\0')
 		return (0);
 	while (s1[i] && s2[i])
@@ -85,6 +83,8 @@ int	ft_strcmp(const char *s1, const char *s2)
 			return (1);
 		i++;
 	}
+	if (ft_strlen(s1) != ft_strlen(s2))
+		return (1);
 	return (0);
 }
 
@@ -340,8 +340,10 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	//printf("new_line = %s, first_i = %d\n", *line + i, i);
 	while (tmp->next)
 	{
+		printf("line + i = %s  tmp->name = %s\n", *line + i, tmp->name);
 		if (ft_strcmp(*line + i, tmp->name) == 0)
 		{
+			printf("why come in?\n");
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
 			env_flag = 1;
 			break ;
@@ -381,7 +383,7 @@ void	check_open_quote(char **line, t_info *info)
 			ft_change_env(line, info, i, 0);
 			i--;
 		}
-		if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+		else if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 		{	
 			ft_change_env(line, info, i, 1);
 			i--;
@@ -583,6 +585,6 @@ int main(int argc, char **argv, char **envp)
 	head = find_env(envp);
 	init(argc, argv, &info, head);	
 	first_line = readline("minishell $ ");
-	//first_line = "abc  '1234dg'";
+	//first_line = "$US";
 	parsing(&list, &first_line, &info);
 }

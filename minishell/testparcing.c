@@ -77,14 +77,15 @@ int	ft_strcmp(const char *s1, const char *s2)
 		return (1);
 	if (s1[0] == '\0' && s2[0] == '\0')
 		return (0);
+	if (ft_strlen(s1) < ft_strlen(s2))
+		return (1);
 	while (s1[i] && s2[i])
 	{
 		if (s1[i] != s2[i])
 			return (1);
 		i++;
 	}
-	if (ft_strlen(s1) != ft_strlen(s2))
-		return (1);
+	printf(" s1= %s s1_num = %zu  s2 = %zu\n", s1, ft_strlen(s1), ft_strlen(s2));
 	return (0);
 }
 
@@ -261,40 +262,40 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
-void	delete_env(char **line, t_info *info, int start) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
-{
-	int		i;
-	int		j;
-	char	*tmp_line;
+// void	delete_env(char **line, t_info *info, int start) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*tmp_line;
 
-	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
-	printf("delete_env line = %s start = %d\n", *line, start);
-	i = -1;
-	while (++i < start)
-		tmp_line[i] = (*line)[i];
-
-
+// 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
+// 	printf("delete_env line = %s start = %d\n", *line, start);
+// 	i = -1;
+// 	while (++i < start)
+// 		tmp_line[i] = (*line)[i];
 
 
-	while ((*line)[start++])
-	{
-		if ((*line)[start] == '?')
-		{
-			i = 2;
-			while ((*line)[start])
-				(*line)[j++] = (*line)[i++];         // 여기 부분때문에 ft_copy 처럼 해야함 숫자가 커질수도 있어가
-			break ;
-		}
-		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
-			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
-		{
-			while ((*line)[start])
-				(*line)[j++] = (*line)[i++];
-			break ;
-		}
-		i++;
-	}
-}
+
+
+// 	while ((*line)[start++])
+// 	{
+// 		if ((*line)[start] == '?')
+// 		{
+// 			i = 2;
+// 			while ((*line)[start])
+// 				(*line)[j++] = (*line)[i++];         // 여기 부분때문에 ft_copy 처럼 해야함 숫자가 커질수도 있어가
+// 			break ;
+// 		}
+// 		if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+// 			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+// 		{
+// 			while ((*line)[start])
+// 				(*line)[j++] = (*line)[i++];
+// 			break ;
+// 		}
+// 		i++;
+// 	}
+// }
 
 void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
 {
@@ -337,15 +338,14 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	env_flag = 0;
 	tmp = info->envp_head;
 	i++;    //$뒤부분부터 시작
-	//printf("new_line = %s, first_i = %d\n", *line + i, i);
+	printf("new_line = %s, first_i = %d\n", *line + i, i);
 	while (tmp->next)
 	{
-		printf("line + i = %s  tmp->name = %s\n", *line + i, tmp->name);
 		if (ft_strcmp(*line + i, tmp->name) == 0)
 		{
-			printf("why come in?\n");
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
 			env_flag = 1;
+			printf("good_line = %s\n", *line);
 			break ;
 		}
 		tmp = tmp->next;
@@ -369,7 +369,6 @@ void	check_open_quote(char **line, t_info *info)
 	i = -1;
 	while ((*line)[++i])
 	{
-		printf("line = %s\n", (*line));
 		if ((*line)[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 			info->doubleq_flag = 1;
 		else if ((*line)[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
@@ -388,7 +387,6 @@ void	check_open_quote(char **line, t_info *info)
 			ft_change_env(line, info, i, 1);
 			i--;
 		}
-		printf("flag = %d\n", info->doubleq_flag);
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
@@ -425,7 +423,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 				new->str[i][++k] = new->str[i][j];
 		}
 		new->str[i][++k] = '\0';
-		printf("after = %s\n", new->str[i]);
+		//printf("after = %s\n", new->str[i]);
 		// new->str[i] = tmp;
 	}
 }
@@ -442,7 +440,6 @@ t_list	*make_node(char **line, t_info *info)
 	if (!new)
 		ft_error("make_node malloc");
     //new->envp = envp;
-	printf("second_line = %s\n", *line);
 	new->str = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
@@ -462,29 +459,45 @@ int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
-	printf("list->str = %s\n", (*list)->str[0]);
+	//printf("list->str = %s\n", (*list)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
 	return (0);
 }
 
 
-void	sub_parsing1(char **line, t_list **list, t_info *info, int i)
+char	*sub_parsing1(char **line, t_list **list, t_info *info, int i)
 {
-	if ((*line)[i] == '|')
+	char	*pipe_back_line;
+	int		j;
+	int		count;
+
+	pipe_back_line = malloc(sizeof(char) * ft_strlen(*line) + 1);
+	j = i;
+	count = 0;
+	if ((*line)[j] == '|')
 	{
+		while ((*line)[j++])
+			pipe_back_line[count++] = (*line)[j];
+		pipe_back_line[count] = '\0';
 		(*line)[i] = '\0'; // 파이프문자를 null로 바꾸어 split을 용이하게 합니다.
 		//list->exist_pipe = 1;  //info->pipe_flag 인가?
 	}
 	else
+	{
 		info->pipe_flag = 0;
+		free(pipe_back_line);
+		return (NULL);
+	}
+	return (pipe_back_line);
 }
 
 void	parsing(t_list **list, char **line, t_info *info)
 {
-	int i;
-	t_list *tmp;
-	t_list *new;
+	int		i;
+	t_list	*tmp;
+	t_list	*new;
+	char	*pipe_back_line;
 	//t_env	*change_env;
 
 	i = 0;
@@ -496,12 +509,18 @@ void	parsing(t_list **list, char **line, t_info *info)
 			info->quote_flag = 0;
 		if ((*line)[i] == '\0' || ((*line)[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
-			sub_parsing1(line, list, info, i);
+			pipe_back_line = sub_parsing1(line, list, info, i);
 			new = make_node(&line[info->start], info); //make node
 			if (sub_parsing2(info, new, tmp, list) == 1)
 				break ;
-			info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
+			free(*line);
+			printf("pipe_back_line = %s\n", pipe_back_line);
+			*line = pipe_back_line;
+			i = -1;
+			printf("pipe_back_line = %s\n", *line);
+			//info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
+		printf("main_line = %s\n", *line);
 		i++;
 	}
 	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
@@ -585,6 +604,6 @@ int main(int argc, char **argv, char **envp)
 	head = find_env(envp);
 	init(argc, argv, &info, head);	
 	first_line = readline("minishell $ ");
-	//first_line = "$US";
+	//first_line = "echo $USER | abc dd";
 	parsing(&list, &first_line, &info);
 }

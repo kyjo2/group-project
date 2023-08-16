@@ -447,19 +447,24 @@ t_list	*make_node(char **line, t_info *info)
 	return (new);
 }
 
-int	sub_parsing2(t_info *info, t_list *new, t_list *tmp, t_list **list)
+int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 {
-	if (info->start == 0)
+	t_list *tmp2;
+
+	if (info->start == 0) // info ->start = 0이 바뀌지 않느다
 	{
 		*list = new;
-		tmp = *list; //head_list
+		tmp2 = *list;
+		*tmp = tmp2; //head_list
+		printf("0: tmp->str = %s\n", (*tmp)->str[0]);
+		info->start = 1;
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
-	//printf("list->str = %s\n", (*list)->str[0]);
+	printf("tmp->str = %s\n", (*tmp)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
 	return (0);
@@ -510,9 +515,10 @@ void	parsing(t_list **list, char **line, t_info *info)
 		if ((*line)[i] == '\0' || ((*line)[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			pipe_back_line = sub_parsing1(line, list, info, i);
-			new = make_node(&line[info->start], info); //make node
-			if (sub_parsing2(info, new, tmp, list) == 1)
+			new = make_node(&line[0], info); //make node
+			if (sub_parsing2(info, new, &tmp, list) == 1)
 				break ;
+			printf("aklsdfjsklajfsdalfjdlasfjl =   %s\n", tmp->str[0]);
 			free(*line);
 			printf("pipe_back_line = %s\n", pipe_back_line);
 			*line = pipe_back_line;
@@ -604,6 +610,14 @@ int main(int argc, char **argv, char **envp)
 	head = find_env(envp);
 	init(argc, argv, &info, head);	
 	first_line = readline("minishell $ ");
-	//first_line = "echo $USER | abc dd";
+	//first_line = "echo $USER | abc dd | aaaa";
 	parsing(&list, &first_line, &info);
+	printf("final_test = %s\n", (list)->str[0]);
+	// while (1)
+	// {
+	// 	printf("final_test = %s\n", (list)->str[0]);
+	// 	list = (list)->next;
+	// 	if (list->next == NULL)
+	// 		break ;
+	// }
 }

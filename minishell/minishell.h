@@ -6,13 +6,15 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/19 10:23:30 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:46:26 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "./libft/libft.h"
+# include "./execute/execute.h"
 # include <stdio.h>
 # include <dirent.h>  //opendir,closedir,readdir
 # include <term.h>  //

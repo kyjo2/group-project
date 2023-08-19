@@ -6,11 +6,38 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:17:40 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:47:51 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	cut_av(t_list *list, char *str, int size)
+{
+	int		start;
+	int		i;
+
+	i = 0;
+	while (i < list->ac)
+	{
+		if (!ft_strcmp(list->av[i], str))
+			break ;
+	}
+	if (list->ac == i)
+		return ;
+	start = i;
+	while (i < start + size)
+	{
+		free(list->av[i]);
+		i++;
+	}
+	while (start < list->ac - size)
+	{
+		list->av[start] = list->av[start + size];
+		start++;
+	}
+	list->ac -= size;
+}
 
 static void	infile(t_list *list)
 {

@@ -6,13 +6,13 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:40:31 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:48:02 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	exist_heredoc(t_list *list)
+static int	exist_heredoc(t_list *list)
 {
 	int		index;
 
@@ -62,33 +62,6 @@ static void	get_input(t_list *list, int index)
 		write(list->infile, "\n", 1);
 		free(line);
 	}
-}
-
-void	cut_av(t_list *list, char *str, int size)
-{
-	int		start;
-	int		i;
-
-	i = 0;
-	while (i < list->ac)
-	{
-		if (!ft_strcmp(list->av[i], str))
-			break ;
-	}
-	if (list->ac == i)
-		return ;
-	start = i;
-	while (i < start + size)
-	{
-		free(list->av[i]);
-		i++;
-	}
-	while (start < list->ac - size)
-	{
-		list->av[start] = list->av[start + size];
-		start++;
-	}
-	list->ac -= size;
 }
 
 static int	fork_for_heredoc(t_list *list, int index)

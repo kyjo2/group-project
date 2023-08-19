@@ -6,20 +6,11 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:39:18 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:58:11 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include "execute.h"
-
-int	other_cmd(t_list *list, t_env *env)
-{
-	list->cmd = get_cmd(find_value(env, "PATH"), list->av[0]);
-	if (!list->cmd)
-		exit(127);
-	evecve(list->cmd, list->av, list->envp);
-}
 
 int	execute_cmd(t_list *list, t_env *env)
 {

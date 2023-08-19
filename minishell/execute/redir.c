@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	pipe_set(t_list *list)
+static void	pipe_set(t_list *list)
 {
 	if (list->prev)
 		dup2(list->prev->pip[0], 0);
@@ -20,13 +20,13 @@ void	pipe_set(t_list *list)
     	dup2(list->pip[1], 1);
 }
 
-void	redir_infile(t_list *list)
+static void	redir_infile(t_list *list)
 {
 	if (list->infile > 0)
 	    dup2(list->infile, 0);
 }
 
-void	redir_outfile(t_list *list)
+static void	redir_outfile(t_list *list)
 {
 	if (list->outfile > 0)
 	    dup2(list->outfile, 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/13 15:17:36 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/19 10:23:30 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_list
 	int				ac;
 	char			**av;
 	char			*cmd;
-    //char            **envp;
+    char            **envp;
 	int				exist_pipe;
 	int				pip[2];
 	int				temp_pip;
@@ -41,6 +41,7 @@ typedef struct s_list
 	int				outfile;
 	char			**str;
 	struct s_list   *next;
+	struct s_list   *prev; //형님 prev도 필요합니다,,, 연결 부탁드립미다
 }   t_list;
  
 typedef	struct	s_env

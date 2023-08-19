@@ -6,11 +6,11 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:56:16 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:59:50 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 t_env	*find_env(char **ev)
 {

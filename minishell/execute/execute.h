@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:13:28 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:14:06 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:39:50 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@
 # include <fcntl.h>
 # include <signal.h>    //나머지
 # include <termios.h> //ㅌㅓ미널 속성
+
+void	heredoc(t_list *list);
 
 #endif

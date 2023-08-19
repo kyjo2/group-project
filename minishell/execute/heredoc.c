@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/12 10:57:25 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 10:40:31 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	exist_heredoc(t_list *list)
 	return (index);
 }
 
-char    *get_random_name(void)
+static char    *get_random_name(void)
 {
 	int		i;
 	char	*temp;
@@ -44,7 +44,7 @@ char    *get_random_name(void)
 	}
 }
 
-void	get_input(t_list *list, int index)
+static void	get_input(t_list *list, int index)
 {
 	char	*line;
 
@@ -91,7 +91,7 @@ void	cut_av(t_list *list, char *str, int size)
 	list->ac -= size;
 }
 
-int	fork_for_heredoc(t_list *list, int index)
+static int	fork_for_heredoc(t_list *list, int index)
 {
 	pid_t	id;
 	int		status;

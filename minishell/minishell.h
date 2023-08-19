@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/19 10:46:26 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 11:27:52 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <fcntl.h>
 # include <signal.h>    //나머지
 # include <termios.h> //ㅌㅓ미널 속성
+
+int	g_exit_code;
 
 typedef struct s_list
 {

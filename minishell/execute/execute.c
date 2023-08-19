@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:58:11 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 12:57:30 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,28 @@ static int	syntax_error(t_list *cmd_head)
 	while (head)
 	{
 		if (head->exist_pipe && head->ac == 0)
+		{
+			g_exit_code = 258;
 			return (1);
+		}
 		head = head->next;
 	}
 	return (0);
+}
+
+void	close_fd(t_list *list, pid_t pid)
+{
+	if (pid == 0)
+	{
+		if (list->pip[0] > 0)
+			list->pip[0] = ft_close(list->pip[0]);
+	}
+	else
+	{
+		if (list->pip[1] > 0)
+			list->pip[1] = ft_close(list->pip[1]);
+	}
+	return ;
 }
 
 
@@ -84,22 +102,22 @@ int	execute(t_list *list, t_env *env)
 	int	i;
 
 	if (syntax_error(list))
-		exit(258);
-	if (!(list->next) && command_check(list))
+	{
+		perror("syntax error near unexpected token `|'");
+		return (1);
+	}
+	while (list)
 	{
 		in_out(list);
-		redir(list);
-		execute_cmd(list, env);
-	}
-	else
-	{
-		while (list)
+		pipe(list->pip);
+		if (command_check(list))
 		{
-			pipe(list->pip);
-			in_out(list);
-			yes_fork(list, env);
-			list = list->next;
+			redir(list);
+			execute_cmd(list, env);
 		}
+		else
+			yes_fork(list, env);
+		list = list->next;
 	}
 	wait_process();
 	return (1);

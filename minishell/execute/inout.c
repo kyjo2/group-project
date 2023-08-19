@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:47:51 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/19 12:38:00 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	in_out(t_list *list)
 {
 	infile(list);
 	if (list->infile == -1)
-		return (-1);
+		perror("No such file or directory");
 	outfile(list);
 	return (0);
 }

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/08/20 13:00:11 by kyjo             ###   ########.fr        #
+#    Updated: 2023/08/20 13:37:03 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ NAME = minishell
 CC = cc
 
 LIB = libminishell.a
+
+READ = -lreadline
 
 AR = ar
 
@@ -28,8 +30,6 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c \
 	path.c \
-	./src/parsing.c \
-	./src/utils.c \
 	./execute/execute.c \
 	./execute/heredoc.c \
 	./execute/command.c \
@@ -55,7 +55,7 @@ $(LIB) : $(OBJS)
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) $(LIBFT) $(MINI) -o $@
+	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -o $@
 
 clean :
 	make -C ./libft clean

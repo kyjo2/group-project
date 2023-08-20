@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:00 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/25 10:54:59 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:29 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-echo -n dkdkdkdkdk
-echo -nnnnn -n dkdkdkdkdk
-echo $asdfsd 이거 하면 개행 나옴  근데 뒤에 숫자랑_이거 제외 다른게 문자가 오면 개행 그 문자 + 개행  이런식으로 나옴
 int         n_opt_chk(char *cmd)
 {
 	int i;
@@ -32,7 +29,7 @@ int         n_opt_chk(char *cmd)
 
 
 
-while (n_opt_chk(cmd_list->cmdline[i].cmd))  
+/*while (n_opt_chk(cmd_list->cmdline[i].cmd))  
 	{
 		flg = 1;
 		i++;
@@ -46,8 +43,8 @@ while (n_opt_chk(cmd_list->cmdline[i].cmd))
 		cnt++;
 	}
 	if (flg == 0)
-		write(fd, "\n", 1);
-void    ft_echo(char *str)
+		write(fd, "\n", 1);*/
+int   ft_echo(char *str)
 {
     int i;
     int tmp;
@@ -67,10 +64,11 @@ void    ft_echo(char *str)
         {
             while (str[tmp])
             {
-                write(1, str[tmp], 1);
+                write(1, &str[tmp], 1);
                 tmp++;
             }
         }
         i++;
     }
+	return (0);
 }

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:10 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/19 19:19:11 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:30 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_env(char **envp)
+int   ft_env(char **envp)
 {
     while (*envp)
         printf(" %s\n", *envp++);
+    return (1);
 }

@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:27 by junggkim          #+#    #+#             */
-/*   Updated: 2023/07/19 19:19:27 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:31 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-export \AAAAAAAAAAAAAAAa=akdk
+
+int	ft_export(void)
+{
+	return (0);
+}

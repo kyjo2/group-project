@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 12:38:00 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:34 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	infile(t_list *list)
 			if (!ft_strcmp(list->av[i], "<\0"))
 				break ;
 			if (!ft_strcmp(list->av[i], "<<\0"))
-				heredoc(list);
+				heredoc(list, i);
 			i++;
 		}
 		if (list->av[i] == NULL)

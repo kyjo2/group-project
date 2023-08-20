@@ -6,30 +6,30 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 13:54:07 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:33 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	execute_cmd(t_list *list, t_env *env)
+int	execute_cmd(t_list *list)
 {
 	if (ft_strncmp(list->av[0], "echo\0", 5))
-		return (ft_echo());
+		return (ft_echo(list->av[1]));
 	else if (ft_strncmp(list->av[0], "cd\0", 3))
 		return (ft_cd());
 	else if (ft_strncmp(list->av[0], "pwd\0", 4))
-		return (ft_pwd());
+		return (ft_pwd(list->ac));
 	else if (ft_strncmp(list->av[0], "export\0", 7))
 		return (ft_export());
 	else if (ft_strncmp(list->av[0], "unset\0", 6))
 		return (ft_unset());
 	else if (ft_strncmp(list->av[0], "env\0", 4))
-		return (ft_env());
+		return (ft_env(list->envp));
 	else if (ft_strncmp(list->av[0], "exit\0", 5))
 		return (ft_exit());
 	else
-		return (other_cmd(list, env));
+		return (other_cmd(list));
 }
 
 static int	syntax_error(t_list *cmd_head)
@@ -54,18 +54,18 @@ void	close_fd(t_list *list, pid_t pid)
 	if (pid == 0)
 	{
 		if (list->pip[0] > 0)
-			list->pip[0] = ft_close(list->pip[0]);
+			list->pip[0] = close(list->pip[0]);
 	}
 	else
 	{
 		if (list->pip[1] > 0)
-			list->pip[1] = ft_close(list->pip[1]);
+			list->pip[1] = close(list->pip[1]);
 	}
 	return ;
 }
 
 
-void	yes_fork(t_list *list, t_env *env)
+void	yes_fork(t_list *list)
 {
 	pid_t	pid;
 
@@ -74,7 +74,7 @@ void	yes_fork(t_list *list, t_env *env)
 	{
 		redir(list);
 		close_fd(list, pid);
-		exit(execute_cmd(list, env));
+		exit(execute_cmd(list));
 	}
 	else
 		close_fd(list, pid);
@@ -97,10 +97,8 @@ int	wait_process(void)
 }
 
 
-int	execute(t_list *list, t_env *env)
+int	execute(t_list *list)
 {
-	int	i;
-
 	if (syntax_error(list))
 	{
 		perror("syntax error near unexpected token `|'");
@@ -110,14 +108,14 @@ int	execute(t_list *list, t_env *env)
 	{
 		in_out(list);
 		redir(list);
-		execute_cmd(list, env);
+		execute_cmd(list);
 		return (1);
 	}
 	while (list)
 	{
 		in_out(list);
 		pipe(list->pip);
-		yes_fork(list, env);
+		yes_fork(list);
 		list = list->next;
 	}
 	wait_process();

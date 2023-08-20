@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/19 11:27:52 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/20 12:42:44 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "./libft/libft.h"
-# include "./execute/execute.h"
 # include <stdio.h>
 # include <dirent.h>  //opendir,closedir,readdir
 # include <term.h>  //
@@ -45,14 +44,14 @@ typedef struct s_list
 	int				outfile;
 	char			**str;
 	struct s_list   *next;
-	struct s_list   *prev; //형님 prev도 필요합니다,,, 연결 부탁드립미다
+	struct s_list   *prev;
 }   t_list;
  
 typedef	struct	s_env
 {
 	char			*name;
 	char			*value;
-	//char			*question_mark; //$? 일때 숫자
+	char			*question_mark; //$? 일때 숫자
 	struct s_env	*next;
 }				t_env;
 
@@ -66,6 +65,23 @@ typedef struct	s_info
 	char			*question_mark; //$? 일때 숫자
 	struct s_env	*envp_head;
 }	t_info;
+
+int 	in_out(t_list *list);
+int	    command_check(t_list *list);
+int	    other_cmd(t_list *list);
+void	redir(t_list *list);
+void	heredoc(t_list *list, int index);
+void	cut_av(t_list *list, char *str, int size);
+t_env	*find_env(char **ev);
+int		execute(t_list *list);
+void	parsing(t_list **list, char *line, char **envp, t_info *info);
+int		ft_cd(void);
+int	    ft_echo(char *str);
+int	    ft_env(char **envp);
+int		ft_exit(void);
+int		ft_export(void);
+int		ft_pwd(int fd);
+int		ft_unset(void);
 
 #endif
 

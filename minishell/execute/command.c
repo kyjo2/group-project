@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:59:12 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:33 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ static char	**find_path(char **ev)
 	return (ft_split(path, ':'));
 }
 
-int	other_cmd(t_list *list, t_env *env)
+int	other_cmd(t_list *list)
 {
 	list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 	if (!list->cmd)
 		exit(127);
-	evecve(list->cmd, list->av, list->envp);
+	return (execve(list->cmd, list->av, list->envp));
 }

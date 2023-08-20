@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:23:01 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/11 19:19:08 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:48:38 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_copy(char *line, char *value, int name_len)
 // 중간에 숫자랑 _ 이거 두개 가능
 // $?
 
-void	delete_env(char *line, t_env *change_env) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
+void	delete_env(char *line) // "&US'" 이걸 띄어쓰기 말고 S뒤에 있는 걸 이어서 copy
 {
 	int	i;
 	int	j;
@@ -89,7 +89,7 @@ void	change_env_space(char *line, t_env *change_env) // $? 처리 $부터 시작
 		if (line[1] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $? 이렇게 나오는경우 생각해서 짬
 		{
 			line[0] = ' ';
-			line[1] = change_env->question_mark;
+			line[1] = *change_env->question_mark;
 			break ;
 		} 
 		if (line[i] != '_' && (line[i] < '0' || line[i] > '9')
@@ -122,9 +122,9 @@ void	ft_change_env(char *line, t_env *change_env, int i, int doubleq_flag)
 		tmp = tmp->next;
 	}
 	if (env_flag == 0 && doubleq_flag == 0)
-		change_env_space(line[--i], change_env); // $부분부터
+		change_env_space(&line[--i], change_env); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		delete_env(line[--i], change_env);
+		delete_env(line[--i]);
 }
 
 // '$USER' -> $USER
@@ -199,13 +199,13 @@ t_list	*make_node(char *line, t_info *info, char **envp, t_env *change_env)
 	if (!new)
 		ft_error("make_node malloc");
     new->envp = envp;
-	new->ac = ;
-	new->av = ;
-	new->cmd = ;
-	new->exit_pipe = ;
-	new->pipe[2] = ;
-	new->infile = ;
-	new->outfile = ;
+	new->ac = 0;
+	new->av = 0;
+	new->cmd = 0;
+	new->exist_pipe = 0;
+	new->pip[2] = 0;
+	new->infile = 0;
+	new->outfile = 0;
 	new->str = new_split(line, ' ', info);
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;

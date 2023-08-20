@@ -6,27 +6,11 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/19 10:48:02 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:34 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static int	exist_heredoc(t_list *list)
-{
-	int		index;
-
-	index = 0;
-	while (list->av[index])
-	{
-		if (!ft_strcmp(list->av[index], "<<\0"))
-			break ;
-		index++;
-	}
-	if (!list->av[index])
-		return (-1);
-	return (index);
-}
 
 static char    *get_random_name(void)
 {
@@ -88,10 +72,9 @@ static int	fork_for_heredoc(t_list *list, int index)
 	return (ret);
 }
 
-void	heredoc(t_list *list)
+void	heredoc(t_list *list, int index)
 {
     char    *temp;
-	int		index;
 
 	if (list->infile > 0)
 		close(list->infile);

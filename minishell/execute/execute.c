@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 23:24:55 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 23:24:29 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int	execute_cmd(t_list *list)
 {
-	if (ft_strncmp(list->av[0], "echo\0", 5))
+	if (!ft_strncmp(list->av[0], "echo", 4))
 		return (ft_echo(list->av[1]));
-	else if (ft_strncmp(list->av[0], "cd\0", 3))
+	else if (!ft_strncmp(list->av[0], "cd", 2))
 		return (ft_cd());
-	else if (ft_strncmp(list->av[0], "pwd\0", 4))
+	else if (!ft_strncmp(list->av[0], "pwd", 3))
 		return (ft_pwd(list->ac));
-	else if (ft_strncmp(list->av[0], "export\0", 7))
+	else if (!ft_strncmp(list->av[0], "export", 6))
 		return (ft_export());
-	else if (ft_strncmp(list->av[0], "unset\0", 6))
+	else if (!ft_strncmp(list->av[0], "unset", 5))
 		return (ft_unset());
-	else if (ft_strncmp(list->av[0], "env\0", 4))
+	else if (!ft_strncmp(list->av[0], "env", 3))
 		return (ft_env(list->envp));
-	else if (ft_strncmp(list->av[0], "exit\0", 5))
+	else if (!ft_strncmp(list->av[0], "exit", 4))
 		return (ft_exit());
 	else
 		return (other_cmd(list));

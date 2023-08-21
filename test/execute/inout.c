@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 21:24:55 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 22:38:50 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	cut_av(t_list *list, char *str, int size)
 	{
 		if (!ft_strcmp(list->av[i], str))
 			break ;
+		i++;
 	}
 	if (list->ac == i)
 		return ;

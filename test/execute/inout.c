@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 23:21:25 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 23:27:16 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	cut_av(t_list *list, char *str, int size)
 		}
 		idx = start;
 	}
-	list->ac -= size;
+	list->ac -= 2;
 }
 
 static void	infile(t_list *list)

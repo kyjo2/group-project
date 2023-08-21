@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 23:24:29 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 23:28:02 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ void	close_fd(t_list *list, pid_t pid)
 {
 	if (pid == 0)
 	{
-		if (list->pip[0] > 0)
-			list->pip[0] = close(list->pip[0]);
+		if (list->pip[READ] > 0)
+			list->pip[READ] = close(list->pip[READ]);
 	}
 	else
 	{
-		if (list->pip[1] > 0)
-			list->pip[1] = close(list->pip[1]);
+		if (list->pip[WRITE] > 0)
+			list->pip[WRITE] = close(list->pip[WRITE]);
 	}
 	return ;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/20 12:44:33 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/21 21:25:08 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,20 @@ int	execute(t_list *list)
 		perror("syntax error near unexpected token `|'");
 		return (1);
 	}
+	printf("\n%s\n", list->av[0]);
+	in_out(list);
 	if (!(list->next) && command_check(list))
 	{
-		in_out(list);
 		redir(list);
 		execute_cmd(list);
 		return (1);
 	}
 	while (list)
 	{
-		in_out(list);
 		pipe(list->pip);
 		yes_fork(list);
 		list = list->next;
+		in_out(list);
 	}
 	wait_process();
 	return (1);

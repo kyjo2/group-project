@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inout.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/20 12:44:34 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/21 21:24:55 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static void	outfile(t_list *list)
 
 int	in_out(t_list *list)
 {
+	if (!list)
+		return (0);
 	infile(list);
 	if (list->infile == -1)
 		perror("No such file or directory");

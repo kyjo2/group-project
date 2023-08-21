@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/20 12:42:44 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/08/21 21:08:57 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	heredoc(t_list *list, int index);
 void	cut_av(t_list *list, char *str, int size);
 t_env	*find_env(char **ev);
 int		execute(t_list *list);
-void	parsing(t_list **list, char *line, char **envp, t_info *info);
+void	parsing(t_list **list, char **line, t_info *info);
 int		ft_cd(void);
 int	    ft_echo(char *str);
 int	    ft_env(char **envp);

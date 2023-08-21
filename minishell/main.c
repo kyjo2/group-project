@@ -7,32 +7,7 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <termios.h>
-
-typedef struct s_list
-{
-   // char            **envp;
-	int				temp_pip;
-	char			**str;
-	struct s_list   *next;
-}   t_list;
-
-typedef	struct	s_env
-{
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}				t_env;
-
-typedef struct	s_info
-{
-	int	pipe_flag;
-	int	quote_flag;
-	int	doubleq_flag;
-	int	singleq_flag;
-	int	start;
-	char			*question_mark; //$? 일때 숫자
-	struct s_env	*envp_head;
-}	t_info;
+#include <minishell.h>
 
 char	*ft_strdup(const char *s1)
 {
@@ -58,7 +33,7 @@ char	*ft_strdup(const char *s1)
 	return (result);
 }
 
-int	ft_strlen(const char *s)
+static int	ftt_strlen(const char *s)
 {
 	size_t	i;
 
@@ -77,7 +52,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 		return (1);
 	if (s1[0] == '\0' && s2[0] == '\0')
 		return (0);
-	if (ft_strlen(s1) < ft_strlen(s2))
+	if (ftt_strlen(s1) < ftt_strlen(s2))
 		return (1);
 	while (s1[i] && s2[i])
 	{
@@ -85,7 +60,6 @@ int	ft_strcmp(const char *s1, const char *s2)
 			return (1);
 		i++;
 	}
-	printf(" s1= %s s1_num = %d  s2 = %d\n", s1, ft_strlen(s1), ft_strlen(s2));
 	return (0);
 }
 
@@ -100,7 +74,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	size_t	i;
 	size_t	src_len;
 
-	src_len = ft_strlen(src);
+	src_len = ftt_strlen(src);
 	if (!dst || !src)
 		return (0);
 	if (dstsize == 0)
@@ -203,7 +177,6 @@ char	**new_split(char const *s, char c, t_info *info)
 	if (!s)
 		return (NULL);
 	room = count_room(s, c, info);
-	printf("room  = %zu\n", room);
 	result = (char **)malloc(sizeof(char *) * (room + 1));
 	if (!(result))
 		return (NULL);
@@ -218,8 +191,8 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	int		value_len;
 	int		j;
 
-	value_len = ft_strlen(value);
-	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + value_len + 1);
+	value_len = ftt_strlen(value);
+	tmp_line = malloc(sizeof(char) * ftt_strlen(*line)  + value_len + 1);
 	i = 0;
 	while (i < start - 1)
 	{
@@ -230,7 +203,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	while (value[j])
 		tmp_line[i++] = value[j++];
 	j = start + name_len;
-	while (j <= ft_strlen(*line))
+	while (j <= ftt_strlen(*line))
 		tmp_line[i++] = (*line)[j++];
 	tmp_line[i] = '\0';
 	free(*line);
@@ -239,9 +212,9 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	
 	// j = 0;
 	// i = start + name_len;     // 우선 line 의 주소는 $USER  뒤에 부터 주소임!!
-	// printf("line =%s %zu\n", line, ft_strlen(line));
+	// printf("line =%s %zu\n", line, ftt_strlen(line));
 	// printf("value = %s\n", value);
-	// while (i <= ft_strlen(line))  //  환경변수 뒤에 있는 것들 복사하기 위해서 임의로 다른곳에 저장  '\0'까지 복사
+	// while (i <= ftt_strlen(line))  //  환경변수 뒤에 있는 것들 복사하기 위해서 임의로 다른곳에 저장  '\0'까지 복사
 	// 	tmp_line[j++] = line[i++];
 	// i = 0;
 	// start -= 1;
@@ -249,7 +222,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	// 	line[start++] = value[i++];
 	// printf("line =%s tmp_line =%s\n", line, tmp_line);
 	// j = 0;
-	// while (j < ft_strlen(tmp_line))    // 환경변수 value 값 복사하한후 환경변수표시 뒤에 있던 원래 line에 있었던 문자들 다시 복사!
+	// while (j < ftt_strlen(tmp_line))    // 환경변수 value 값 복사하한후 환경변수표시 뒤에 있던 원래 line에 있었던 문자들 다시 복사!
 	// 	line[start++] = tmp_line[j++];
 	// line[start] = '\0';
 	// free(tmp_line);
@@ -268,7 +241,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 // 	int		j;
 // 	char	*tmp_line;
 
-// 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
+// 	tmp_line = malloc(sizeof(char) * ftt_strlen(*line) + ftt_strlen(info->question_mark) + 1); //여기 info->question_mark 개수가 3자리를 넘나? 127
 // 	printf("delete_env line = %s start = %d\n", *line, start);
 // 	i = -1;
 // 	while (++i < start)
@@ -302,8 +275,7 @@ void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터
 	int	i;
 	char	*tmp_line;
 
-	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);
-	printf("line == %s %d\n", *line, start);
+	tmp_line = malloc(sizeof(char) * ftt_strlen(*line) + 3 + 1);
 	i = -1;
 	while (++i < start)
 		tmp_line[i] = (*line)[i];            //echo aa$Erm!
@@ -327,7 +299,6 @@ void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터
 	tmp_line[i] = '\0';
 	free(*line);
 	*line = tmp_line;
-	printf("final_line = %s\n", *line);
 }
 
 void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
@@ -338,14 +309,12 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	env_flag = 0;
 	tmp = info->envp_head;
 	i++;    //$뒤부분부터 시작
-	printf("new_line = %s, first_i = %d\n", *line + i, i);
 	while (tmp->next)
 	{
 		if (ft_strcmp(*line + i, tmp->name) == 0)
 		{
-			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
+			ft_copy(line, tmp->value, ftt_strlen(tmp->name), i);
 			env_flag = 1;
-			printf("good_line = %s\n", *line);
 			break ;
 		}
 		tmp = tmp->next;
@@ -403,7 +372,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	i = -1;
 	while (new->str[++i]) 
 	{
-		// tmp = malloc(sizeof(char) * (ft_strlen(new->str[i]) + 1));
+		// tmp = malloc(sizeof(char) * (ftt_strlen(new->str[i]) + 1));
 		// printf("i = %d\n", i);
 		j = -1;
 		k = -1;
@@ -434,7 +403,7 @@ t_list	*make_node(char **line, t_info *info)
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
-	printf("first_line = %s\n", *line);
+	//printf("first_line = %s\n", *line);
 	check_open_quote(line, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
@@ -456,7 +425,7 @@ int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 		*list = new;
 		tmp2 = *list;
 		*tmp = tmp2; //head_list
-		printf("0: tmp->str = %s\n", (*tmp)->str[0]);
+		//printf("0: tmp->str = %s\n", (*tmp)->str[0]);
 		info->start = 1;
 	}
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
@@ -464,7 +433,7 @@ int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 		(*list)->next = new;
 		*list = (*list)->next;
 	}
-	printf("tmp->str = %s\n", (*tmp)->str[0]);
+	//printf("tmp->str = %s\n", (*tmp)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
 	return (0);
@@ -477,7 +446,7 @@ char	*sub_parsing1(char **line, t_info *info, int i)
 	int		j;
 	int		count;
 
-	pipe_back_line = malloc(sizeof(char) * ft_strlen(*line) + 1);
+	pipe_back_line = malloc(sizeof(char) * ftt_strlen(*line) + 1);
 	j = i;
 	count = 0;
 	if ((*line)[j] == '|')
@@ -518,15 +487,15 @@ void	parsing(t_list **list, char **line, t_info *info)
 			new = make_node(&line[0], info); //make node
 			if (sub_parsing2(info, new, &tmp, list) == 1)
 				break ;
-			printf("aklsdfjsklajfsdalfjdlasfjl =   %s\n", tmp->str[0]);
+			//printf("aklsdfjsklajfsdalfjdlasfjl =   %s\n", tmp->str[0]);
 			free(*line);
-			printf("pipe_back_line = %s\n", pipe_back_line);
+			//printf("pipe_back_line = %s\n", pipe_back_line);
 			*line = pipe_back_line;
 			i = -1;
-			printf("pipe_back_line = %s\n", *line);
+			//printf("pipe_back_line = %s\n", *line);
 			//info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
-		printf("main_line = %s\n", *line);
+		//printf("main_line = %s\n", *line);
 		i++;
 	}
 	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
@@ -601,24 +570,27 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 
 int main(int argc, char **argv, char **envp)
 {
-	char			*line;
 	t_list			*list;
 	t_env			*head;
 	t_info			info;
-	char			*first_line;
+	char			*line;
 
 	line = NULL;
 	head = find_env(envp);
 	init(argc, argv, &info, head);	
-	first_line = readline("minishell $ ");
-	//first_line = "echo $USER | abc dd | aaaa";
-	parsing(&list, &first_line, &info);
-	printf("final_test = %s\n", (list)->str[0]);
 	while (1)
 	{
-		printf("final_test = %s\n", (list)->str[0]);
-		list = (list)->next;
-		if (list->next == NULL)
-			break ;
+		line = readline("minishell $ ");
+		if (!line) // EOF 처리 : ctr + d
+			break;
+		if (*line != '\0')
+			add_history(line);
+		/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
+		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
+		{
+			parsing(&list, &line, &info);
+			execute(list);
+		}
+		free(line);
 	}
 }

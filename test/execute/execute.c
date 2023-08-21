@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 22:35:51 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 23:24:29 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,7 @@ int	execute(t_list *list)
 		perror("syntax error near unexpected token `|'");
 		return (1);
 	}
-	printf("\nhi\n");
 	in_out(list);
-	printf("\nhi\n");
 	if (!(list->next) && command_check(list))
 	{
 		redir(list);

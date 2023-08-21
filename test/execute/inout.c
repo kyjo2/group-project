@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 22:38:50 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 23:21:25 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,24 @@
 
 void	cut_av(t_list *list, char *str, int size)
 {
-	int		start;
-	int		i;
+	int	idx;
+	int	start;
 
-	i = 0;
-	while (i < list->ac)
-	{
-		if (!ft_strcmp(list->av[i], str))
-			break ;
-		i++;
-	}
-	if (list->ac == i)
+	idx = 0;
+	while (idx < list->ac && ft_strcmp(list->av[idx], str))
+		idx++;
+	if (idx == list->ac)
 		return ;
-	start = i;
-	while (i < start + size)
+	start = idx;
+	while (size--)
 	{
-		free(list->av[i]);
-		i++;
-	}
-	while (start < list->ac - size)
-	{
-		list->av[start] = list->av[start + size];
-		start++;
+		free(list->av[idx]);
+		while (idx < list->ac)
+		{
+			list->av[idx] = list->av[idx + 1];
+			idx++;
+		}
+		idx = start;
 	}
 	list->ac -= size;
 }
@@ -49,9 +45,9 @@ static void	infile(t_list *list)
 		i = 0;
 		while (list->av[i])
 		{
-			if (!ft_strcmp(list->av[i], "<\0"))
+			if (!ft_strncmp(list->av[i], "<", 1))
 				break ;
-			if (!ft_strcmp(list->av[i], "<<\0"))
+			if (!ft_strncmp(list->av[i], "<<", 2))
 				heredoc(list, i);
 			i++;
 		}
@@ -62,7 +58,7 @@ static void	infile(t_list *list)
 		list->infile = open(list->av[i + 1], O_RDONLY);
 		if (list->infile == -1)
 			perror("no such file");
-		cut_av(list, "<\0", 2);
+		cut_av(list, "<", 2);
 	}
 }
 
@@ -73,19 +69,19 @@ static void	outfile(t_list *list)
 	i = 0;
 	while (list->av[i])
 	{
-		if (!ft_strcmp(list->av[i], ">\0"))
+		if (!ft_strncmp(list->av[i], ">", 1))
 		{
 			if (list->outfile > 0)
 				close(list->outfile);
 			list->outfile = open(list->av[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			cut_av(list, ">\0", 2);
+			cut_av(list, ">", 2);
 		}
-		else if (ft_strcmp(list->av[i], ">>\0") == 0)
+		else if (!ft_strncmp(list->av[i], ">>", 2))
 		{
 			if (list->outfile > 0)
 				close(list->outfile);
 			list->outfile = open(list->av[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			cut_av(list, ">>\0", 2);
+			cut_av(list, ">>", 2);
 		}
 		i++;
 	}

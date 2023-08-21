@@ -6,12 +6,15 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/21 21:47:04 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 22:20:24 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define READ 0
+# define WRITE 1
 
 # include "./libft/libft.h"
 # include <stdio.h>

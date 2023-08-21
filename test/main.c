@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 21:31:52 by yul               #+#    #+#             */
-/*   Updated: 2023/08/21 22:00:58 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/21 22:28:29 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main(int argc, char **av, char **ev)
 	{
 		line = readline("minishell $ ");
 		list->av = ft_split(line, ' ');
-		list->ac = 2;
+		list->ac = 3;
 		list->cmd = NULL;
 		list->envp = ev;
 		list->exist_pipe = 0;

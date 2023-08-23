@@ -5,10 +5,10 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	char	*tmp_line;
 	int		i;
 	int		value_len;
-	int		j;
+	size_t  j;
 
-	value_len = ftt_strlen(value);
-	tmp_line = malloc(sizeof(char) * ftt_strlen(*line)  + value_len + 1);
+	value_len = ft_strlen(value);
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + value_len + 1);
 	i = 0;
 	while (i < start - 1)
 	{
@@ -19,7 +19,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	while (value[j])
 		tmp_line[i++] = value[j++];
 	j = start + name_len;
-	while (j <= ftt_strlen(*line))
+	while (j <= ft_strlen(*line))
 		tmp_line[i++] = (*line)[j++];
 	tmp_line[i] = '\0';
 	free(*line);
@@ -33,7 +33,7 @@ void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터
 	int	i;
 	char	*tmp_line;
 
-	tmp_line = malloc(sizeof(char) * ftt_strlen(*line) + 3 + 1);
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);
 	i = -1;
 	while (++i < start)
 		tmp_line[i] = (*line)[i];            //echo aa$Erm!
@@ -71,7 +71,7 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	{
 		if (ft_strcmp(*line + i, tmp->name) == 0)
 		{
-			ft_copy(line, tmp->value, ftt_strlen(tmp->name), i);
+			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
 			env_flag = 1;
 			break ;
 		}

@@ -6,7 +6,7 @@
 #    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/08/23 17:29:30 by junggkim         ###   ########.fr        #
+#    Updated: 2023/08/23 18:13:07 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,14 +52,14 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $^ -o $@ -I./ 
+	$(CC) $(CFLAGS) -I${HOME}/.brew/opt/readline/include -c $^ -o $@ -I./ 
 
 $(LIB) : $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) -g3 -fsanitize=address $(LIBFT) $(MINI) $(READ) -o $@
+	$(CC) $(CFLAGS) -g3 -fsanitize=address $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

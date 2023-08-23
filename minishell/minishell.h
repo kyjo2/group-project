@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/23 16:33:18 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/08/23 19:23:21 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,18 @@ int		ft_exit(void);
 int		ft_export(void);
 int		ft_pwd(int fd);
 int		ft_unset(void);
+//parsing
+void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag);
+void	delete_quote(t_list *new, t_info *info);
+void	change_env_space(char **line, t_info *info, int start);
+void	ft_copy(char **line, char *value, int name_len, int start);
+void    ft_error(char *str);
+//static int	check_sep(char s, char c, t_info *info, int flag);
+//static size_t	count_room(char const *s, char c, t_info *info);
+//static void	*ft_free(char **result);
+//static char	**sub_split(char **result, char const *s, char c, t_info *info);
+char	**new_split(char const *s, char c, t_info *info);
+//static int	ft_len(const char *s);
 
 #endif
 

@@ -86,7 +86,7 @@ char	*sub_parsing1(char **line, t_info *info, int i)
 	int		j;
 	int		count;
 
-	pipe_back_line = malloc(sizeof(char) * ftt_strlen(*line) + 1);
+	pipe_back_line = malloc(sizeof(char) * ft_strlen(*line) + 1);
 	j = i;
 	count = 0;
 	if ((*line)[j] == '|')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/21 22:20:37 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/23 16:33:18 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ typedef struct s_list
 	int				outfile;
 	char			**str;
 	struct s_list   *next;
-	struct s_list   *prev;
+	struct s_list   *prev;  
 }   t_list;
  
 typedef	struct	s_env
 {
 	char			*name;
 	char			*value;
-	char			*question_mark; //$? 일때 숫자
+	//char			*question_mark; //$? 일때 숫자
 	struct s_env	*next;
 }				t_env;
 

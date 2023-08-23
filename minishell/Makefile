@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yul <yul@student.42.fr>                    +#+  +:+       +#+         #
+#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/08/21 21:13:23 by yul              ###   ########.fr        #
+#    Updated: 2023/08/23 17:29:30 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,11 @@ SRCS = main.c \
 	./builtin/ft_exit.c \
 	./builtin/ft_export.c \
 	./builtin/ft_pwd.c \
-	./builtin/ft_unset.c
+	./builtin/ft_unset.c \
+	./parsing/parsing.c \
+	./parsing/parsing2.c\
+	./parsing/utils.c\
+	./parsing/utils2.c
 
 OBJS = $(SRCS:.c=.o)
 

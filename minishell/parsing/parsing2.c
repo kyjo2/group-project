@@ -1,0 +1,122 @@
+#include <minishell.h>
+
+void	ft_copy(char **line, char *value, int name_len, int start)
+{
+	char	*tmp_line;
+	int		i;
+	int		value_len;
+	int		j;
+
+	value_len = ftt_strlen(value);
+	tmp_line = malloc(sizeof(char) * ftt_strlen(*line)  + value_len + 1);
+	i = 0;
+	while (i < start - 1)
+	{
+		tmp_line[i] = (*line)[i];
+		i++;
+	}
+	j = 0;
+	while (value[j])
+		tmp_line[i++] = value[j++];
+	j = start + name_len;
+	while (j <= ftt_strlen(*line))
+		tmp_line[i++] = (*line)[j++];
+	tmp_line[i] = '\0';
+	free(*line);
+	*line = tmp_line;
+
+}
+
+
+void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
+{
+	int	i;
+	char	*tmp_line;
+
+	tmp_line = malloc(sizeof(char) * ftt_strlen(*line) + 3 + 1);
+	i = -1;
+	while (++i < start)
+		tmp_line[i] = (*line)[i];            //echo aa$Erm!
+	while ((*line)[start])
+	{
+		if ((*line)[++start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $?a 이렇게 나오는경우 생각해서 짬
+		{
+			tmp_line[i++] = *info->question_mark;
+			while ((*line)[++start])
+				tmp_line[i++] = (*line)[start];
+			break ;
+		}
+		else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+		{
+			while ((*line)[start])
+				tmp_line[i++] = (*line)[start++];
+			break ;
+		}
+	}
+	tmp_line[i] = '\0';
+	free(*line);
+	*line = tmp_line;
+}
+
+void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
+{
+	t_env	*tmp;
+	int		env_flag;
+
+	env_flag = 0;
+	tmp = info->envp_head;
+	i++;    //$뒤부분부터 시작
+	while (tmp->next)
+	{
+		if (ft_strcmp(*line + i, tmp->name) == 0)
+		{
+			ft_copy(line, tmp->value, ftt_strlen(tmp->name), i);
+			env_flag = 1;
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	i--;  // $부분부터
+	if (env_flag == 0 && doubleq_flag == 0)
+		change_env_space(line, info, i); // $부분부터
+	else if (env_flag == 0 && doubleq_flag == 1)
+		change_env_space(line, info, i); 
+		//delete_env(line, info, i);
+}
+
+// echo " sss" dd aa
+void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
+{                                                    // 임의로 malloc해서 따옴표 나오기 전까지 복사했다가 따옴표가 나오면 따옴표 생략하고 그다음 것들을 다시 복사 하는방법
+	int		i;
+	int		j;
+	int		k;
+	// char	*tmp;
+	
+	i = -1;
+	while (new->str[++i]) 
+	{
+		// tmp = malloc(sizeof(char) * (ftt_strlen(new->str[i]) + 1));
+		// printf("i = %d\n", i);
+		j = -1;
+		k = -1;
+		while (new->str[i][++j])
+		{
+			// printf("before = %s\n", new->str[i]);
+			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
+			if (new->str[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+				info->doubleq_flag = 1;
+			else if (new->str[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+				info->doubleq_flag = 0;
+			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+				info->singleq_flag = 1;
+			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+				info->singleq_flag = 0;
+			else
+				new->str[i][++k] = new->str[i][j];
+		}
+		new->str[i][++k] = '\0';
+		//printf("after = %s\n", new->str[i]);
+		// new->str[i] = tmp;
+	}
+}

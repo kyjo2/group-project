@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 23:37:20 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/26 17:11:53 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,21 @@ void	cut_av(t_list *list, char *str, int size)
 	int	start;
 
 	idx = 0;
-	while (idx < list->ac && ft_strcmp(list->av[idx], str))
+	while (list->av[idx] && ft_strcmp(list->av[idx], str))
 		idx++;
-	if (idx == list->ac)
+	if (!list->av[idx])
 		return ;
 	start = idx;
 	while (size--)
 	{
 		free(list->av[idx]);
-		while (idx < list->ac)
+		while (list->av[idx + 1])
 		{
 			list->av[idx] = list->av[idx + 1];
 			idx++;
 		}
 		idx = start;
 	}
-	list->ac -= 2;
 }
 
 static void	infile(t_list *list)

@@ -49,7 +49,7 @@ void ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1) // readline으로 설정한 문자열을 한 번 출력한다?
 		exit(1);
-	rl_replace_line("", 1); // 프롬프트에 이미 친 문자열을 싹 날려준다.
+	//rl_replace_line("", 1); // 프롬프트에 이미 친 문자열을 싹 날려준다.
 	rl_redisplay();			// 프롬프트 커서가 움직이지 않게 해준다.
 }
 
@@ -65,13 +65,14 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 
 	(void)argc;
 	(void)argv;
+	(void)head;
 	if (argc != 1)
 	{
 		printf("argument error!!\n");
 		exit(1);
 	}
 	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
-	info->envp_head = head;
+	//info->envp_head = head;
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
@@ -101,7 +102,7 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 int main(int argc, char **argv, char **envp)
 {
 	t_list			*list;
-	t_env			*head;
+	t_env			*head = NULL;
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
@@ -110,9 +111,9 @@ int main(int argc, char **argv, char **envp)
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	info.envp = envp;
-	head = find_env(envp);
+	//head = find_env(envp);
 	init(argc, argv, &info, head);
-	signal_setting();
+	//signal_setting();
 	while (1)
 	{
 		line = readline("minishell $ ");
@@ -129,7 +130,11 @@ int main(int argc, char **argv, char **envp)
 			printf("%d\n", list->pip[0]);
 			printf("%d\n", list->infile);
 			printf("%d\n", list->outfile);
+			list->prev = NULL;
+			list->envp = envp;
 			tmp_list = list;
+			list->infile = -2;
+			list->outfile = -2;
 			while (tmp_list->next)
 			{
 				printf("av = %s\n", tmp_list->av[0]);

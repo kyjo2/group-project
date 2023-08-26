@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/26 17:13:55 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/26 19:10:57 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,16 @@ int	execute(t_list *list)
 		in_out(list);
 		redir(list);
 		execute_cmd(list);
-		return (1);
 	}
-	while (list)
+	else
 	{
-		pipe(list->pip);
-		in_out(list);
-		yes_fork(list);
-		list = list->next;
+		while (list)
+		{
+			pipe(list->pip);
+			in_out(list);
+			yes_fork(list);
+			list = list->next;
+		}
 	}
 	wait_process();
 	free_list(head);

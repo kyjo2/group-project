@@ -49,7 +49,7 @@ t_list	*make_node(char **line, t_info *info)
 	if (!new)
 		ft_error("make_node malloc");
     //new->envp = envp;
-	new->str = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+	new->av = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;

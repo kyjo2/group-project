@@ -45,7 +45,6 @@ typedef struct s_list
 	int				temp_pip;
 	int				infile;
 	int				outfile;
-	char			**str;
 	struct s_list   *next;
 	struct s_list   *prev;  
 }   t_list;

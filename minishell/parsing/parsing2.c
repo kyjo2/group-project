@@ -94,28 +94,28 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	// char	*tmp;
 	
 	i = -1;
-	while (new->str[++i]) 
+	while (new->av[++i]) 
 	{
 		// tmp = malloc(sizeof(char) * (ftt_strlen(new->str[i]) + 1));
 		// printf("i = %d\n", i);
 		j = -1;
 		k = -1;
-		while (new->str[i][++j])
+		while (new->av[i][++j])
 		{
 			// printf("before = %s\n", new->str[i]);
 			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
-			if (new->str[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			if (new->av[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 				info->doubleq_flag = 1;
-			else if (new->str[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+			else if (new->av[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 				info->doubleq_flag = 0;
-			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			else if (new->av[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 				info->singleq_flag = 1;
-			else if (new->str[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+			else if (new->av[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 				info->singleq_flag = 0;
 			else
-				new->str[i][++k] = new->str[i][j];
+				new->av[i][++k] = new->av[i][j];
 		}
-		new->str[i][++k] = '\0';
+		new->av[i][++k] = '\0';
 		//printf("after = %s\n", new->str[i]);
 		// new->str[i] = tmp;
 	}

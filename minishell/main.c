@@ -122,7 +122,7 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
-			printf("%s\n", list->str[0]);
+			printf("%s\n", list->av[0]);
 			execute(list);
 		}
 		free(line);

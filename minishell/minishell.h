@@ -39,7 +39,7 @@ typedef struct s_list
 	int				ac;
 	char			**av;
 	char			*cmd;
-    char            **envp;
+    char			**envp;
 	int				exist_pipe;
 	int				pip[2];
 	int				infile;
@@ -64,6 +64,7 @@ typedef struct	s_info
 	int				singleq_flag;
 	int				start;
 	char			*question_mark; //$? 일때 숫자
+	char			**envp;
 	struct s_env	*envp_head;
 }	t_info;
 

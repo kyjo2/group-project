@@ -43,12 +43,10 @@ t_list	*make_node(char **line, t_info *info)
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
-	//printf("first_line = %s\n", *line);
 	check_open_quote(line, info);
 	new = malloc(sizeof(t_list));
 	if (!new)
 		ft_error("make_node malloc");
-    //new->envp = envp;
 	new->av = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 	if (info->pipe_flag == 1)
 		new->exist_pipe = 1;
@@ -57,6 +55,12 @@ t_list	*make_node(char **line, t_info *info)
 	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
+	new->envp = info->envp;
+	new->cmd = NULL;
+	new->ac = 0;
+	*new->pip = 0;
+	new->infile = 0;
+	new->outfile = 0;
 	return (new);
 }
 

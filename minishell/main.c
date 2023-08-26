@@ -105,9 +105,11 @@ int main(int argc, char **argv, char **envp)
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
+	t_list			*tmp_list;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
+	info.envp = envp;
 	head = find_env(envp);
 	init(argc, argv, &info, head);
 	signal_setting();
@@ -122,7 +124,18 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
-			printf("%s\n", list->av[0]);
+			printf("%s\n", list->envp[0]);
+			printf("%d\n", list->exist_pipe);
+			printf("%d\n", list->pip[0]);
+			printf("%d\n", list->infile);
+			printf("%d\n", list->outfile);
+			tmp_list = list;
+			while (tmp_list->next)
+			{
+				printf("av = %s\n", tmp_list->av[0]);
+				//printf("tmp_list = %d\n", tmp_list->exist_pipe);
+				tmp_list = tmp_list->next;
+			}
 			execute(list);
 		}
 		free(line);

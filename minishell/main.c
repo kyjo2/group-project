@@ -113,7 +113,7 @@ int main(int argc, char **argv, char **envp)
 	info.envp = envp;
 	//head = find_env(envp);
 	init(argc, argv, &info, head);
-	//signal_setting();
+	signal_setting();
 	while (1)
 	{
 		line = readline("minishell $ ");

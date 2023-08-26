@@ -116,6 +116,7 @@ int	execute(t_list *list)
 {
 	t_list	*head;
 
+	printf("execute = %s\n", (list)->str[0]);
 	head = list;
 	if (syntax_error(list))
 	{

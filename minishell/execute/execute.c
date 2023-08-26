@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/26 14:02:18 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/26 16:19:51 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ int	execute(t_list *list)
 		pipe(list->pip);
 		yes_fork(list);
 		list = list->next;
-		in_out(list);
 	}
 	wait_process();
 	free_list(head);

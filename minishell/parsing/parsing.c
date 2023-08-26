@@ -50,6 +50,10 @@ t_list	*make_node(char **line, t_info *info)
 		ft_error("make_node malloc");
     //new->envp = envp;
 	new->av = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+	if (info->pipe_flag == 1)
+		new->exist_pipe = 1;
+	else
+		new->exist_pipe = 0;
 	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
@@ -132,7 +136,6 @@ void	parsing(t_list **list, char **line, t_info *info)
 			//printf("pipe_back_line = %s\n", pipe_back_line);
 			*line = pipe_back_line;
 			i = -1;
-			//printf("pipe_back_line = %s\n", *line);
 			//info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
 		//printf("main_line = %s\n", *line);

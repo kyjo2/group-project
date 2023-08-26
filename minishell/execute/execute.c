@@ -132,8 +132,8 @@ int	execute(t_list *list)
 	}
 	while (list)
 	{
-		in_out(list);
 		pipe(list->pip);
+		in_out(list);
 		yes_fork(list);
 		list = list->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/26 16:19:51 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/26 17:13:55 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_cmd(t_list *list)
 	else if (!ft_strncmp(list->av[0], "cd", 2))
 		return (ft_cd());
 	else if (!ft_strncmp(list->av[0], "pwd", 3))
-		return (ft_pwd(list->ac));
+		return (ft_pwd(list->outfile));
 	else if (!ft_strncmp(list->av[0], "export", 6))
 		return (ft_export());
 	else if (!ft_strncmp(list->av[0], "unset", 5))
@@ -39,7 +39,7 @@ static int	syntax_error(t_list *cmd_head)
 	head = cmd_head;
 	while (head)
 	{
-		if (head->exist_pipe && head->ac == 0)
+		if (head->exist_pipe && head->av[0])
 		{
 			g_exit_code = 258;
 			return (1);

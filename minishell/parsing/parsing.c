@@ -35,12 +35,21 @@ void	check_open_quote(char **line, t_info *info)
 		ft_error("quote!!");
 }
 
-
+int	count_ac(char **str)
+{
+	int	count;
+	
+	count = 0;
+	while (str[count])
+		count++;
+	return (count);
+}
 
 t_list	*make_node(char **line, t_info *info)
 {
     t_list  *new;
 
+	printf("make_node\n");
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
 	check_open_quote(line, info);
@@ -55,10 +64,10 @@ t_list	*make_node(char **line, t_info *info)
 	info->doubleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
+	new->prev = NULL;
 	new->envp = info->envp;
 	new->cmd = NULL;
-	new->ac = 0;
-	*new->pip = 0;
+	new->ac = count_ac(new->av);
 	new->infile = 0;
 	new->outfile = 0;
 	return (new);
@@ -68,8 +77,10 @@ int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 {
 	t_list *tmp2;
 
+	printf("sub_parsing2\n");
 	if (info->start == 0) // info ->start = 0이 바뀌지 않느다
 	{
+		printf("info->start\n");
 		*list = new;
 		tmp2 = *list;
 		*tmp = tmp2; //head_list
@@ -79,8 +90,11 @@ int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 	else // 처음 노드가 아니기 때문에 list가 존재하므로 next로 연결해줍니다.
 	{
 		(*list)->next = new;
-		*list = (*list)->next;
+		new->prev = (*list);
+		// *list = (*list)->next;
 	}
+	printf("info->start = %d\n", info->start);
+	printf("info->pipe_flag\n");
 	//printf("tmp->str = %s\n", (*tmp)->str[0]);
 	if (info->pipe_flag == 0) // 마지막 노드이므로 while loop를 벗어납니다.
 		return (1);
@@ -94,6 +108,7 @@ char	*sub_parsing1(char **line, t_info *info, int i)
 	int		j;
 	int		count;
 
+	printf("sub_parsing1\n");
 	pipe_back_line = malloc(sizeof(char) * ft_strlen(*line) + 1);
 	j = i;
 	count = 0;
@@ -136,7 +151,9 @@ void	parsing(t_list **list, char **line, t_info *info)
 			if (sub_parsing2(info, new, &tmp, list) == 1)
 				break ;
 			//printf("aklsdfjsklajfsdalfjdlasfjl =   %s\n", tmp->str[0]);
+			printf("*line\n");
 			free(*line);
+			printf("free\n");
 			//printf("pipe_back_line = %s\n", pipe_back_line);
 			*line = pipe_back_line;
 			i = -1;
@@ -145,5 +162,11 @@ void	parsing(t_list **list, char **line, t_info *info)
 		//printf("main_line = %s\n", *line);
 		i++;
 	}
+	info->start = 0;
 	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
+	printf("%s\n", (*list)->envp[0]);
+	printf("%d\n", (*list)->exist_pipe);
+	printf("%d\n", (*list)->pip[0]);
+	printf("%d\n", (*list)->infile);
+	printf("%d\n", (*list)->outfile);
 }

@@ -117,18 +117,14 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell $ ");
-		printf("11111\n");
 		if (!line) // EOF 처리 : ctr + d
 			break;
-		printf("222222\n");
 		if (*line != '\0')
 			add_history(line);
 		/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
-			printf("3333333\n");
 			parsing(&list, &line, &info);
-			printf("4444444\n");
 			// printf("%s\n", list->envp[0]);
 			// printf("%d\n", list->exist_pipe);
 			// printf("%d\n", list->pip[0]);
@@ -154,7 +150,6 @@ int main(int argc, char **argv, char **envp)
 			// }
 			execute(list);
 			free_aa(list);
-			printf("6666666666\n");
 		}
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/27 21:07:07 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/27 21:13:29 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int	execute(t_list *list)
 {
 	t_list	*head;
 
-	printf("execute = %s\n", (list)->av[0]);
 	head = list;
 	if (syntax_error(list))
 	{
@@ -135,7 +134,6 @@ int	execute(t_list *list)
 		{
 			pipe(list->pip);
 			in_out(list);
-			printf("av = %s\n", list->av[0]);
 			yes_fork(list);
 			list = list->next;
 		}

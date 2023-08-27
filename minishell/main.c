@@ -16,6 +16,7 @@ t_env	*find_env(char **ev)
 	t_env	*head;
 	t_env	*temp;
 	t_env	*new;
+	char	*str;
 	int		i;
 
 	new = malloc(sizeof(t_env));
@@ -23,13 +24,14 @@ t_env	*find_env(char **ev)
 	head = new;
 	while (*ev)
 	{
+		str = ft_strdup(*ev);
 		i = 0;
-		while ((*ev)[i] != '=')
+		while (str[i] != '=')
 			i++;
 		new->name = malloc(sizeof(char) * (i + 1));
-		ft_strlcpy(new->name, *ev, i + 1);
-		*ev += (i + 1);
-		new->value = ft_strdup(*ev);
+		ft_strlcpy(new->name, str, i + 1);
+		str += (i + 1);
+		new->value = ft_strdup(str);
 		ev++;
 		if (*ev)
 		{
@@ -38,7 +40,6 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
-		
 	}
 	return (head);
 }

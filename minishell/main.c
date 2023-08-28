@@ -40,6 +40,7 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
+		free(str);
 	}
 	return (head);
 }

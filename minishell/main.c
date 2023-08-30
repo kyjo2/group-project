@@ -40,7 +40,6 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
-		free(str);
 	}
 	return (head);
 }
@@ -150,7 +149,6 @@ int main(int argc, char **argv, char **envp)
 			// 	tmp_list = tmp_list->prev;
 			// }
 			execute(list);
-			free_aa(list);
 		}
 		free(line);
 	}

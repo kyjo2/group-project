@@ -9,38 +9,40 @@
 #include <termios.h>
 #include "minishell.h"
 
+t_env	*new_env(void)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	new->next = NULL;
+	return (new);
+}
+
 t_env	*find_env(char **ev)
 {
 	t_env	*head;
 	t_env	*temp;
 	t_env	*new;
-	char	*str;
 	int		i;
 
-	new = malloc(sizeof(t_env));
-	new->next = NULL;
+	new = new_env();
 	head = new;
 	while (*ev)
 	{
-		str = ft_strdup(*ev);
 		i = 0;
-		while (str[i] != '=')
+		while ((*ev)[i] != '=')
 			i++;
 		new->name = malloc(sizeof(char) * (i + 1));
-		ft_strlcpy(new->name, str, i + 1);
-		str += (i + 1);
-		new->value = ft_strdup(str);
+		ft_strlcpy(new->name, *ev, i + 1);
+		new->value = ft_strdup(&(*ev)[i+1]);
 		new->have_equl = 1;    //export할떄 필요함
 		ev++;
 		if (*ev)
 		{
-			temp = malloc(sizeof(t_env));
-			temp->next = NULL;
+			temp = new_env();
 			new->next = temp;
 			new = temp;
 		}
-		str -= (i + 1);
-		free(str);
 	}
 	return (head);
 }
@@ -119,6 +121,13 @@ int main(int argc, char **argv, char **envp)
 	line = NULL;
 	info.envp = envp;
 	head = find_env(envp);
+	while (head)
+	{
+		printf("\n");
+		printf("name = %s\n", head->name);
+		printf("value = %s\n", head->value);
+		head = head->next;
+	}
 	init(argc, argv, &info, head);
 	signal_setting();
 	while (1)

@@ -39,7 +39,8 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
-		//free(str);
+		str -= (i + 1);
+		free(str);
 	}
 	return (head);
 }
@@ -131,6 +132,10 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
+			if (list->next)
+				printf("\ngood\n");
+			else
+				printf("\nbad\n");
 			execute(list, &info);
 			free_aa(list);
 		}

@@ -12,7 +12,7 @@
 // 	return (i);
 // }
 
-int	ft_strcmp(const char *s1, const char *s2)
+int	new_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 

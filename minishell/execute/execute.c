@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/27 21:13:29 by yul              ###   ########.fr       */
+/*   Updated: 2023/08/30 23:06:27 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	execute_cmd(t_list *list)
+int	execute_cmd(t_list *list, t_info *info)
 {
 	if (!ft_strncmp(list->av[0], "echo", 4))
-		return (ft_echo(list->av[1]));
+		return (ft_echo(list->av));
 	else if (!ft_strncmp(list->av[0], "cd", 2))
-		return (ft_cd());
+		return (ft_cd(list->av, info));
 	else if (!ft_strncmp(list->av[0], "pwd", 3))
 		return (ft_pwd(list->outfile));
 	else if (!ft_strncmp(list->av[0], "export", 6))
-		return (ft_export());
+		return (ft_export(list->av, info));
 	else if (!ft_strncmp(list->av[0], "unset", 5))
-		return (ft_unset());
+		return (ft_unset(list->av, info));
 	else if (!ft_strncmp(list->av[0], "env", 3))
-		return (ft_env(list->envp));
+		return (ft_env(info->envp_head));
 	else if (!ft_strncmp(list->av[0], "exit", 4))
-		return (ft_exit());
+		return (ft_exit(list->av));
 	else
 		return (other_cmd(list));
 }
@@ -65,7 +65,7 @@ void	close_fd(t_list *list, pid_t pid)
 }
 
 
-void	yes_fork(t_list *list)
+void	yes_fork(t_list *list, t_info *info)
 {
 	pid_t	pid;
 
@@ -74,7 +74,7 @@ void	yes_fork(t_list *list)
 	{
 		redir(list);
 		close_fd(list, pid);
-		exit(execute_cmd(list));
+		exit(execute_cmd(list, info));
 	}
 	else
 		close_fd(list, pid);
@@ -112,7 +112,7 @@ void	free_list(t_list *head)
 	}
 }
 
-int	execute(t_list *list)
+int	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
 
@@ -126,7 +126,7 @@ int	execute(t_list *list)
 	{
 		in_out(list);
 		redir(list);
-		execute_cmd(list);
+		execute_cmd(list, info);
 	}
 	else
 	{
@@ -134,7 +134,7 @@ int	execute(t_list *list)
 		{
 			pipe(list->pip);
 			in_out(list);
-			yes_fork(list);
+			yes_fork(list, info);
 			list = list->next;
 		}
 	}

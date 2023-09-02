@@ -9,8 +9,6 @@
 #include <termios.h>
 #include "minishell.h"
 
-
-
 t_env	*find_env(char **ev)
 {
 	t_env	*head;
@@ -32,6 +30,7 @@ t_env	*find_env(char **ev)
 		ft_strlcpy(new->name, str, i + 1);
 		str += (i + 1);
 		new->value = ft_strdup(str);
+		new->have_equl = 1;    //export할떄 필요함
 		ev++;
 		if (*ev)
 		{
@@ -40,6 +39,7 @@ t_env	*find_env(char **ev)
 			new->next = temp;
 			new = temp;
 		}
+		//free(str);
 	}
 	return (head);
 }
@@ -63,8 +63,8 @@ void signal_setting()
 void init(int argc, char *argv[], t_info *info, t_env *head)
 {
 	struct termios termios_new;
+	//t_env *tmp;
 
-	(void)argc;
 	(void)argv;
 	if (argc != 1)
 	{
@@ -73,6 +73,12 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	}
 	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
 	info->envp_head = head;
+	// tmp = info ->envp_head;
+	// while (tmp->next)
+	// {
+	// 	printf("name = %s value = %s\n", tmp->name, tmp->value);
+	// 	tmp = tmp->next;
+	// }
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
@@ -125,30 +131,8 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
-			// printf("%s\n", list->envp[0]);
-			// printf("%d\n", list->exist_pipe);
-			// printf("%d\n", list->pip[0]);
-			// printf("%d\n", list->infile);
-			// printf("%d\n", list->outfile);
-			// list->envp = envp;
-			// tmp_list = list;
-			// // list->prev = NULL;
-			// // list->infile = -2;
-			// // list->outfile = -2;
-			// printf("555555555\n");
-			// while (tmp_list->next)
-			// {
-			// 	printf("av = %s\n", tmp_list->av[1]);
-			// 	printf("%d\n", tmp_list->ac);
-			// 	//printf("tmp_list = %d\n", tmp_list->exist_pipe);
-			// 	tmp_list = tmp_list->next;
-			// }
-			// while (tmp_list->prev)
-			// {
-			// 	printf("prev");
-			// 	tmp_list = tmp_list->prev;
-			// }
-			execute(list);
+			execute(list, &info);
+			free_aa(list);
 		}
 		free(line);
 	}

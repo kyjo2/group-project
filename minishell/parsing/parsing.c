@@ -155,5 +155,5 @@ void	parsing(t_list **list, char **line, t_info *info)
 		i++;
 	}
 	info->start = 0;
-	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.	
+	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
 }

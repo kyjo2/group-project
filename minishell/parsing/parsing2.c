@@ -67,9 +67,9 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	env_flag = 0;
 	tmp = info->envp_head;
 	i++;    //$뒤부분부터 시작
-	while (tmp->next)
+	while (tmp)
 	{
-		if (ft_strcmp(*line + i, tmp->name) == 0)
+		if (new_strcmp(*line + i, tmp->name) == 0)
 		{
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
 			env_flag = 1;

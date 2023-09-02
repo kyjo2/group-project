@@ -38,6 +38,21 @@ void	declare_print(t_info *info)
 	}
 }
 
+void	pick_name_val2(t_env *tmp, char *cmd, int *nlen, int *vlen)
+{
+	int	i;
+
+	while (cmd[*nlen + 1 + *vlen] != '\0')
+		(*vlen)++;
+	tmp->value = malloc(sizeof(char) * (*vlen) + 1);
+	if (!tmp->value)
+		exit(1);
+	i = -1;
+	while (++i < *vlen)
+		tmp->value[i] = cmd[i + (*nlen) + 1];
+	tmp->value[i] = '\0';
+}
+
 int		pick_name_val(t_env *tmp, char *cmd)
 {
 	int	nlen;
@@ -57,15 +72,7 @@ int		pick_name_val(t_env *tmp, char *cmd)
 	tmp->name[i] = '\0';
 	if (cmd[nlen + 1] == '\0')
 		return (0);
-	while (cmd[nlen + 1 + vlen] != '\0')
-		vlen++;
-	tmp->value = malloc(sizeof(char) * vlen + 1);
-	if (!tmp->value)
-		exit(1);
-	i = -1;
-	while (++i < vlen)
-		tmp->value[i] = cmd[i + nlen + 1];
-	tmp->value[i] = '\0';
+	pick_name_val2(tmp, cmd, &nlen, &vlen);
 	return (1);
 }
 
@@ -83,6 +90,11 @@ int		check_cmd(char *cmd)
 	return (1);
 }
 
+void	free_tmp(t_env tmp)
+{
+	free(tmp.name);
+	free(tmp.value);
+}
 
 // export a                            #key값만 생성
 // export b=                           #value에 아무 값 없음
@@ -96,12 +108,6 @@ int	ft_export(char **cmd, t_info *info)
 	int		i;
 	t_env	tmp;
 
-	// i = 0;
-	// while (cmd[i])
-	// {
-	// 	printf("cmd = %s\n", cmd[i]);
-	// 	i++;
-	// }
 	if (!cmd[1])
 	{
 		declare_print(info);
@@ -119,9 +125,9 @@ int	ft_export(char **cmd, t_info *info)
 			if (pick_name_val(&tmp, cmd[i]) == 0)
 				tmp.value = 0;
 			change_env_export(info, tmp.name, tmp.value, 1);
-			free(tmp.name);
-			free(tmp.value);
+			free_tmp(tmp);
 		}
 	}
 	return (0);
 }
+

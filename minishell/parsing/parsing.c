@@ -88,6 +88,7 @@ int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 	{
 		(*list)->next = new;
 		new->prev = (*list);
+		(*list) = new;
 		// *list = (*list)->next;
 	}
 	//printf("tmp->str = %s\n", (*tmp)->str[0]);

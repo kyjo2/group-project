@@ -39,7 +39,7 @@ static int	syntax_error(t_list *cmd_head)
 	head = cmd_head;
 	while (head)
 	{
-		if (head->exist_pipe && head->av[0])
+		if (head->exist_pipe && !head->next)
 		{
 			g_exit_code = 258;
 			return (1);

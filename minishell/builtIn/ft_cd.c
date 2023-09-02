@@ -86,8 +86,7 @@ void	change_env_export(t_info *info, char *name, char *value, int have_equl)
 		{
 			if (value)       	
 				tmp->value = ft_strdup(value);
-			else
-				tmp->have_equl = 1;
+			tmp->have_equl = 1;
 		}
 	}
 }

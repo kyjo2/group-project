@@ -115,7 +115,7 @@ int main(int argc, char **argv, char **envp)
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
-	t_list			*tmp_list;
+	//t_list			*tmp_list;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
@@ -134,20 +134,20 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
-			if (list->next)
-				printf("good\n");
-			else
-				printf("bad\n");
-			tmp_list = list;
-			while (tmp_list)
-			{
-				printf("ac = %d\n", tmp_list->ac);
-				printf("av[0] = %s\n", tmp_list->av[0]);
-				printf("cmd = %s\n", tmp_list->cmd);
-				printf("exit_pipe = %d\n", tmp_list->exist_pipe);
-				printf("envp = %s\n", tmp_list->envp[0]);
-				tmp_list = tmp_list->next;
-			}			
+			// if (list->next)
+			// 	printf("good\n");
+			// else
+			// 	printf("bad\n");
+			// tmp_list = list;
+			// while (tmp_list)
+			// {
+			// 	printf("ac = %d\n", tmp_list->ac);
+			// 	printf("av[0] = %s\n", tmp_list->av[0]);
+			// 	printf("cmd = %s\n", tmp_list->cmd);
+			// 	printf("exit_pipe = %d\n", tmp_list->exist_pipe);
+			// 	printf("envp = %s\n", tmp_list->envp[0]);
+			// 	tmp_list = tmp_list->next;
+			// }			
 			execute(list, &info);
 			free_aa(list);
 		}

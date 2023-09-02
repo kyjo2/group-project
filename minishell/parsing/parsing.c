@@ -48,6 +48,7 @@ int	count_ac(char **str)
 t_list	*make_node(char **line, t_info *info)
 {
     t_list  *new;
+	//int		i; //테스트용이라 지워라
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
@@ -56,6 +57,12 @@ t_list	*make_node(char **line, t_info *info)
 	if (!new)
 		ft_error("make_node malloc");
 	new->av = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
+	// i = 0;
+	// while (new->av[i])
+	// {
+	// 	printf("cmd = %s\n", new->av[i]);
+	// 	i++;
+	// }
 	if (info->pipe_flag == 1)
 		new->exist_pipe = 1;
 	else

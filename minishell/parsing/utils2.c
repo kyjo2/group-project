@@ -30,11 +30,13 @@ static size_t	count_room(char const *s, char c, t_info *info)
 	count = 0;
 	while (s[i] != '\0')
 	{
+		//printf("info->doubleq_flag = %d\ncount = %zu\n", info->doubleq_flag,count);
 		if (check_sep(s[i], c, info, 1) == 0
 			&& check_sep(s[i + 1], c, info, 0) == 1)
 			count++;
 		i++;
 	}
+	//printf("count = %zu\n",count);     ////////////////////////////////////
 	return (count);
 }
 
@@ -58,16 +60,18 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 	size_t	j;
 	size_t	room;
 
+	//printf("s = %s\n", s);
 	room = 0;
 	i = 0;
 	while (s[i])
 	{
+		//printf("room = %zu\n", room);
 		if (check_sep(s[i], c, info, 1) == 1)
 			i++;
 		else
 		{
 			j = 0;
-			while (check_sep(s[i + j], c, info, 0) == 0)   //여기 부분에서 고치면 될듯 아마도
+			while (check_sep(s[i + j], c, info, 1) == 0)   //여기 부분에서 고치면 될듯 아마도
 				j++;
 			result[room] = malloc(sizeof(char) * (j + 1));
 			if (!(result))

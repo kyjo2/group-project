@@ -1,9 +1,6 @@
 {
-    "files.associations": {
-        "stdio.h": "c",
-        "ioctl.h": "c",
-        "signal.h": "c",
-        "minishell.h": "c",
-        "stdlib.h": "c"
-    }
+  "files.associations": {
+    "stdlib.h": "c",
+    "unistd.h": "c"
+  }
 }

@@ -57,7 +57,7 @@ void ft_handler(int signal)
 	rl_redisplay();			// 프롬프트 커서가 움직이지 않게 해준다.
 }
 
-void signal_setting()
+void signal_setting(t_info *info)
 {
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, SIG_IGN);
@@ -116,6 +116,7 @@ int main(int argc, char **argv, char **envp)
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
+	int				i = 0;
 	//t_list			*tmp_list;
 
 	tcgetattr(STDIN_FILENO, &termios_old);
@@ -126,6 +127,8 @@ int main(int argc, char **argv, char **envp)
 	signal_setting();
 	while (1)
 	{
+		printf("i : %d\n", i);
+		i++;
 		line = readline("minishell $ ");
 		if (!line) // EOF 처리 : ctr + d
 			break;
@@ -150,6 +153,7 @@ int main(int argc, char **argv, char **envp)
 			// 	tmp_list = tmp_list->next;
 			// }			
 			execute(list, &info);
+			printf("!!!!!\n");
 			free_aa(list);
 		}
 		free(line);

@@ -72,6 +72,8 @@ void	yes_fork(t_list *list, t_info *info)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		redir(list);
 		close_fd(list, pid);
 		exit(execute_cmd(list, info));

@@ -86,7 +86,7 @@ int	wait_process(void)
 	int		status;
 	int		ret;
 
-	while (waitpid(-1, &status, WNOHANG) > 0)
+	while (wait(&status) != -1)
 	{
 		if (WIFSIGNALED(status))
 			ret = WTERMSIG(status);
@@ -102,6 +102,8 @@ void	free_list(t_list *head)
 	{
 		if (head->pip[READ] > 0)
 			close(head->pip[READ]);
+		if (head->pip[WRITE] > 0)
+			close(head->pip[WRITE]);
 		if (head->infile > 0)
 			close(head->infile);
 		if (head->outfile > 0)
@@ -138,8 +140,8 @@ int	execute(t_list *list, t_info *info)
 			list = list->next;
 		}
 	}
-	wait_process();
 	free_list(head);
+	wait_process();
 	return (1);
 }
 

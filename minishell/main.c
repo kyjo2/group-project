@@ -53,7 +53,7 @@ void ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1) // readline으로 설정한 문자열을 한 번 출력한다?
 		exit(1);
-	//rl_replace_line("", 1); // 프롬프트에 이미 친 문자열을 싹 날려준다.
+	rl_replace_line("", 1); // 프롬프트에 이미 친 문자열을 싹 날려준다.
 	rl_redisplay();			// 프롬프트 커서가 움직이지 않게 해준다.
 }
 
@@ -126,7 +126,6 @@ int main(int argc, char **argv, char **envp)
 	signal_setting();
 	while (1)
 	{
-		printf("\n exit_code : %d\n", g_exit_code);
 		line = readline("minishell $ ");
 		if (!line) // EOF 처리 : ctr + d
 			break;

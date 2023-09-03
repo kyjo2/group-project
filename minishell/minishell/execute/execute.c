@@ -126,8 +126,6 @@ void	free_list(t_list *head)
 	{
 		if (head->pip[READ] > 0)
 			close(head->pip[READ]);
-		if (head->pip[WRITE] > 0)
-			close(head->pip[WRITE]);
 		if (head->infile > 0)
 			close(head->infile);
 		if (head->outfile > 0)

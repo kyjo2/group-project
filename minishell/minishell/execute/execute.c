@@ -32,6 +32,26 @@ int	execute_cmd(t_list *list, t_info *info)
 		return (other_cmd(list));
 }
 
+int	check_exist(t_list *list)
+{
+	if (!ft_strncmp(list->av[0], "echo", 4))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "cd", 2))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "pwd", 3))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "export", 6))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "unset", 5))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "env", 3))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "exit", 4))
+		return (1);
+	else
+		return (other_cmd(list));
+}
+
 static int	syntax_error(t_list *cmd_head)
 {
 	t_list	*head;
@@ -77,7 +97,11 @@ void	yes_fork(t_list *list, t_info *info)
 		exit(execute_cmd(list, info));
 	}
 	else
+	{
+		if (check_exist(list) == 127)
+			printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
+	}
 	return ;
 }
 

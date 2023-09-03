@@ -78,6 +78,8 @@ void	yes_fork(t_list *list, t_info *info)
 	}
 	else
 	{
+		if (!list->next)
+			info->last_pid = pid;
 		if (command_check(list) == 127)
 			printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
@@ -85,19 +87,25 @@ void	yes_fork(t_list *list, t_info *info)
 	return ;
 }
 
-int	wait_process(void)
+void	wait_process(t_info *info)
 {
+	pid_t	temp;
 	int		status;
 	int		ret;
 
-	while (wait(&status) != -1)
+	temp = wait(&status);
+	while (temp != -1)
 	{
 		if (WIFSIGNALED(status))
 			ret = WTERMSIG(status);
 		else
 			ret = WEXITSTATUS(status);
+		if (ret == 2)
+			ret = 130;
+		if (temp == info->last_pid)
+			g_exit_code = ret;
+		temp = wait(&status);
 	}
-	return (ret);
 }
 
 void	free_list(t_list *head)
@@ -106,6 +114,8 @@ void	free_list(t_list *head)
 	{
 		if (head->pip[READ] > 0)
 			close(head->pip[READ]);
+		if (head->pip[WRITE] > 0)
+			close(head->pip[WRITE]);
 		if (head->infile > 0)
 			close(head->infile);
 		if (head->outfile > 0)
@@ -143,6 +153,6 @@ int	execute(t_list *list, t_info *info)
 		}
 	}
 	free_list(head);
-	wait_process();
+	wait_process(info);
 	return (1);
 }

@@ -76,6 +76,7 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	}
 	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
 	info->envp_head = head;
+	g_exit_code = 0;
 	// tmp = info ->envp_head;
 	// while (tmp->next)
 	// {
@@ -125,6 +126,7 @@ int main(int argc, char **argv, char **envp)
 	signal_setting();
 	while (1)
 	{
+		printf("\n exit_code : %d\n", g_exit_code);
 		line = readline("minishell $ ");
 		if (!line) // EOF 처리 : ctr + d
 			break;

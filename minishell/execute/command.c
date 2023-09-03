@@ -57,7 +57,7 @@ int	other_cmd(t_list *list)
 {
 	list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 	if (!list->cmd)
-		exit(127);
+		return (127);
 	return (execve(list->cmd, list->av, list->envp));
 }
 

@@ -64,6 +64,7 @@ typedef struct	s_info
 	int				doubleq_flag;
 	int				singleq_flag;
 	int				start;
+	int				last_pid;
 	char			*question_mark; //$? 일때 숫자
 	char			**envp;
 	struct s_env	*envp_head;

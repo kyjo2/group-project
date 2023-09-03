@@ -140,7 +140,7 @@ int	execute(t_list *list, t_info *info)
 	{
 		in_out(list);
 		redir(list);
-		execute_cmd(list, info);
+		g_exit_code = execute_cmd(list, info);
 	}
 	else
 	{

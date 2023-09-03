@@ -12,26 +12,6 @@
 
 #include "../minishell.h"
 
-int	command_check(t_list *list)
-{
-	if (!ft_strncmp(list->av[0], "echo", 4))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "cd", 2))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "pwd", 3))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "export", 6))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "unset", 5))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "env", 3))
-		return (1);
-	else if (!ft_strncmp(list->av[0], "exit", 4))
-		return (1);
-	else
-		return (0);
-}
-
 static char	*get_cmd(char **path, char *cmd)
 {
 	int		i;
@@ -79,4 +59,29 @@ int	other_cmd(t_list *list)
 	if (!list->cmd)
 		exit(127);
 	return (execve(list->cmd, list->av, list->envp));
+}
+
+int	command_check(t_list *list)
+{
+	if (!ft_strncmp(list->av[0], "echo", 4))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "cd", 2))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "pwd", 3))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "export", 6))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "unset", 5))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "env", 3))
+		return (1);
+	else if (!ft_strncmp(list->av[0], "exit", 4))
+		return (1);
+	else
+	{
+		list->cmd = get_cmd(find_path(list->envp), list->av[0]);
+		if (!list->cmd)
+			return (127);
+	}
+	return (0);
 }

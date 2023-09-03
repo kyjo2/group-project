@@ -77,7 +77,11 @@ void	yes_fork(t_list *list, t_info *info)
 		exit(execute_cmd(list, info));
 	}
 	else
+	{
+		if (command_check(list) == 127)
+			printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
+	}
 	return ;
 }
 
@@ -122,7 +126,7 @@ int	execute(t_list *list, t_info *info)
 		perror("syntax error near unexpected token `|'");
 		return (1);
 	}
-	if (!(list->next) && command_check(list))
+	if (!(list->next) && command_check(list) == 1)
 	{
 		in_out(list);
 		redir(list);
@@ -138,7 +142,7 @@ int	execute(t_list *list, t_info *info)
 			list = list->next;
 		}
 	}
-	wait_process();
 	free_list(head);
+	wait_process();
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/04 21:02:26 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:59:53 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	syntax_error(t_list *cmd_head)
 	head = cmd_head;
 	while (head)
 	{
-		if (head->exist_pipe && !head->next)
+		if (head->exist_pipe && (!head->next || head->ac == 0))
 		{
 			g_exit_code = 258;
 			return (1);
@@ -82,7 +82,7 @@ void	yes_fork(t_list *list, t_info *info)
 	{
 		if (!list->next)
 			info->last_pid = pid;
-		if (command_check(list) == 127)
+		if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
 			printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
 	}
@@ -132,7 +132,6 @@ int	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
 
-	//printf("list = %s\n", list->av[0]);
 	head = list;
 	if (syntax_error(list))
 	{
@@ -151,6 +150,8 @@ int	execute(t_list *list, t_info *info)
 		{
 			pipe(list->pip);
 			in_out(list);
+			if (!list->av)
+				printf("\n !!\n");
 			yes_fork(list, info);
 			list = list->next;
 		}

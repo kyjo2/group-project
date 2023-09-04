@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:17 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/21 21:15:15 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/04 20:43:39 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	not_num_error(char *cmd)
 {
 	printf("exit\n");
  	printf("bash: exit: %s: numeric argument required\n", cmd);
+	g_exit_code = 255;
  	exit(255);
 }
 

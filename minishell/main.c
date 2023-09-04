@@ -57,7 +57,7 @@ void ft_handler(int signal)
 	rl_redisplay();			// 프롬프트 커서가 움직이지 않게 해준다.
 }
 
-void signal_setting(t_info *info)
+void signal_setting()
 {
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, SIG_IGN);
@@ -76,7 +76,7 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	}
 	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
 	info->envp_head = head;
-	g_exit_code = 0;
+	g_exit_code = 0;  // 전역변수
 	// tmp = info ->envp_head;
 	// while (tmp->next)
 	// {
@@ -127,7 +127,7 @@ int main(int argc, char **argv, char **envp)
 	signal_setting();
 	while (1)
 	{
-		printf("i : %d\n", i);
+		//printf("i : %d\n", i);
 		i++;
 		line = readline("minishell $ ");
 		if (!line) // EOF 처리 : ctr + d
@@ -153,7 +153,7 @@ int main(int argc, char **argv, char **envp)
 			// 	tmp_list = tmp_list->next;
 			// }			
 			execute(list, &info);
-			printf("!!!!!\n");
+			//printf("!!!!!\n");
 			free_aa(list);
 		}
 		free(line);

@@ -1,6 +1,83 @@
 
 #include <minishell.h>
 
+int	change_check(char **line, int *i, int doubleq)
+{
+	if (((*line)[(*i) + 1] == '\0' || (*line)[(*i) + 1] == ' ') && doubleq == 0)
+		return (1);
+	else if (((*line)[(*i) + 1] == '\"' || (*line)[(*i) + 1] == ' ') && doubleq == 1)
+		return (1);
+	else if ((*line)[(*i) + 1] == '$')
+	{
+		(*line)[(*i)] = '4';
+		(*line)[(*i) + 1] = '2';
+		return (1);
+	}
+	return (0);
+}
+
+int	solo_dollar_check(char **line, t_info *info)
+{
+	int		i;
+	t_env	*tmp;
+
+	tmp = info->envp_head;
+	i = 0;
+	while ((*line)[i] == ' ')
+		i++;
+	if ((*line)[i] != '$')
+		return (1);
+	while (tmp)
+	{
+		//printf("line = %s\n", *line + i);
+		if (new_strcmp(*line + i++, tmp->name) == 0)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+void	change_change(char **line, t_info *info, int *i)
+{
+	if ((*line)[*i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+	{
+		if (change_check(line, i, 0) || solo_dollar_check(line, info) == 0)
+			return ;
+		else
+		{
+			ft_change_env(line, info, *i, 0);
+			(*i)--;
+		}
+	}
+	else if ((*line)[*i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+	{
+		if (change_check(line, i, 1))
+			return ;
+		else
+		{
+			ft_change_env(line, info, *i, 1);
+			(*i)--;
+		}
+	}
+}
+		// if ((*line)[(*i) + 1] == '\0' || (*line)[(*i) + 1] == ' ')
+		// 	return ;
+		// else if ((*line)[(*i) + 1] == '$')
+		// {
+		// 	(*line)[(*i)] = '4';
+		// 	(*line)[(*i) + 1] = '2';
+		// }
+
+
+
+// if ((*line)[(*i) + 1] == '\"' || (*line)[(*i) + 1] == ' ')
+		// 	return ;
+		// else if ((*line)[(*i) + 1] == '$')
+		// {
+		// 	(*line)[(*i)] = '4';
+		// 	(*line)[(*i) + 1] = '2';
+		// }
+
 // '$USER' -> $USER
 // '"$USER"' -> "$USER"
 // "$USER" -> junggkim
@@ -20,16 +97,17 @@ void	check_open_quote(char **line, t_info *info)
 			info->singleq_flag = 1;
 		else if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 			info->singleq_flag = 0;
-		if ((*line)[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
-		{
-			ft_change_env(line, info, i, 0);
-			i--;
-		}
-		else if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
-		{	
-			ft_change_env(line, info, i, 1);
-			i--;
-		}
+		change_change(line, info, &i);
+		// if ((*line)[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		// {
+		// 	ft_change_env(line, info, i, 0);
+		// 	i--;
+		// }
+		// else if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+		// {	
+		// 	ft_change_env(line, info, i, 1);
+		// 	i--;
+		// }
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
@@ -148,6 +226,9 @@ void	parsing(t_list **list, char **line, t_info *info)
 			info->quote_flag = 0;
 		if ((*line)[i] == '\0' || ((*line)[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
+			if ((*line)[0] == '\0')
+				break ;
+			//printf("new_node??\n");
 			pipe_back_line = sub_parsing1(line, info, i);
 			new = make_node(&line[0], info); //make node
 			if (sub_parsing2(info, new, &tmp, list) == 1)

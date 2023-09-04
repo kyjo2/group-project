@@ -6,7 +6,7 @@
 #    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/08/23 18:13:07 by junggkim         ###   ########.fr        #
+#    Updated: 2023/09/04 17:55:22 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ SRCS = main.c \
 	./parsing/parsing2.c\
 	./parsing/utils.c\
 	./parsing/utils2.c\
-	./libft/ft_strcmp.c
+	./libft/ft_strcmp.c\
+	./libft/ft_itoa.c
 
 
 OBJS = $(SRCS:.c=.o)

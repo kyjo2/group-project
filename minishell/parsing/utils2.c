@@ -6,18 +6,35 @@
 // echo aa dd                                                   // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
 static int	check_sep(char s, char c, t_info *info, int flag)             // " a" 이거나 'b  ' 여기 안에 있는 띄어쓰기 때문에 이렇게 코드짬
 {
+	//printf("s[i] = %c\n", s);
 	if (s == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0 && flag == 1)
+	{
 		info->doubleq_flag = 1;
+		//printf("111111111\n");
+	}
 	else if (s == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0 && flag == 1)
+	{
 		info->doubleq_flag = 0;
+		//printf("2222222222\n");
+	}
 	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0 && flag == 1)
+	{
 		info->singleq_flag = 1;
+		//printf("3333333333\n");
+	}
 	else if (s == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1 && flag == 1)
+	{
 		info->singleq_flag = 0;
+		//printf("4444444444\n");
+	}
 	else if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
+	{
 		return (1);
+	}
 	else if (s == '\0')
+	{
 		return (1);
+	}
 	return (0);
 }
 
@@ -65,14 +82,16 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 	i = 0;
 	while (s[i])
 	{
-		//printf("room = %zu\n", room);
-		if (check_sep(s[i], c, info, 1) == 1)
+		//printf("first_i = %zu\n", i);
+		if (check_sep(s[i], c, info, 0) == 1)
 			i++;
 		else
 		{
+			//printf("second_i =%zu\ncmd =%s\n", i, s);
 			j = 0;
 			while (check_sep(s[i + j], c, info, 1) == 0)   //여기 부분에서 고치면 될듯 아마도
 				j++;
+			//printf("j = %zu\n", j);
 			result[room] = malloc(sizeof(char) * (j + 1));
 			if (!(result))
 				return (ft_free(result));

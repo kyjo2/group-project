@@ -9,12 +9,9 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 
 	value_len = ft_strlen(value);
 	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + value_len + 1);
-	i = 0;
-	while (i < start - 1)
-	{
+	i = -1;
+	while (++i < start - 1)
 		tmp_line[i] = (*line)[i];
-		i++;
-	}
 	j = 0;
 	while (value[j])
 		tmp_line[i++] = value[j++];
@@ -23,17 +20,24 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 		tmp_line[i++] = (*line)[j++];
 	tmp_line[i] = '\0';
 	free(*line);
+	//printf("tmp_line = %s\n", tmp_line);
 	*line = tmp_line;
 
 }
 
 
-void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터 시작
+void	change_env_space(char **line, int start) // $? 처리 $부터 시작
 {
-	int	i;
+	int		i;
 	char	*tmp_line;
+	char	*exit_code;
+	int		exit_code_len;
+	int		j;
 
-	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);
+
+	exit_code = ft_itoa(g_exit_code);
+	exit_code_len = ft_strlen(exit_code);
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);  // $?가 최대 숫자가 3자리숫자 이기 때문에
 	i = -1;
 	while (++i < start)
 		tmp_line[i] = (*line)[i];            //echo aa$Erm!
@@ -41,7 +45,9 @@ void	change_env_space(char **line, t_info *info, int start) // $? 처리 $부터
 	{
 		if ((*line)[++start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $?a 이렇게 나오는경우 생각해서 짬
 		{
-			tmp_line[i++] = *info->question_mark;
+			j = 0;
+			while (exit_code_len--)
+				tmp_line[i++] = exit_code[j++];
 			while ((*line)[++start])
 				tmp_line[i++] = (*line)[start];
 			break ;
@@ -71,6 +77,8 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	{
 		if (new_strcmp(*line + i, tmp->name) == 0)
 		{
+			if (tmp->have_equl == 0)
+				break ;
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
 			env_flag = 1;
 			break ;
@@ -79,9 +87,9 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	}
 	i--;  // $부분부터
 	if (env_flag == 0 && doubleq_flag == 0)
-		change_env_space(line, info, i); // $부분부터
+		change_env_space(line, i); // $부분부터
 	else if (env_flag == 0 && doubleq_flag == 1)
-		change_env_space(line, info, i); 
+		change_env_space(line, i); 
 		//delete_env(line, info, i);
 }
 

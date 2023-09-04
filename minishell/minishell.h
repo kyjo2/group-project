@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/30 23:06:02 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:54:56 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int		ft_unset(char **cmd, t_info *info);
 //parsing
 void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag);
 void	delete_quote(t_list *new, t_info *info);
-void	change_env_space(char **line, t_info *info, int start);
+void	change_env_space(char **line, int start);
 void	ft_copy(char **line, char *value, int name_len, int start);
 void    ft_error(char *str);
 int	new_strcmp(const char *s1, const char *s2);
@@ -101,6 +101,7 @@ int	new_strcmp(const char *s1, const char *s2);
 char	**new_split(char const *s, char c, t_info *info);
 void	change_env_export(t_info *info, char *name, char *value, int have_equl);
 int		check_cmd(char *cmd);
+char	*ft_itoa(int n);
 //static int	ft_len(const char *s);
 
 #endif

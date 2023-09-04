@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/30 23:06:27 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/04 21:02:26 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
 
+	//printf("list = %s\n", list->av[0]);
 	head = list;
 	if (syntax_error(list))
 	{

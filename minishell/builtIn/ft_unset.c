@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:39 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/21 21:15:23 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/04 20:44:45 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ int	ft_unset(char **cmd, t_info *info)
 	while (cmd[++i])
 	{
 		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !unset_check_cmd(cmd[i]))  // 이부분 다시 생각해보기 
+		{
 			printf("bash: unset: `%s': not a valid identifier\n", cmd[i]);
+			return (1);
+		}
 		else
 			delete_env(info, cmd[i]);
 	}

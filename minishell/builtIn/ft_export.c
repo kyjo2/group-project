@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:27 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/21 21:15:17 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/04 20:44:16 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,11 @@ int	ft_export(char **cmd, t_info *info)
 	i = 0;
 	while (cmd[++i])
 	{
-		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !check_cmd(cmd[i])) //
+		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !check_cmd(cmd[i])) /////
+		{
 			printf("bash: export: `%s': not a valid identifier\n", cmd[i]);
+			return (1);
+		}
 		else if (ft_strrchr(cmd[i], '=') == 0)
 			change_env_export(info, cmd[i], 0, 0);
 		else

@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:18:52 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/30 23:57:21 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/04 11:18:00 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	dir(char *path, t_info *info)
 	else if (!ft_strcmp("-", path))
 	{
 		if ((check_oldpwd("OLDPWD", info)))
-			printf("bash: cd: OLDPWD not set\n");
+			return (1);
 		else
 			tmp = ft_strdup(check_env("OLDPWD",info));
 	}
@@ -159,7 +159,7 @@ void	printf_env(t_env *env)
 // cd .
 // cd /Users/su
 //getcwd, chdir
-int	ft_cd(char **cmd, t_info *info)
+int	ft_cd(char **cmd, t_info *info)                 // 에러 값일때 return (1)  정상종료면 return (0);
 {
 	char	pwd[4096];
 
@@ -168,6 +168,12 @@ int	ft_cd(char **cmd, t_info *info)
 	else if(dir(cmd[1], info) == -1)
 	{
 		printf("bash: cd: %s: No such file or directory\n", cmd[1]);
+		return (1);
+	}
+	else if (dir(cmd[1], info) == 1)
+	{
+		printf("bash: cd: OLDPWD not set\n");
+		return (1);
 	}
 	else
 	{

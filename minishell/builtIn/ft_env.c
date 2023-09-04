@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:10 by junggkim          #+#    #+#             */
-/*   Updated: 2023/08/30 23:05:23 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:41:21 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,5 @@ int   ft_env(t_env *env)
         }
         tmp = tmp->next;
     }
-    return (1);
+    return (0);
 }

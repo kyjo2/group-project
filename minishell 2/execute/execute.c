@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/06 22:32:20 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/07 14:06:01 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int	execute_cmd(t_list *list, t_info *info)
 {
-	if (!ft_strncmp(list->av[0], "echo", 4))
+	if (!ft_strncmp(list->av[0], "echo\0", 5))
 		return (ft_echo(list->av));
-	else if (!ft_strncmp(list->av[0], "cd", 2))
+	else if (!ft_strncmp(list->av[0], "cd\0", 3))
 		return (ft_cd(list->av, info));
-	else if (!ft_strncmp(list->av[0], "pwd", 3))
+	else if (!ft_strncmp(list->av[0], "pwd\0", 4))
 		return (ft_pwd(list->outfile));
-	else if (!ft_strncmp(list->av[0], "export", 6))
+	else if (!ft_strncmp(list->av[0], "export\0", 7))
 		return (ft_export(list->av, info));
-	else if (!ft_strncmp(list->av[0], "unset", 5))
+	else if (!ft_strncmp(list->av[0], "unset\0", 6))
 		return (ft_unset(list->av, info));
-	else if (!ft_strncmp(list->av[0], "env", 3))
+	else if (!ft_strncmp(list->av[0], "env\0", 4))
 		return (ft_env(info->envp_head));
-	else if (!ft_strncmp(list->av[0], "exit", 4))
+	else if (!ft_strncmp(list->av[0], "exit\0", 5))
 		return (ft_exit(list->av));
 	else
 		return (other_cmd(list));
@@ -42,8 +42,11 @@ static int	syntax_error(t_list *cmd_head)
 		if (head->exist_pipe && (!head->next || head->ac == 0))
 		{
 			g_exit_code = 258;
+			perror("syntax error near unexpected token `|'");
 			return (1);
 		}
+		if (!head->ac)
+			return (1);
 		head = head->next;
 	}
 	return (0);
@@ -138,10 +141,7 @@ int	execute(t_list *list, t_info *info)
 	// 	printf("cmd = %s\n", list->av[i++]);
 	head = list;
 	if (syntax_error(list))
-	{
-		perror("syntax error near unexpected token `|'");
 		return (1);
-	}
 	if (!(list->next) && command_check(list) == 1)
 	{
 		in_out(list);
@@ -154,8 +154,6 @@ int	execute(t_list *list, t_info *info)
 		{
 			pipe(list->pip);
 			in_out(list);
-			if (!list->av)
-				printf("\n !!\n");
 			yes_fork(list, info);
 			list = list->next;
 		}

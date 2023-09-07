@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/21 21:58:54 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/07 13:53:54 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ int	other_cmd(t_list *list)
 
 int	command_check(t_list *list)
 {
-	if (!ft_strncmp(list->av[0], "echo", 4))
+	if (!ft_strncmp(list->av[0], "echo\0", 5))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "cd", 2))
+	else if (!ft_strncmp(list->av[0], "cd\0", 3))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "pwd", 3))
+	else if (!ft_strncmp(list->av[0], "pwd\0", 4))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "export", 6))
+	else if (!ft_strncmp(list->av[0], "export\0", 7))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "unset", 5))
+	else if (!ft_strncmp(list->av[0], "unset\0", 6))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "env", 3))
+	else if (!ft_strncmp(list->av[0], "env\0", 4))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "exit", 4))
+	else if (!ft_strncmp(list->av[0], "exit\0", 5))
 		return (1);
 	else
 	{

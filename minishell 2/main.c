@@ -146,7 +146,7 @@ int main(int argc, char **argv, char **envp)
 			// while (tmp_list)
 			// {
 			// 	printf("ac = %d\n", tmp_list->ac);
-			// 	printf("av[0] = %s\n", tmp_list->av[0]);
+			//printf("av[0] = %s\n", list->av[0]);
 			// 	printf("cmd = %s\n", tmp_list->cmd);
 			// 	printf("exit_pipe = %d\n", tmp_list->exist_pipe);
 			// 	printf("envp = %s\n", tmp_list->envp[0]);

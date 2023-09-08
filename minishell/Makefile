@@ -45,7 +45,8 @@ SRCS = main.c \
 	./parsing/parsing.c \
 	./parsing/parsing2.c\
 	./parsing/utils.c\
-	./parsing/utils2.c\
+	./parsing/new_split.c\
+	./parsing/new_split2.c\
 	./libft/ft_strcmp.c\
 	./libft/ft_itoa.c
 

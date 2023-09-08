@@ -1,16 +1,11 @@
 
 #include "minishell.h"
 
-
-// static int	ft_len(const char *s)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (s[i])
-// 		i++;
-// 	return (i);
-// }
+void	init_info_flag(t_info *info)
+{
+	info->singleq_flag = 0;
+	info->doubleq_flag = 0;
+}
 
 int	check_s1(char s1)
 {

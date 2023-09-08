@@ -12,38 +12,6 @@
 
 #include "../minishell.h"
 
-// int		have_equal(char *line)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (line[i])
-// 	{
-// 		if (line[i] == '=')
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-// int   ft_env(char **env)
-// {
-//     int i;
-    
-//     i = 0;
-//     while (env[i])
-//     {
-//         if (have_equal(env[i]))
-//             printf("%s\n", env[i]);
-//         i++;
-//     }
-//     return (1);
-// }
-
-
-
-// 연결리스트로 구현하는건 밑에거
-
 int		have_equal(char *line)
 {
 	int i;

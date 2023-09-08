@@ -105,6 +105,9 @@ char	**new_split(char const *s, char c, t_info *info);
 void	change_env_export(t_info *info, char *name, char *value, int have_equl);
 int		check_cmd(char *cmd);
 char	*ft_itoa(int n);
+void	init_info_flag(t_info *info);
+void	change_variable1(size_t *i, size_t *room);
+void	change_variable2(size_t *i, size_t *j, size_t *room);
 //int		check_s1(char s1);
 //static int	ft_len(const char *s);
 

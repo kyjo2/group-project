@@ -143,17 +143,6 @@ int	dir(char *path, t_info *info)
 	return (result);
 }
 
-void	printf_env(t_env *env)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-        tmp = tmp->next;
-    }
-}
-
 //왜 OLDPWD가 미리 생성되어 있는것인가?
 // cd ..
 // cd .

@@ -21,7 +21,7 @@ int	execute_cmd(t_list *list, t_info *info)
 	else if (!ft_strcmp(list->av[0], "cd"))
 		return (ft_cd(list->av, info));
 	else if (!ft_strcmp(list->av[0], "pwd"))
-		return (ft_pwd(list->outfile));
+		return (ft_pwd(list->outfile, info));
 	else if (!ft_strcmp(list->av[0], "export"))
 		return (ft_export(list->av, info));
 	else if (!ft_strcmp(list->av[0], "unset"))

@@ -88,7 +88,7 @@ int	    ft_echo(char **cmd);
 int		ft_env(t_env *env);
 int		ft_exit(char **cmd, int flag);
 int		ft_export(char **cmd, t_info *info);
-int		ft_pwd(int fd);
+int		ft_pwd(int fd, t_info *info);
 int		ft_unset(char **cmd, t_info *info);
 //parsing
 void	ft_change_env(char **line, t_info *info, int i);

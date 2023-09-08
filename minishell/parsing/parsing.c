@@ -59,7 +59,6 @@ void	change_change(char **line, t_info *info, int *i)
 			return ;
 		else
 		{
-			//printf("ft_change_env go!\n");
 			ft_change_env(line, info, *i);
 			(*i)--;
 		}
@@ -67,35 +66,14 @@ void	change_change(char **line, t_info *info, int *i)
 	else if ((*line)[*i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 	{
 		if (change_check(line, i, 1))
-		{
-			//printf("!!!!\n");
 			return ;
-		}
 		else
 		{
-			//printf("?????????\n");
 			ft_change_env(line, info, *i);
 			(*i)--;
 		}
 	}
 }
-		// if ((*line)[(*i) + 1] == '\0' || (*line)[(*i) + 1] == ' ')
-		// 	return ;
-		// else if ((*line)[(*i) + 1] == '$')
-		// {
-		// 	(*line)[(*i)] = '4';
-		// 	(*line)[(*i) + 1] = '2';
-		// }
-
-
-
-// if ((*line)[(*i) + 1] == '\"' || (*line)[(*i) + 1] == ' ')
-		// 	return ;
-		// else if ((*line)[(*i) + 1] == '$')
-		// {
-		// 	(*line)[(*i)] = '4';
-		// 	(*line)[(*i) + 1] = '2';
-		// }
 
 // '$USER' -> $USER
 // '"$USER"' -> "$USER"
@@ -140,7 +118,6 @@ int	count_ac(char **str)
 t_list	*make_node(char **line, t_info *info)
 {
     t_list  *new;
-	//int		i; //테스트용이라 지워라
 
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
@@ -149,12 +126,6 @@ t_list	*make_node(char **line, t_info *info)
 	if (!new)
 		ft_error("make_node malloc");
 	new->av = new_split(*line, ' ', info); // aaa " dd" | 'fd' "dd'a'dd" 이렇게 하면 aaa " 이 하나로 잡힘
-	// i = 0;
-	// while (new->av[i])
-	// {
-	// 	printf("cmd = %s\n", new->av[i]);
-	// 	i++;
-	// }
 	if (info->pipe_flag == 1)
 		new->exist_pipe = 1;
 	else
@@ -224,41 +195,49 @@ char	*sub_parsing1(char **line, t_info *info, int i)
 	return (pipe_back_line);
 }
 
+void	info_change(t_info *info)
+{
+	info->pipe_flag = 1;
+	info->start = 0;
+}
+
+void	check_flag(char c, t_info *info)
+{
+	if ((c == '\"' || c == '\'') && info->quote_flag == 0) // 파이프가 따옴표 안에 들어가는 경우 끊으면 안됨.
+		info->quote_flag = 1;
+	else if ((c == '\"' || c == '\'') && info->quote_flag == 1)
+		info->quote_flag = 0;
+}
+
 void	parsing(t_list **list, char **line, t_info *info)
 {
 	int		i;
 	t_list	*tmp;
 	t_list	*new;
 	char	*pipe_back_line;
-	//t_env	*change_env;
 
-	i = 0;
+	i = -1;
 	while (1)
 	{
-		if (((*line)[i] == '\"' || (*line)[i] == '\'') && info->quote_flag == 0) // 파이프가 따옴표 안에 들어가는 경우 끊으면 안됨.
-			info->quote_flag = 1;
-		else if (((*line)[i] == '\"' || (*line)[i] == '\'') && info->quote_flag == 1)
-			info->quote_flag = 0;
+		check_flag((*line)[++i], info);
 		if ((*line)[i] == '\0' || ((*line)[i] == '|' && info->quote_flag == 0)) // 파이프를 기준으로 명령어를 나누기 위해 설정한 조건문입니다. null을 만날 경우, 이전까지의 명령어를 list의 노드로 생성합니다.
 		{
 			if ((*line)[0] == '\0')
 				break ;
-			//printf("new_node??\n");
 			pipe_back_line = sub_parsing1(line, info, i);
-			new = make_node(&line[0], info); //make node
+			new = make_node(&line[0], info);
 			if (sub_parsing2(info, new, &tmp, list) == 1)
 				break ;
-			//printf("aklsdfjsklajfsdalfjdlasfjl =   %s\n", tmp->str[0]);
 			free(*line);
-			//printf("pipe_back_line = %s\n", pipe_back_line);
 			*line = pipe_back_line;
 			i = -1;
-			//info->start = i + 1; // split할 명령어의 첫번째 index를 파이프의 다음 index로 갱신시켜줍니다.
 		}
-		//printf("main_line = %s\n", *line);
-		i++;
+		//i++;
 	}
-	info->pipe_flag = 1;
-	info->start = 0;
+	info_change(info);
 	*list = tmp; // backup 해놨던 첫번째 명령어의 주소를 cmd_list에 넣어 반환합니다.
 }
+	// if (((*line)[i] == '\"' || (*line)[i] == '\'') && info->quote_flag == 0) // 파이프가 따옴표 안에 들어가는 경우 끊으면 안됨.
+		// 	info->quote_flag = 1;
+		// else if (((*line)[i] == '\"' || (*line)[i] == '\'') && info->quote_flag == 1)
+		// 	info->quote_flag = 0;

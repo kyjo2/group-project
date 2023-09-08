@@ -66,11 +66,11 @@ $(NAME) : $(LIB)
 
 clean :
 	make -C ./libft clean
-	rm -rf $(OBJS) $(LIB)
+	rm -rf $(OBJS)
 
 fclean : clean
 	make -C ./libft fclean
-	rm -rf $(NAME)
+	rm -rf $(LIB) $(NAME)
 
 re : 
 	$(MAKE) fclean

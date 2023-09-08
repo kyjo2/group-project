@@ -1,20 +1,54 @@
 #include <minishell.h>
 
+int	ft_count_quote(char **line)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while ((*line)[i])
+	{
+		if ((*line)[i] == '\'' || (*line)[i] == '\"')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 void	ft_copy(char **line, char *value, int name_len, int start)
 {
 	char	*tmp_line;
 	int		i;
-	int		value_len;
 	size_t  j;
 
-	value_len = ft_strlen(value);
-	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + value_len + 1);
+	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + ft_strlen(value)+  ft_count_quote(line) + 1);
 	i = -1;
-	while (++i < start - 1)
+	while (++i < start - 1)     //$뒷부분부터 시작된거라 start - 1   //export a=algo"algo echo "$a"
 		tmp_line[i] = (*line)[i];
 	j = 0;
 	while (value[j])
-		tmp_line[i++] = value[j++];
+	{
+		if (value[j] == '\'' || value[j] == '\"')           //a=dd'ccc""
+		{
+			tmp_line[i++] = '\\';
+			if (value[j] == '\'')
+				tmp_line[i++] = '\'';
+			else if (value[j] == '\"')
+				tmp_line[i++] = '\"';
+			j++;
+		}
+		else if (value[j + 1] == '\'' || value[j + 1] == '\"')      //tmp_line =dd\'ccc\"\"
+		{
+			tmp_line[i] = value[j];
+			tmp_line[++i] = '\\';
+			i++;
+			j++;
+			tmp_line[i++] = value[j++];                                   // \이거 넣을라고
+		}
+		else
+			tmp_line[i++] = value[j++];
+	}
 	j = start + name_len;
 	while (j <= ft_strlen(*line))
 		tmp_line[i++] = (*line)[j++];
@@ -22,9 +56,32 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	free(*line);
 	//printf("tmp_line = %s\n", tmp_line);
 	*line = tmp_line;
-
 }
 
+// void	ft_copy(char **line, char *value, int name_len, int start)
+// {
+// 	char	*tmp_line;
+// 	int		i;
+// 	int		value_len;
+// 	size_t  j;
+
+// 	value_len = ft_strlen(value);
+// 	tmp_line = malloc(sizeof(char) * ft_strlen(*line)  + value_len + 1);
+// 	i = -1;
+// 	while (++i < start - 1)        //export a='algo"algo' echo "$a"
+// 		tmp_line[i] = (*line)[i];
+// 	j = 0;
+// 	while (value[j])
+// 		tmp_line[i++] = value[j++];
+// 	j = start + name_len;
+// 	while (j <= ft_strlen(*line))
+// 		tmp_line[i++] = (*line)[j++];
+// 	tmp_line[i] = '\0';
+// 	free(*line);
+// 	//printf("tmp_line = %s\n", tmp_line);
+// 	*line = tmp_line;
+
+// }
 
 void	change_env_space(char **line, int start) // $? 처리 $부터 시작
 {
@@ -160,7 +217,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 	int		j;
 	int		k;
 	// char	*tmp;
-	
+	//printf("final_line = %s\n", new->av[0]);
 	i = -1;
 	while (new->av[++i]) 
 	{
@@ -173,7 +230,12 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 			//check_quote(info, new->av[i]);
 			// printf("before = %s\n", new->str[i]);
 			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
-			if (new->av[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+			if (new->av[i][j] == '\\' && (new->av[i][j + 1] == '\'' || new->av[i][j + 1] == '\"'))
+			{	
+				j++;
+				new->av[i][++k] = new->av[i][j];
+			}
+			else if (new->av[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 				info->doubleq_flag = 1;
 			else if (new->av[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 				info->doubleq_flag = 0;
@@ -189,3 +251,40 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 		// new->str[i] = tmp;
 	}
 }
+
+// // echo " sss" dd aa
+// void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
+// {                                                    // 임의로 malloc해서 따옴표 나오기 전까지 복사했다가 따옴표가 나오면 따옴표 생략하고 그다음 것들을 다시 복사 하는방법
+// 	int		i;
+// 	int		j;
+// 	int		k;
+// 	// char	*tmp;
+	
+// 	i = -1;
+// 	while (new->av[++i]) 
+// 	{
+// 		// tmp = malloc(sizeof(char) * (ftt_strlen(new->str[i]) + 1));
+// 		// printf("i = %d\n", i);
+// 		j = -1;
+// 		k = -1;
+// 		while (new->av[i][++j])
+// 		{
+// 			//check_quote(info, new->av[i]);
+// 			// printf("before = %s\n", new->str[i]);
+// 			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
+// 			if (new->av[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+// 				info->doubleq_flag = 1;
+// 			else if (new->av[i][j] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
+// 				info->doubleq_flag = 0;
+// 			else if (new->av[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+// 				info->singleq_flag = 1;
+// 			else if (new->av[i][j] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
+// 				info->singleq_flag = 0;
+// 			else
+// 				new->av[i][++k] = new->av[i][j];
+// 		}
+// 		new->av[i][++k] = '\0';
+// 		//printf("after = %s\n", new->str[i]);
+// 		// new->str[i] = tmp;
+// 	}
+// }

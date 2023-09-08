@@ -73,6 +73,7 @@ void	change_change(char **line, t_info *info, int *i)
 		}
 		else
 		{
+			//printf("?????????\n");
 			ft_change_env(line, info, *i);
 			(*i)--;
 		}
@@ -104,19 +105,23 @@ void	check_open_quote(char **line, t_info *info)
 {
 	int		i;
 
+	
 	i = -1;
 	while ((*line)[++i])
 	{
-		//printf("iiiii = %d\n(*line)[i] = %c\n", i, (*line)[i]);
-		if ((*line)[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		// printf("iiiii = %d\n(*line)[i] = %c\n", i, (*line)[i]);
+		if ((*line)[i] == '\\' && ((*line)[i + 1] == '\'' || (*line)[i + 1] == '\"'))    //tmp_line =dd\'ccc\"\"
+				i++;
+		else if ((*line)[i] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 			info->doubleq_flag = 1;
 		else if ((*line)[i] == '\"' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 			info->doubleq_flag = 0;
-		if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		else if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 0)
 			info->singleq_flag = 1;
 		else if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 			info->singleq_flag = 0;
 		change_change(line, info, &i);
+		//printf("i = %d doubleq = %dsingleq = %d\n", i, info->doubleq_flag, info->singleq_flag);
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");

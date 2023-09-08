@@ -126,9 +126,9 @@ int main(int argc, char **argv, char **envp)
 	info.envp = envp;
 	head = find_env(envp);
 	init(argc, argv, &info, head);
+	signal_setting();
 	while (1)
 	{
-		signal_setting();
 		//printf("i : %d\n", i);
 		i++;
 		line = readline("minishell $ ");
@@ -144,15 +144,11 @@ int main(int argc, char **argv, char **envp)
 			// 	printf("good\n");
 			// else
 			// 	printf("bad\n");
-			// tmp_list = list;
-			// while (tmp_list)
+			// i = 0;
+			// while (list->av[i])
 			// {
-			// 	printf("ac = %d\n", tmp_list->ac);
-			//printf("av[0] = %s\n", list->av[0]);
-			// 	printf("cmd = %s\n", tmp_list->cmd);
-			// 	printf("exit_pipe = %d\n", tmp_list->exist_pipe);
-			// 	printf("envp = %s\n", tmp_list->envp[0]);
-			// 	tmp_list = tmp_list->next;
+			// 	printf("av[%d] = %s\n", i, list->av[i]);
+			// 	i++;	
 			// }			
 			execute(list, &info);
 			//printf("!!!!!\n");

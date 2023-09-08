@@ -29,10 +29,12 @@ static int	check_sep(char s, char c, t_info *info, int flag)             // " a"
 	}
 	else if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
 	{
+		//printf("5555555\n");
 		return (1);
 	}
 	else if (s == '\0')
 	{
+		//printf("66666666\n");
 		return (1);
 	}
 	return (0);
@@ -53,7 +55,7 @@ static size_t	count_room(char const *s, char c, t_info *info)
 			count++;
 		i++;
 	}
-	//printf("count = %zu\n",count);     ////////////////////////////////////
+	//printf("count = %zu\n",count);
 	return (count);
 }
 
@@ -77,7 +79,9 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 	size_t	j;
 	size_t	room;
 
-	//printf("s = %s\n", s);
+	//printf("info->doubleq = %d info->singleq = %d\n", info->doubleq_flag, info->singleq_flag);
+	info->singleq_flag = 0;
+	info->doubleq_flag = 0;
 	room = 0;
 	i = 0;
 	while (s[i])
@@ -87,7 +91,7 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 			i++;
 		else
 		{
-			//printf("second_i =%zu\ncmd =%s\n", i, s);
+			//printf("second_i =%zu\n", i);
 			j = 0;
 			while (check_sep(s[i + j], c, info, 1) == 0)   //여기 부분에서 고치면 될듯 아마도
 				j++;

@@ -70,10 +70,11 @@ int	num_check(char *cmd)
 
 int	ft_exit(char **cmd, int flag)
 {
+	if (flag)
+		exit(0);
 	if (!cmd[1])
 	{
-		if (!flag)
-			printf("exit\n");
+		printf("exit\n");
 		exit(0);
 	}
 	else if (!num_check(cmd[1]))

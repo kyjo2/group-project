@@ -34,18 +34,47 @@ int	execute_cmd(t_list *list, t_info *info)
 		return (other_cmd(list));
 }
 
+static int syntax_print()
+{
+	g_exit_code = 258;
+	printf("syntax error\n");
+	return (1);
+}
+
+static int syntax_red(t_list *a, int i)
+{
+	if (!ft_strncmp(a->av[i], "<", 1) || !ft_strncmp(a->av[i], "<<", 2) \
+		|| !ft_strncmp(a->av[i], ">", 1) || !ft_strncmp(a->av[i], ">>", 2))
+	{
+		if (i + 1 == a->ac)
+			return (1);
+		if (!ft_strncmp(a->av[i + 1], "<", 1) \
+		|| !ft_strncmp(a->av[i + 1], "<<", 2) \
+		|| !ft_strncmp(a->av[i + 1], ">", 1) \
+		|| !ft_strncmp(a->av[i + 1], ">>", 2) \
+		|| !ft_strncmp(a->av[i + 1], "(", 1) \
+		|| !ft_strncmp(a->av[i + 1], ")", 1))
+			return (1);
+	}
+	return (0);
+}
+
 static int	syntax_error(t_list *cmd_head)
 {
 	t_list	*head;
+	int		i;
 
 	head = cmd_head;
 	while (head)
 	{
+		i = 0;
 		if (head->exist_pipe && (!head->next || head->ac == 0))
+			return (syntax_print());
+		while (i < head->ac)
 		{
-			g_exit_code = 258;
-			perror("syntax error near unexpected token `|'");
-			return (1);
+			if (syntax_red(head, i))
+				return (syntax_print());
+			i++;
 		}
 		if (!head->ac)
 			return (1);
@@ -81,6 +110,8 @@ void	yes_fork(t_list *list, t_info *info)
 		signal(SIGQUIT, SIG_DFL);
 		redir(list);
 		close_fd(list, pid);
+		if (list->infile == -1)
+			exit(1);
 		exit(execute_cmd(list, info));
 	}
 	else
@@ -109,8 +140,8 @@ void	wait_process(t_info *info)
 			ret = WTERMSIG(status);
 		else
 			ret = WEXITSTATUS(status);
-		if (ret == 2)
-			ret = 130;
+		if (ret == 2 || ret == 3)
+			ret += 128;
 		if (temp == info->last_pid)
 			g_exit_code = ret;
 		temp = wait(&status);
@@ -150,7 +181,10 @@ int	execute(t_list *list, t_info *info)
 	{
 		in_out(list);
 		redir(list);
-		g_exit_code = execute_cmd(list, info);
+		if (list->infile == -1)
+			g_exit_code = 1;
+		else
+			g_exit_code = execute_cmd(list, info);
 	}
 	else
 	{

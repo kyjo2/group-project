@@ -57,7 +57,7 @@ static void infile(t_list *list)
             close(list->infile);
         list->infile = open(list->av[i + 1], O_RDONLY);
         if (list->infile == -1)
-            perror("no such file");
+            perror("The following error occurred");
         cut_av(list, "<", 2);
     }
 }
@@ -92,8 +92,6 @@ int in_out(t_list *list)
     if (!list)
         return (0);
     infile(list);
-    if (list->infile == -1)
-        perror("No such file or directory");
     outfile(list);
     return (0);
 }

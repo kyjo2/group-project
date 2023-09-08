@@ -41,23 +41,34 @@ void	change_env_space(char **line, int start) // $? 처리 $부터 시작
 	i = -1;
 	while (++i < start)
 		tmp_line[i] = (*line)[i];            //echo aa$Erm!
-	while ((*line)[start])
+	//printf("first_start = %d\n", start);
+	j = start + 1;
+	if ((*line)[j] >= '0' && (*line)[j] <= '9')  // echo "$1TEST"  
 	{
-		if ((*line)[++start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $?a 이렇게 나오는경우 생각해서 짬
+		while ((*line)[++j])
+			tmp_line[i++] = (*line)[j];
+	}
+	else
+	{
+		//printf("second_start = %d\n", start);
+		while ((*line)[start])
 		{
-			j = 0;
-			while (exit_code_len--)
-				tmp_line[i++] = exit_code[j++];
-			while ((*line)[++start])
-				tmp_line[i++] = (*line)[start];
-			break ;
-		}
-		else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
-			&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
-		{
-			while ((*line)[start])
-				tmp_line[i++] = (*line)[start++];
-			break ;
+			if ((*line)[++start] == '?') // 명령어 처음에 $? 나오는 경우가 아니라 echo $?a 이렇게 나오는경우 생각해서 짬
+			{
+				j = 0;
+				while (exit_code_len--)
+					tmp_line[i++] = exit_code[j++];
+				while ((*line)[++start])
+					tmp_line[i++] = (*line)[start];
+				break ;
+			}
+			else if ((*line)[start] != '_' && ((*line)[start] < '0' || (*line)[start] > '9')
+				&& ((*line)[start] < 'A' || (*line)[start] > 'Z') && ((*line)[start] < 'a' || (*line)[start] > 'z')) //영어 숫자 _  48 ~ 57  65 ~ 90 97 ~ 122
+			{
+				while ((*line)[start])
+					tmp_line[i++] = (*line)[start++];
+				break ;
+			}
 		}
 	}
 	tmp_line[i] = '\0';
@@ -65,7 +76,41 @@ void	change_env_space(char **line, int start) // $? 처리 $부터 시작
 	*line = tmp_line;
 }
 
-void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
+// void	check_quote(t_info *info, char *value) // export a='algo"algo' echo "$a" 이런경우 때문에 만들었슴
+// {
+// 	int	i;
+
+// 	printf("!!!!!!!!\n");
+// 	i = -1;
+// 	while (value[++i])
+// 	{
+// 		if (value[i] == '\"')
+// 		{
+// 			if (info->doubleq_flag == 1)      //"$a" ->
+// 				info->doubleq_flag = 0;
+// 			else if (info->doubleq_flag == 0 && info->singleq_flag == 1)  // $a -> a=ss'bb" "$a"
+// 				info->doubleq_flag = 1;
+// 			else if (info->doubleq_flag == 0 && info->singleq_flag == 0)  // $a -> a=ss"bb' a=ss"bb
+// 				info->doubleq_flag = 1;
+// 		}
+// 		else if (value[i] == '\'')
+// 		{
+// 			if (info->singleq_flag == 1)  //
+// 				info->singleq_flag = 0;
+// 			else if (info->doubleq_flag == 0 && info->singleq_flag == 0)  //$a -> a=ss'bb" "$a"
+// 				info->singleq_flag = 1;
+// 			else if (info->doubleq_flag == 1 && info->singleq_flag == 0)  //$a -> a=ss"bb'
+// 				info->singleq_flag = 1;
+// 		}
+// 	}
+// }
+
+// void	count_quote(t_info *info, char *str)
+// {
+
+// }
+
+void	ft_change_env(char **line, t_info *info, int i)
 {
 	t_env	*tmp;
 	int		env_flag;
@@ -75,23 +120,38 @@ void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag)
 	i++;    //$뒤부분부터 시작
 	while (tmp)
 	{
+		//printf("line = %s\n", *line + i);
 		if (new_strcmp(*line + i, tmp->name) == 0)
 		{
 			if (tmp->have_equl == 0)
 				break ;
 			ft_copy(line, tmp->value, ft_strlen(tmp->name), i);
+			//check_quote(info, tmp->value);
 			env_flag = 1;
 			break ;
 		}
 		tmp = tmp->next;
 	}
 	i--;  // $부분부터
-	if (env_flag == 0 && doubleq_flag == 0)
+	if (env_flag == 0)
 		change_env_space(line, i); // $부분부터
-	else if (env_flag == 0 && doubleq_flag == 1)
-		change_env_space(line, i); 
-		//delete_env(line, info, i);
+	// else if (env_flag == 0 && doubleq_flag == 1)
+	// 	change_env_space(line, i); 
+	// 	//delete_env(line, info, i);
 }
+
+// void	check_delete_quote(char *str, t_info *info)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (str[++i])
+// 	{
+// 		if (str[i] == '\"')
+
+// 	}
+// }
+
 
 // echo " sss" dd aa
 void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 다 없애준다!
@@ -110,6 +170,7 @@ void	delete_quote(t_list *new, t_info *info)  // 여기서 " " 랑 '' 이것들 
 		k = -1;
 		while (new->av[i][++j])
 		{
+			//check_quote(info, new->av[i]);
 			// printf("before = %s\n", new->str[i]);
 			// printf("doubleq_flag = %d singleq_flag = %d\n", info->doubleq_flag, info->singleq_flag);
 			if (new->av[i][j] == '\"' && info->doubleq_flag == 0 && info->singleq_flag == 0)

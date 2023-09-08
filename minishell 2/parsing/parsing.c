@@ -1,11 +1,19 @@
 
 #include <minishell.h>
 
+int	check_doubleq(char s1)
+{
+	if (s1 != '_' && (s1 < 'A' || s1 > 'Z') && (s1 < '0' || s1 > '9')
+		&& (s1 < 'a' || s1 > 'z') && s1 != '?' && s1 != '$')
+			return (0);
+	return (1);
+}
+
 int	change_check(char **line, int *i, int doubleq)
 {
 	if (((*line)[(*i) + 1] == '\0' || (*line)[(*i) + 1] == ' ') && doubleq == 0)
 		return (1);
-	else if (((*line)[(*i) + 1] == '\"' || (*line)[(*i) + 1] == ' ') && doubleq == 1)
+	else if (((*line)[(*i) + 1] == '\"' || (*line)[(*i) + 1] == ' ' || check_doubleq((*line)[(*i) + 1]) == 0) && doubleq == 1)
 		return (1);
 	else if ((*line)[(*i) + 1] == '$')
 	{
@@ -52,17 +60,21 @@ void	change_change(char **line, t_info *info, int *i)
 		else
 		{
 			//printf("ft_change_env go!\n");
-			ft_change_env(line, info, *i, 0);
+			ft_change_env(line, info, *i);
 			(*i)--;
 		}
 	}
 	else if ((*line)[*i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
 	{
 		if (change_check(line, i, 1))
+		{
+			//printf("!!!!\n");
 			return ;
+		}
 		else
 		{
-			ft_change_env(line, info, *i, 1);
+			printf("?????????\n");
+			ft_change_env(line, info, *i);
 			(*i)--;
 		}
 	}
@@ -106,16 +118,7 @@ void	check_open_quote(char **line, t_info *info)
 		else if ((*line)[i] == '\'' && info->doubleq_flag == 0 && info->singleq_flag == 1)
 			info->singleq_flag = 0;
 		change_change(line, info, &i);
-		// if ((*line)[i] == '$' && info->doubleq_flag == 0 && info->singleq_flag == 0)
-		// {
-		// 	ft_change_env(line, info, i, 0);
-		// 	i--;
-		// }
-		// else if ((*line)[i] == '$' && info->doubleq_flag == 1 && info->singleq_flag == 0)
-		// {	
-		// 	ft_change_env(line, info, i, 1);
-		// 	i--;
-		// }
+		printf("i = %d doubleq = %dsingleq = %d\n", i, info->doubleq_flag, info->singleq_flag);
 	}
 	if (info->doubleq_flag == 1 || info->singleq_flag == 1)
 		ft_error("quote!!");
@@ -226,7 +229,7 @@ void	parsing(t_list **list, char **line, t_info *info)
 	//t_env	*change_env;
 
 	i = 0;
-	while (1) // readline으로 입력받은 line을 모두 하나하나 체크하는 loop입니다.
+	while (1)
 	{
 		if (((*line)[i] == '\"' || (*line)[i] == '\'') && info->quote_flag == 0) // 파이프가 따옴표 안에 들어가는 경우 끊으면 안됨.
 			info->quote_flag = 1;

@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/07 14:06:01 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/07 16:08:30 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	execute_cmd(t_list *list, t_info *info)
 {
-	if (!ft_strncmp(list->av[0], "echo\0", 5))
+	if (list->ac == 0)
+		return (0);
+	else if (!ft_strncmp(list->av[0], "echo\0", 5))
 		return (ft_echo(list->av));
 	else if (!ft_strncmp(list->av[0], "cd\0", 3))
 		return (ft_cd(list->av, info));
@@ -85,8 +87,9 @@ void	yes_fork(t_list *list, t_info *info)
 	{
 		if (!list->next)
 			info->last_pid = pid;
-		if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
-			printf("minishell: %s: command not found\n", list->av[0]);
+		if (list->ac != 0)
+			if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
+				printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
 	}
 	return ;

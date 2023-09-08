@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/07 14:03:17 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/07 20:53:30 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef struct	s_info
 	int				singleq_flag;
 	int				start;
 	int				last_pid;
+	int				count_doubleq;
+	int				count_singleq;
 	char			*question_mark; //$? 일때 숫자
 	char			**envp;
 	struct s_env	*envp_head;
@@ -88,7 +90,7 @@ int		ft_export(char **cmd, t_info *info);
 int		ft_pwd(int fd);
 int		ft_unset(char **cmd, t_info *info);
 //parsing
-void	ft_change_env(char **line, t_info *info, int i, int doubleq_flag);
+void	ft_change_env(char **line, t_info *info, int i);
 void	delete_quote(t_list *new, t_info *info);
 void	change_env_space(char **line, int start);
 void	ft_copy(char **line, char *value, int name_len, int start);
@@ -102,6 +104,7 @@ char	**new_split(char const *s, char c, t_info *info);
 void	change_env_export(t_info *info, char *name, char *value, int have_equl);
 int		check_cmd(char *cmd);
 char	*ft_itoa(int n);
+//int		check_s1(char s1);
 //static int	ft_len(const char *s);
 
 #endif

@@ -88,6 +88,8 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	info->quote_flag = 0;
 	info->doubleq_flag = 0;
 	info->singleq_flag = 0;
+	info->count_doubleq = 0;
+	info->count_singleq = 0;
 	tcgetattr(STDIN_FILENO, &termios_new);
 	termios_new.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);

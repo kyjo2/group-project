@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/07 15:58:08 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/08 19:09:40 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static void infile(t_list *list)
         i = 0;
         while (list->av[i])
         {
-            if (!ft_strncmp(list->av[i], "<<", 2))
+            if (!ft_strcmp(list->av[i], "<<"))
                 heredoc(list, i);
-            else if (!ft_strncmp(list->av[i], "<", 1))
+            else if (!ft_strcmp(list->av[i], "<"))
                 break ;
             i++;
         }
@@ -69,14 +69,14 @@ static void outfile(t_list *list)
     i = 0;
     while (list->av[i])
     {
-        if (!ft_strncmp(list->av[i], ">>", 2))
+        if (!ft_strcmp(list->av[i], ">>"))
         {
             if (list->outfile > 0)
                 close(list->outfile);
             list->outfile = open(list->av[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
             cut_av(list, ">>", 2);
         }
-        else if (!ft_strncmp(list->av[i], ">", 1))
+        else if (!ft_strcmp(list->av[i], ">"))
         {
             if (list->outfile > 0)
                 close(list->outfile);

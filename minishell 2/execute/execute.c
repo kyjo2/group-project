@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/07 16:08:30 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/08 19:08:42 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,13 +176,15 @@ int	execute(t_list *list, t_info *info)
 
 	// i = 0;
 	// while (list->av[i])
-	// 	printf("cmd = %s\n", list->av[i++]);
+	//for (int i = 0;i < 4;i++)
+	//	printf("cmd = %s\n", list->av[i]);
 	head = list;
 	if (syntax_error(list))
 		return (1);
-	if (!(list->next) && command_check(list, info) == 1)
+	in_out(list);
+	if (!(list->next) && command_check(list, info) == 1 \
+		&& list->infile <= 0 && list->outfile <= 0)
 	{
-		in_out(list);
 		redir(list);
 		if (list->infile == -1)
 			g_exit_code = 1;
@@ -194,9 +196,9 @@ int	execute(t_list *list, t_info *info)
 		while (list)
 		{
 			pipe(list->pip);
-			in_out(list);
 			yes_fork(list, info);
 			list = list->next;
+			in_out(list);
 		}
 	}
 	free_list(head);

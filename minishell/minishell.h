@@ -73,12 +73,13 @@ typedef struct	s_info
 }	t_info;
 
 int 	in_out(t_list *list);
-int	    command_check(t_list *list);
-int	    other_cmd(t_list *list);
+int	    command_check(t_list *list, t_info *info);
+int	    other_cmd(t_list *list, t_info *info);
 void	redir(t_list *list);
 void	heredoc(t_list *list, int index);
 void	cut_av(t_list *list, char *str, int size);
 t_env	*find_env(char **ev);
+char	**find_path(t_info *info);
 int		execute(t_list *list, t_info *info);
 void	parsing(t_list **list, char **line, t_info *info);
 int		ft_cd(char **cmd, t_info *info);

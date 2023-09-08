@@ -31,7 +31,11 @@ int	execute_cmd(t_list *list, t_info *info)
 	else if (!ft_strncmp(list->av[0], "exit\0", 5))
 		return (ft_exit(list->av, list->exist_pipe));
 	else
-		return (other_cmd(list));
+	{
+		if (!find_path(info))
+			return (127);
+		return (other_cmd(list, info));
+	}
 }
 
 static int syntax_print()
@@ -52,8 +56,7 @@ static int syntax_red(t_list *a, int i)
 		|| !ft_strncmp(a->av[i + 1], ">", 1) \
 		|| !ft_strncmp(a->av[i + 1], "(", 1) \
 		|| !ft_strncmp(a->av[i + 1], ")", 1) \
-		|| !ft_strncmp(a->av[i + 1], "|", 1) \
-		|| !ft_strncmp(a->av[i + 1], ";", 1))
+		|| !ft_strncmp(a->av[i + 1], "|", 1))
 			return (1);
 	}
 	return (0);
@@ -120,7 +123,7 @@ void	yes_fork(t_list *list, t_info *info)
 		if (!list->next)
 			info->last_pid = pid;
 		if (list->ac != 0)
-			if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
+			if (command_check(list, info) == 127 || !ft_strncmp(list->av[0], "", 1))
 				printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
 	}
@@ -177,7 +180,7 @@ int	execute(t_list *list, t_info *info)
 	head = list;
 	if (syntax_error(list))
 		return (1);
-	if (!(list->next) && command_check(list) == 1)
+	if (!(list->next) && command_check(list, info) == 1)
 	{
 		in_out(list);
 		redir(list);

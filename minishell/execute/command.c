@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/07 13:53:54 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/08 19:37:01 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	**find_path(t_info *info)
 	t_env	*tmp;
 
 	tmp = info->envp_head;
-	while (tmp && ft_strncmp("PATH", tmp->name, 4))
+	while (tmp && ft_strcmp("PATH", tmp->name))
 		tmp = tmp->next;
 	if (tmp == NULL)
 		return (NULL);
@@ -65,19 +65,19 @@ int	other_cmd(t_list *list, t_info *info)
 
 int	command_check(t_list *list, t_info *info)
 {
-	if (!ft_strncmp(list->av[0], "echo\0", 5))
+	if (!ft_strcmp(list->av[0], "echo"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "cd\0", 3))
+	else if (!ft_strcmp(list->av[0], "cd"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "pwd\0", 4))
+	else if (!ft_strcmp(list->av[0], "pwd"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "export\0", 7))
+	else if (!ft_strcmp(list->av[0], "export"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "unset\0", 6))
+	else if (!ft_strcmp(list->av[0], "unset"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "env\0", 4))
+	else if (!ft_strcmp(list->av[0], "env"))
 		return (1);
-	else if (!ft_strncmp(list->av[0], "exit\0", 5))
+	else if (!ft_strcmp(list->av[0], "exit"))
 		return (1);
 	else
 	{

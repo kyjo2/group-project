@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/08 19:08:42 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/08 19:38:18 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ int	execute_cmd(t_list *list, t_info *info)
 {
 	if (list->ac == 0)
 		return (0);
-	else if (!ft_strncmp(list->av[0], "echo\0", 5))
+	else if (!ft_strcmp(list->av[0], "echo"))
 		return (ft_echo(list->av));
-	else if (!ft_strncmp(list->av[0], "cd\0", 3))
+	else if (!ft_strcmp(list->av[0], "cd"))
 		return (ft_cd(list->av, info));
-	else if (!ft_strncmp(list->av[0], "pwd\0", 4))
+	else if (!ft_strcmp(list->av[0], "pwd"))
 		return (ft_pwd(list->outfile));
-	else if (!ft_strncmp(list->av[0], "export\0", 7))
+	else if (!ft_strcmp(list->av[0], "export"))
 		return (ft_export(list->av, info));
-	else if (!ft_strncmp(list->av[0], "unset\0", 6))
+	else if (!ft_strcmp(list->av[0], "unset"))
 		return (ft_unset(list->av, info));
-	else if (!ft_strncmp(list->av[0], "env\0", 4))
+	else if (!ft_strcmp(list->av[0], "env"))
 		return (ft_env(info->envp_head));
-	else if (!ft_strncmp(list->av[0], "exit\0", 5))
+	else if (!ft_strcmp(list->av[0], "exit"))
 		return (ft_exit(list->av, list->exist_pipe));
 	else
 	{

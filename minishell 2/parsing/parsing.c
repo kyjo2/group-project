@@ -160,6 +160,7 @@ t_list	*make_node(char **line, t_info *info)
 	else
 		new->exist_pipe = 0;
 	info->doubleq_flag = 0;
+	info->singleq_flag = 0;
 	delete_quote(new , info);  // 여기서 " " 랑 '' 이것들 다 없애준다!
 	new->next = NULL;
 	new->prev = NULL;

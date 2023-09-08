@@ -49,11 +49,11 @@ static int syntax_red(t_list *a, int i)
 		if (i + 1 == a->ac)
 			return (1);
 		if (!ft_strncmp(a->av[i + 1], "<", 1) \
-		|| !ft_strncmp(a->av[i + 1], "<<", 2) \
 		|| !ft_strncmp(a->av[i + 1], ">", 1) \
-		|| !ft_strncmp(a->av[i + 1], ">>", 2) \
 		|| !ft_strncmp(a->av[i + 1], "(", 1) \
-		|| !ft_strncmp(a->av[i + 1], ")", 1))
+		|| !ft_strncmp(a->av[i + 1], ")", 1) \
+		|| !ft_strncmp(a->av[i + 1], "|", 1) \
+		|| !ft_strncmp(a->av[i + 1], ";", 1))
 			return (1);
 	}
 	return (0);

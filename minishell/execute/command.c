@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/08 19:37:01 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/09 13:26:46 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,31 +91,14 @@ int	command_check(t_list *list)
 {
 	char	**temp;
 
-	if (!ft_strcmp(list->av[0], "echo"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "cd"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "pwd"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "export"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "unset"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "env"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "exit"))
-		return (1);
-	else
-	{
-		temp = find_path(list->envp);
-		if (!temp)
-			return (127);
-		list->cmd = get_cmd(temp, list->av[0]);
-		deep_free(temp);
-		if (!list->cmd)
-			return (127);
-		free(list->cmd);
-		list->cmd = NULL;
-	}
+	temp = find_path(list->envp);
+	if (!temp)
+		return (127);
+	list->cmd = get_cmd(temp, list->av[0]);
+	deep_free(temp);
+	if (!list->cmd)
+		return (127);
+	free(list->cmd);
+	list->cmd = NULL;
 	return (0);
 }

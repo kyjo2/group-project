@@ -1,46 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_export2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 19:19:32 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 13:49:19 by kyjo             ###   ########.fr       */
+/*   Created: 2023/09/09 13:55:44 by kyjo              #+#    #+#             */
+/*   Updated: 2023/09/09 13:56:03 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	new_putstr_fd(char *s, int fd, t_info *info)
+int	check_cmd(char *cmd)
 {
-	t_env	*tmp;
+	int	i;
 
-	tmp = info->envp_head;
-	if (s == NULL)
+	i = 0;
+	while (cmd[i] != '\0' && cmd[i] != '=')
 	{
-		while (tmp)
-		{
-			if (ft_strcmp(tmp->name, "OLDPWD") == 0)
-				write(fd, tmp->value, ft_strlen(tmp->value));
-			tmp = tmp->next;
-		}
-		return ;
+		if (!ft_isalnum(cmd[i]) && cmd[i] != '_')
+			return (0);
+		i++;
 	}
-	while (*s)
-	{
-		write(fd, s, 1);
-		s++;
-	}
+	return (1);
 }
 
-int	ft_pwd(int fd, t_info *info)
+void	free_tmp(t_env tmp)
 {
-	char		*str;
-
-	str = getcwd(NULL, 0);
-	new_putstr_fd(str, fd, info);
-	write(fd, "\n", 1);
-	free(str);
-	return (0);
+	free(tmp.name);
+	free(tmp.value);
 }

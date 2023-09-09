@@ -6,13 +6,13 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 12:18:24 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/20 12:18:35 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 13:39:37 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)        // libft 에 있는거 고쳐야함 $US 랑 $USER이랑 같다고 보기 떄문에 밑에 처럼 고쳐야함
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 

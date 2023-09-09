@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/08 19:38:18 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/09 13:41:33 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,54 +36,6 @@ int	execute_cmd(t_list *list, t_info *info)
 	}
 }
 
-static int syntax_print()
-{
-	g_exit_code = 258;
-	printf("syntax error\n");
-	return (1);
-}
-
-static int syntax_red(t_list *a, int i)
-{
-	if (!ft_strncmp(a->av[i], "<", 1) || !ft_strncmp(a->av[i], "<<", 2) \
-		|| !ft_strncmp(a->av[i], ">", 1) || !ft_strncmp(a->av[i], ">>", 2))
-	{
-		if (i + 1 == a->ac)
-			return (1);
-		if (!ft_strncmp(a->av[i + 1], "<", 1) \
-		|| !ft_strncmp(a->av[i + 1], ">", 1) \
-		|| !ft_strncmp(a->av[i + 1], "(", 1) \
-		|| !ft_strncmp(a->av[i + 1], ")", 1) \
-		|| !ft_strncmp(a->av[i + 1], "|", 1))
-			return (1);
-	}
-	return (0);
-}
-
-static int	syntax_error(t_list *cmd_head)
-{
-	t_list	*head;
-	int		i;
-
-	head = cmd_head;
-	while (head)
-	{
-		i = 0;
-		if (head->exist_pipe && (!head->next || head->ac == 0))
-			return (syntax_print());
-		while (i < head->ac)
-		{
-			if (syntax_red(head, i))
-				return (syntax_print());
-			i++;
-		}
-		if (!head->ac)
-			return (1);
-		head = head->next;
-	}
-	return (0);
-}
-
 void	close_fd(t_list *list, pid_t pid)
 {
 	if (pid == 0)
@@ -98,7 +50,6 @@ void	close_fd(t_list *list, pid_t pid)
 	}
 	return ;
 }
-
 
 void	yes_fork(t_list *list, t_info *info)
 {
@@ -128,85 +79,24 @@ void	yes_fork(t_list *list, t_info *info)
 	return ;
 }
 
-void	wait_process(t_info *info)
+static void	execute_fork(t_list *list, t_info *info)
 {
-	pid_t	temp;
-	int		status;
-	int		ret;
-
-	temp = wait(&status);
-	while (temp != -1)
+	while (list)
 	{
-		if (WIFSIGNALED(status))
-			ret = WTERMSIG(status);
-		else
-			ret = WEXITSTATUS(status);
-		if (ret == 2 || ret == 3)
-			ret += 128;
-		if (ret == 255)
-			ret -= 128;
-		if (temp == info->last_pid)
-			g_exit_code = ret;
-		temp = wait(&status);
+		pipe(list->pip);
+		yes_fork(list, info);
+		list = list->next;
+		in_out(list);
 	}
 }
 
-void	free_list(t_list *head)
-{
-	while (head)
-	{
-		if (head->pip[READ] > 0)
-			close(head->pip[READ]);
-		if (head->pip[WRITE] > 0)
-			close(head->pip[WRITE]);
-		if (head->infile > 0)
-			close(head->infile);
-		if (head->outfile > 0)
-			close(head->outfile);
-		if (head->cmd)
-			free(head->cmd);
-		if (head->av)
-			deep_free(head->av);
-		head = head->next;
-	}
-}
-
-void	unlink_tmp_file(void)
-{
-	int		i;
-	int		j;
-	char	*temp;
-	char	*temp_number;
-
-	i = 0;
-	while (1)
-	{
-		temp_number = ft_itoa(i);
-		temp = ft_strjoin("temp_", temp_number);
-		free(temp_number);
-		if (open(temp, O_RDONLY) < 0)
-			break ;
-		i++;
-		free(temp);
-	}
-	free(temp);
-	j = 0;
-	while (j < i)
-	{
-		temp = ft_strjoin("temp_", ft_itoa(j));
-		unlink(temp);
-		free(temp);
-		j++;
-	}
-}
-
-int	execute(t_list *list, t_info *info)
+void	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
 
 	head = list;
 	if (syntax_error(list))
-		return (1);
+		return ;
 	in_out(list);
 	if (!(list->next) && builtin_check(list) \
 		&& list->infile <= 0 && list->outfile <= 0)
@@ -218,17 +108,9 @@ int	execute(t_list *list, t_info *info)
 			g_exit_code = execute_cmd(list, info);
 	}
 	else
-	{
-		while (list)
-		{
-			pipe(list->pip);
-			yes_fork(list, info);
-			list = list->next;
-			in_out(list);
-		}
-	}
+		execute_fork(list, info);
 	unlink_tmp_file();
+	free_in_list(head);
 	free_list(head);
 	wait_process(info);
-	return (1);
 }

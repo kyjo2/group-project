@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:39 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/04 20:44:45 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/09 13:48:41 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	delete_env(t_info *info, char *name)
 	}
 }
 
-int		unset_check_cmd(char *cmd)
+int	unset_check_cmd(char *cmd)
 {
 	int	i;
 
@@ -58,9 +58,7 @@ int		unset_check_cmd(char *cmd)
 	}
 	return (1);
 }
-// unset a
-// unset b c
-// unset abcdef
+
 int	ft_unset(char **cmd, t_info *info)
 {
 	int		i;
@@ -70,7 +68,8 @@ int	ft_unset(char **cmd, t_info *info)
 	i = 0;
 	while (cmd[++i])
 	{
-		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !unset_check_cmd(cmd[i]))  // 이부분 다시 생각해보기 
+		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) \
+			|| !unset_check_cmd(cmd[i]))
 		{
 			printf("bash: unset: `%s': not a valid identifier\n", cmd[i]);
 			return (1);

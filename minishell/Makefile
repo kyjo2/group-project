@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
+#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/04 17:55:22 by junggkim         ###   ########.fr        #
+#    Updated: 2023/09/09 13:59:32 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,15 @@ SRCS = main.c \
 	./execute/command.c \
 	./execute/inout.c \
 	./execute/redir.c \
+	./execute/syntax.c \
+	./execute/free.c \
 	./builtin/ft_cd.c \
+	./builtin/ft_cd2.c \
 	./builtin/ft_echo.c \
 	./builtin/ft_env.c \
 	./builtin/ft_exit.c \
 	./builtin/ft_export.c \
+	./builtin/ft_export2.c \
 	./builtin/ft_pwd.c \
 	./builtin/ft_unset.c \
 	./parsing/parsing.c \
@@ -48,7 +52,7 @@ SRCS = main.c \
 	./parsing/new_split.c\
 	./parsing/new_split2.c\
 	./libft/ft_strcmp.c\
-	./libft/ft_itoa.c
+	./libft/ft_itoa.c \
 
 
 OBJS = $(SRCS:.c=.o)

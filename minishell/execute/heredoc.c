@@ -6,13 +6,13 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/08/20 12:44:34 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 13:06:53 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char    *get_random_name(void)
+static char	*get_random_name(void)
 {
 	int		i;
 	char	*temp;
@@ -77,7 +77,7 @@ static int	fork_for_heredoc(t_list *list, int index)
 
 void	heredoc(t_list *list, int index)
 {
-    char    *temp;
+	char	*temp;
 
 	if (list->infile > 0)
 		close(list->infile);

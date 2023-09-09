@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:27 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/04 20:44:16 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/09 13:59:49 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	declare_print(t_info *info)
 {
@@ -29,7 +28,8 @@ void	declare_print(t_info *info)
 			else
 			{
 				if (tmp_env->value)
-					printf("declare -x %s=\"%s\"\n", tmp_env->name, tmp_env->value);
+					printf("declare -x %s=\"%s\"\n", \
+						tmp_env->name, tmp_env->value);
 				else
 					printf("declare -x %s=\"\"\n", tmp_env->name);
 			}
@@ -53,7 +53,7 @@ void	pick_name_val2(t_env *tmp, char *cmd, int *nlen, int *vlen)
 	tmp->value[i] = '\0';
 }
 
-int		pick_name_val(t_env *tmp, char *cmd)
+int	pick_name_val(t_env *tmp, char *cmd)
 {
 	int	nlen;
 	int	vlen;
@@ -76,47 +76,13 @@ int		pick_name_val(t_env *tmp, char *cmd)
 	return (1);
 }
 
-int		check_cmd(char *cmd)
+int	ft_export2(char **cmd, t_info *info, int i)
 {
-	int	i;
-
-	i = 0;
-	while (cmd[i] != '\0' && cmd[i] != '=')
-	{
-		if (!ft_isalnum(cmd[i]) && cmd[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	free_tmp(t_env tmp)
-{
-	free(tmp.name);
-	free(tmp.value);
-}
-
-// export a                            #key값만 생성
-// export b=                           #value에 아무 값 없음
-// export c=hello          
-// export d="oh      my          god"  #echo출력과 export출력 다름
-// export e=elephant f=flower
-// export 1e=23                        #ㄴ숫자는 환경변수 추가안된다
-// export b=acd 에서 export b 는 b가 따로 선언이 되지 않는다. 
-int	ft_export(char **cmd, t_info *info)
-{
-	int		i;
 	t_env	tmp;
 
-	if (!cmd[1])
-	{
-		declare_print(info);
-		return (0);
-	}
-	i = 0;
 	while (cmd[++i])
 	{
-		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !check_cmd(cmd[i])) /////
+		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !check_cmd(cmd[i]))
 		{
 			printf("bash: export: `%s': not a valid identifier\n", cmd[i]);
 			return (1);
@@ -134,3 +100,15 @@ int	ft_export(char **cmd, t_info *info)
 	return (0);
 }
 
+int	ft_export(char **cmd, t_info *info)
+{
+	int		i;
+
+	if (!cmd[1])
+	{
+		declare_print(info);
+		return (0);
+	}
+	i = 0;
+	return (ft_export2(cmd, info, 0));
+}

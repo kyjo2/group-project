@@ -1,0 +1,177 @@
+     1	#include <signal.h>
+     2	#include <stdbool.h>
+     3	#include <stdio.h>
+     4	#include <stdlib.h>
+     5	#include <string.h>
+     6	#include <readline/readline.h>
+     7	#include <readline/history.h>
+     8	#include <unistd.h>
+     9	#include <termios.h>
+    10	#include "minishell.h"
+    11	
+    12	t_env	*new_env(void)
+    13	{
+    14		t_env	*new;
+    15	
+    16		new = malloc(sizeof(t_env));
+    17		new->next = NULL;
+    18		return (new);
+    19	}
+    20	
+    21	t_env	*find_env(char **ev)
+    22	{
+    23		t_env	*head;
+    24		t_env	*temp;
+    25		t_env	*new;
+    26		int		i;
+    27	
+    28		new = new_env();
+    29		head = new;
+    30		while (*ev)
+    31		{
+    32			i = 0;
+    33			while ((*ev)[i] != '=')
+    34				i++;
+    35			new->name = malloc(sizeof(char) * (i + 1));
+    36			ft_strlcpy(new->name, *ev, i + 1);
+    37			new->value = ft_strdup(&(*ev)[i+1]);
+    38			new->have_equl = 1;    //export할떄 필요함
+    39			ev++;
+    40			if (*ev)
+    41			{
+    42				temp = new_env();
+    43				new->next = temp;
+    44				new = temp;
+    45			}
+    46		}
+    47		return (head);
+    48	}
+    49	
+    50	void ft_handler(int signal)
+    51	{
+    52		if (signal == SIGINT)
+    53			printf("\n");
+    54		if (rl_on_new_line() == -1) // readline으로 설정한 문자열을 한 번 출력한다?
+    55			exit(1);
+    56		//rl_replace_line("", 1); // 프롬프트에 이미 친 문자열을 싹 날려준다.
+    57		rl_redisplay();			// 프롬프트 커서가 움직이지 않게 해준다.
+    58	}
+    59	
+    60	void signal_setting()
+    61	{
+    62		signal(SIGINT, ft_handler);
+    63		signal(SIGQUIT, SIG_IGN);
+    64	}
+    65	
+    66	void init(int argc, char *argv[], t_info *info, t_env *head)
+    67	{
+    68		struct termios termios_new;
+    69	
+    70		(void)argv;
+    71		if (argc != 1)
+    72		{
+    73			printf("argument error!!\n");
+    74			exit(1);
+    75		}
+    76		info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
+    77		info->envp_head = head;
+    78		g_exit_code = 0;  // 전역변수
+    79		info->pipe_flag = 1;
+    80		info->start = 0;
+    81		info->quote_flag = 0;
+    82		info->doubleq_flag = 0;
+    83		info->singleq_flag = 0;
+    84		info->count_doubleq = 0;
+    85		info->count_singleq = 0;
+    86		tcgetattr(STDIN_FILENO, &termios_new);
+    87		termios_new.c_lflag &= ~(ECHOCTL);
+    88		tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
+    89	}
+    90	
+    91	void	deep_free(char **temp)
+    92	{
+    93		int	i;
+    94	
+    95		i = 0;
+    96		while (temp[i])
+    97		{
+    98			free(temp[i]);
+    99			i++;
+   100		}
+   101		free(temp);
+   102		temp = NULL;
+   103	}
+   104	
+   105	void	free_aa(t_list *head) 
+   106	{
+   107	    t_list	*current;
+   108		t_list	*temp;
+   109		
+   110		current = head;
+   111	    while (current != NULL) 
+   112		{
+   113	        temp = current;
+   114	        current = current->next;
+   115			//deep_free(temp->av);
+   116			//free(temp->cmd);
+   117	        free(temp);
+   118	    }
+   119	}
+   120	
+   121	void	free_env(t_env *head)
+   122	{
+   123		t_env	*current;
+   124		t_env	*temp;
+   125	
+   126		current = head;
+   127		while (!current)
+   128		{
+   129			temp = current;
+   130	        current = current->next;
+   131			free(temp->name);
+   132			free(temp->value);
+   133	        free(temp);
+   134		}
+   135	}
+   136	void	v(void)
+   137	{
+   138		system("leaks minishell");
+   139	}
+   140	
+   141	int	main(int argc, char **argv, char **envp)
+   142	{
+   143		t_list			*list;
+   144		t_env			*head;
+   145		t_info			info;
+   146		struct termios	termios_old;
+   147		char			*line;
+   148		int				i = 0;
+   149	
+   150		atexit(v);
+   151		tcgetattr(STDIN_FILENO, &termios_old);
+   152		line = NULL;
+   153		info.envp = envp;
+   154		head = find_env(envp);
+   155		init(argc, argv, &info, head);
+   156		signal_setting();
+   157		while (1)
+   158		{
+   159			i++;
+   160			line = readline("minishell $ ");
+   161			if (!line) // EOF 처리 : ctr + d
+   162				break;
+   163			if (*line != '\0')
+   164				add_history(line);
+   165			/* 힙메모리에 저장되기때문에 다 사용한 메모리는 할당을 해제해줘야한다 */
+   166			if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
+   167			{
+   168				parsing(&list, &line, &info);
+   169				execute(list, &info);
+   170				free_aa(list);
+   171			}
+   172			free(line);
+   173		}
+   174		free_env(head);
+   175		tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
+   176		// TSCANOW : 속성을 바로 변경한다
+   177	}

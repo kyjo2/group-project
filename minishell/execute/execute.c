@@ -164,10 +164,9 @@ void	free_list(t_list *head)
 		if (head->outfile > 0)
 			close(head->outfile);
 		if (head->cmd)
-		{
-			printf("hihi\n");
 			free(head->cmd);
-		}
+		if (head->av)
+			deep_free(head->av);
 		head = head->next;
 	}
 }

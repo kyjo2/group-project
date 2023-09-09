@@ -63,7 +63,7 @@ $(LIB) : $(OBJS)
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) -g3 -fsanitize=address $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
+	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

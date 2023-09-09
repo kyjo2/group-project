@@ -41,29 +41,29 @@ static char	*get_cmd(char **path, char *cmd)
 	return (NULL);
 }
 
-char	**find_path(t_info *info)
+char	**find_path(char **envp)
 {
-	t_env	*tmp;
+	char	*path;
 
-	tmp = info->envp_head;
-	while (tmp && ft_strcmp("PATH", tmp->name))
-		tmp = tmp->next;
-	if (tmp == NULL)
+	while (*envp && ft_strncmp("PATH=", *envp, 5))
+		envp++;
+	if (!*envp)
 		return (NULL);
-	return (ft_split(tmp->value, ':'));
+	path = *envp + 5;
+	return (ft_split(path, ':'));
 }
 
-int	other_cmd(t_list *list, t_info *info)
+int	other_cmd(t_list *list)
 {
-	if (find_path(info) == NULL)
+	if (find_path(list->envp) == NULL)
 		return (127);
-	list->cmd = get_cmd(find_path(info), list->av[0]);
+	list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 	if (!list->cmd)
 		return (127);
 	return (execve(list->cmd, list->av, list->envp));
 }
 
-int	command_check(t_list *list, t_info *info)
+int	command_check(t_list *list)
 {
 	if (!ft_strcmp(list->av[0], "echo"))
 		return (1);
@@ -81,9 +81,9 @@ int	command_check(t_list *list, t_info *info)
 		return (1);
 	else
 	{
-		if (!find_path(info))
+		if (!find_path(list->envp))
 			return (127);
-		list->cmd = get_cmd(find_path(info), list->av[0]);
+		list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 		if (!list->cmd)
 			return (127);
 	}

@@ -66,7 +66,6 @@ void signal_setting()
 void init(int argc, char *argv[], t_info *info, t_env *head)
 {
 	struct termios termios_new;
-	//t_env *tmp;
 
 	(void)argv;
 	if (argc != 1)
@@ -77,12 +76,6 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	info->question_mark = "0";    //유동적으로 바꿀수 있어야 한다.
 	info->envp_head = head;
 	g_exit_code = 0;  // 전역변수
-	// tmp = info ->envp_head;
-	// while (tmp->next)
-	// {
-	// 	printf("name = %s value = %s\n", tmp->name, tmp->value);
-	// 	tmp = tmp->next;
-	// }
 	info->pipe_flag = 1;
 	info->start = 0;
 	info->quote_flag = 0;
@@ -95,23 +88,57 @@ void init(int argc, char *argv[], t_info *info, t_env *head)
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
-
-//메모리 해제 함수
-void free_aa(t_list* head) 
+void	deep_free(char **temp)
 {
-    t_list* current;
-	t_list* temp;
+	int	i;
+
+	i = 0;
+	while (temp[i])
+	{
+		free(temp[i]);
+		i++;
+	}
+	free(temp);
+	temp = NULL;
+}
+
+void	free_aa(t_list *head) 
+{
+    t_list	*current;
+	t_list	*temp;
 	
 	current = head;
     while (current != NULL) 
 	{
         temp = current;
         current = current->next;
+		//deep_free(temp->av);
+		//free(temp->cmd);
         free(temp);
     }
 }
 
-int main(int argc, char **argv, char **envp)
+void	free_env(t_env *head)
+{
+	t_env	*current;
+	t_env	*temp;
+
+	current = head;
+	while (!current)
+	{
+		temp = current;
+        current = current->next;
+		free(temp->name);
+		free(temp->value);
+        free(temp);
+	}
+}
+void	v(void)
+{
+	system("leaks minishell");
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_list			*list;
 	t_env			*head;
@@ -119,8 +146,8 @@ int main(int argc, char **argv, char **envp)
 	struct termios	termios_old;
 	char			*line;
 	int				i = 0;
-	//t_list			*tmp_list;
 
+	//atexit(v);
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	info.envp = envp;
@@ -129,7 +156,6 @@ int main(int argc, char **argv, char **envp)
 	signal_setting();
 	while (1)
 	{
-		//printf("i : %d\n", i);
 		i++;
 		line = readline("minishell $ ");
 		if (!line) // EOF 처리 : ctr + d
@@ -140,22 +166,12 @@ int main(int argc, char **argv, char **envp)
 		if (*line != '\0') // 프롬프트상에서 입력된 문자가 null || 모두 white_space일 
 		{
 			parsing(&list, &line, &info);
-			// if (list->next)
-			// 	printf("good\n");
-			// else
-			// 	printf("bad\n");
-			// i = 0;
-			// while (list->av[i])
-			// {
-			// 	printf("av[%d] = %s\n", i, list->av[i]);
-			// 	i++;	
-			// }			
 			execute(list, &info);
-			//printf("!!!!!\n");
 			free_aa(list);
 		}
 		free(line);
 	}
+	//free_env(head);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
 	// TSCANOW : 속성을 바로 변경한다
 }

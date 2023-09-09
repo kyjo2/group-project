@@ -32,9 +32,9 @@ int	execute_cmd(t_list *list, t_info *info)
 		return (ft_exit(list->av, list->exist_pipe));
 	else
 	{
-		if (!find_path(info))
+		if (!find_path(list->envp))
 			return (127);
-		return (other_cmd(list, info));
+		return (other_cmd(list));
 	}
 }
 
@@ -123,7 +123,7 @@ void	yes_fork(t_list *list, t_info *info)
 		if (!list->next)
 			info->last_pid = pid;
 		if (list->ac != 0)
-			if (command_check(list, info) == 127 || !ft_strncmp(list->av[0], "", 1))
+			if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
 				printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
 	}
@@ -145,6 +145,8 @@ void	wait_process(t_info *info)
 			ret = WEXITSTATUS(status);
 		if (ret == 2 || ret == 3)
 			ret += 128;
+		if (ret == 255)
+			ret -= 128;
 		if (temp == info->last_pid)
 			g_exit_code = ret;
 		temp = wait(&status);
@@ -169,20 +171,41 @@ void	free_list(t_list *head)
 	}
 }
 
+void	unlink_tmp_file(void)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	while (1)
+	{
+		temp = ft_strjoin("temp_", ft_itoa(i));
+		if (open(temp, O_RDONLY) < 0)
+			break ;
+		free(temp);
+		i++;
+	}
+	free(temp);
+	j = 0;
+	while (j < i)
+	{
+		temp = ft_strjoin("temp_", ft_itoa(j));
+		unlink(temp);
+		free(temp);
+		j++;
+	}
+}
+
 int	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
-	//int		i;
 
-	// i = 0;
-	// while (list->av[i])
-	//for (int i = 0;i < 4;i++)
-	//	printf("cmd = %s\n", list->av[i]);
 	head = list;
 	if (syntax_error(list))
 		return (1);
 	in_out(list);
-	if (!(list->next) && command_check(list, info) == 1 \
+	if (!(list->next) && command_check(list) == 1 \
 		&& list->infile <= 0 && list->outfile <= 0)
 	{
 		redir(list);
@@ -201,6 +224,7 @@ int	execute(t_list *list, t_info *info)
 			in_out(list);
 		}
 	}
+	unlink_tmp_file();
 	free_list(head);
 	wait_process(info);
 	return (1);

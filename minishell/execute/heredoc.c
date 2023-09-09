@@ -21,7 +21,7 @@ static char    *get_random_name(void)
 	while (1)
 	{
 		temp = ft_strjoin("temp_", ft_itoa(i));
-		if (open(temp, O_RDONLY) == -1)
+		if (open(temp, O_RDONLY) < 0)
 			return (temp);
 		free(temp);
 		i++;
@@ -35,7 +35,7 @@ static void	get_input(t_list *list, int index)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line) // EOF 처리 : ctr + d
+		if (!line)
 			break ;
 		if (!ft_strcmp(line, list->av[index + 1]))
 		{

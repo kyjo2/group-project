@@ -12,6 +12,15 @@
 
 #include "../minishell.h"
 
+void	delete_path(char **envp)
+{
+	while (*envp && ft_strncmp("PATH=", *envp, 5))
+		envp++;
+	if (!*envp)
+		return ;
+	(*envp)++;
+}
+
 void	delete_env(t_info *info, char *name)
 {
 	t_env	*tmp;
@@ -20,6 +29,8 @@ void	delete_env(t_info *info, char *name)
 	tmp = info->envp_head;
 	while (tmp)
 	{
+		if (!ft_strcmp(name, "PATH"))
+			delete_path(info->envp);
 		if (!ft_strcmp(tmp->name, name))
 		{
 			pre->next = tmp->next;

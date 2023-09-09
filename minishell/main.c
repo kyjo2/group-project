@@ -147,7 +147,7 @@ int	main(int argc, char **argv, char **envp)
 	char			*line;
 	int				i = 0;
 
-	//atexit(v);
+	atexit(v);
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	info.envp = envp;
@@ -171,7 +171,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(line);
 	}
-	//free_env(head);
+	free_env(head);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
 	// TSCANOW : 속성을 바로 변경한다
 }

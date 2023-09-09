@@ -32,8 +32,6 @@ int	execute_cmd(t_list *list, t_info *info)
 		return (ft_exit(list->av, list->exist_pipe));
 	else
 	{
-		if (!find_path(list->envp))
-			return (127);
 		return (other_cmd(list));
 	}
 }

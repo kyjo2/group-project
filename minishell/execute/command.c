@@ -55,12 +55,14 @@ char	**find_path(char **envp)
 
 int	other_cmd(t_list *list)
 {
-	if (find_path(list->envp) == NULL)
-		return (127);
+	int	temp;
+
 	list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 	if (!list->cmd)
 		return (127);
-	return (execve(list->cmd, list->av, list->envp));
+	temp = execve(list->cmd, list->av, list->envp);
+	free(list->cmd);
+	return (temp);
 }
 
 int	command_check(t_list *list)
@@ -81,11 +83,10 @@ int	command_check(t_list *list)
 		return (1);
 	else
 	{
-		if (!find_path(list->envp))
-			return (127);
 		list->cmd = get_cmd(find_path(list->envp), list->av[0]);
 		if (!list->cmd)
 			return (127);
+		free(list->cmd);
 	}
 	return (0);
 }

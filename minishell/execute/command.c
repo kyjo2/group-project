@@ -55,17 +55,19 @@ char	**find_path(char **envp)
 
 int	other_cmd(t_list *list)
 {
-	int	temp;
+	char	**path;
 
-	list->cmd = get_cmd(find_path(list->envp), list->av[0]);
+	path = find_path(list->envp);
+	if (!path)
+		return (127);
+	list->cmd = get_cmd(path, list->av[0]);
+	deep_free(path);
 	if (!list->cmd)
 		return (127);
-	temp = execve(list->cmd, list->av, list->envp);
-	free(list->cmd);
-	return (temp);
+	return (execve(list->cmd, list->av, list->envp));
 }
 
-int	command_check(t_list *list)
+int	builtin_check(t_list *list)
 {
 	if (!ft_strcmp(list->av[0], "echo"))
 		return (1);
@@ -82,11 +84,35 @@ int	command_check(t_list *list)
 	else if (!ft_strcmp(list->av[0], "exit"))
 		return (1);
 	else
+		return (0);
+}
+
+int	command_check(t_list *list)
+{
+	char	**temp;
+
+	if (!ft_strcmp(list->av[0], "echo"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "cd"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "pwd"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "export"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "unset"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "env"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "exit"))
+		return (1);
+	else
 	{
-		list->cmd = get_cmd(find_path(list->envp), list->av[0]);
+		temp = find_path(list->envp);
+		list->cmd = get_cmd(temp, list->av[0]);
+		deep_free(temp);
 		if (!list->cmd)
 			return (127);
-		free(list->cmd);
+		//free(list->cmd);
 	}
 	return (0);
 }

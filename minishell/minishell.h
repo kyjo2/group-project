@@ -72,8 +72,10 @@ typedef struct	s_info
 	struct s_env	*envp_head;
 }	t_info;
 
+void	deep_free(char **temp);
 int 	in_out(t_list *list);
 int	    command_check(t_list *list);
+int	    builtin_check(t_list *list);
 int	    other_cmd(t_list *list);
 void	redir(t_list *list);
 void	heredoc(t_list *list, int index);

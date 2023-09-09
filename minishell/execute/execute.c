@@ -164,7 +164,10 @@ void	free_list(t_list *head)
 		if (head->outfile > 0)
 			close(head->outfile);
 		if (head->cmd)
+		{
+			printf("hihi\n");
 			free(head->cmd);
+		}
 		head = head->next;
 	}
 }
@@ -203,7 +206,7 @@ int	execute(t_list *list, t_info *info)
 	if (syntax_error(list))
 		return (1);
 	in_out(list);
-	if (!(list->next) && command_check(list) == 1 \
+	if (!(list->next) && builtin_check(list) \
 		&& list->infile <= 0 && list->outfile <= 0)
 	{
 		redir(list);

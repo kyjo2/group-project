@@ -124,7 +124,7 @@ void	free_env(t_env *head)
 	t_env	*temp;
 
 	current = head;
-	while (!current)
+	while (current)
 	{
 		temp = current;
         current = current->next;

@@ -48,6 +48,9 @@ SRCS = main.c \
 	./builtin/ft_unset.c \
 	./parsing/parsing.c \
 	./parsing/parsing2.c\
+	./parsing/parsing3.c\
+	./parsing/parsing4.c\
+	./parsing/parsing5.c\
 	./parsing/utils.c\
 	./parsing/new_split.c\
 	./parsing/new_split2.c\
@@ -67,7 +70,7 @@ $(LIB) : $(OBJS)
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) -g -fsanitize=address $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
+	$(CC) $(CFLAGS) -g $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

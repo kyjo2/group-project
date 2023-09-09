@@ -27,7 +27,6 @@ void	ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1)
 		exit(1);
-	//rl_replace_line("", 1);
 	rl_redisplay();
 }
 
@@ -63,9 +62,39 @@ void	init(int argc, char *argv[], char **envp, t_info *info)
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
-void	v(void)
+// void free_list_all(t_list* head)
+// {
+//     t_list* current;
+//     t_list* temp;
+//     current = head;
+//     while (current != NULL)
+//     {
+//         temp = current;
+//         current = current->next;
+//         free(temp);
+//     }
+// }
+
+void	free_list_all(t_list *list)
 {
-	system("leaks minishell");
+	t_list		*tmp;
+	int			i;
+
+	while (list->next != NULL)
+	{
+		i = 0;
+		tmp = list;
+		list = list->next;
+		while (tmp->av[i] != NULL)
+			free(tmp->av[i++]);
+		free(tmp->av);
+		free(tmp);
+	}
+	i = 0;
+	while (list->av[i] != NULL)
+		free(list->av[i++]);
+	free(list->av);
+	free(list);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -75,7 +104,6 @@ int	main(int argc, char **argv, char **envp)
 	struct termios	termios_old;
 	char			*line;
 
-	//atexit(v);
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	init(argc, argv, envp, &info);
@@ -90,6 +118,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			parsing(&list, &line, &info);
 			execute(list, &info);
+			free_list_all(list);
 		}
 		free(line);
 	}

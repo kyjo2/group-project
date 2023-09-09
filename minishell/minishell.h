@@ -18,19 +18,19 @@
 
 # include "./libft/libft.h"
 # include <stdio.h>
-# include <dirent.h>  //opendir,closedir,readdir
-# include <term.h>  //
-# include <stdio.h>  //tgetstr,tgoto,tgetent,tgetflag,tgetnum,tputs
-# include <sys/termios.h> //tcsetattr, tcgetattr
+# include <dirent.h>
+# include <term.h>
+# include <stdio.h>
+# include <sys/termios.h>
 # include <sys/ioctl.h>
-# include <sys/wait.h> // ioctl,wait3,wait4
-# include <unistd.h> // STDIN_FILENO표준입력
+# include <sys/wait.h>
+# include <unistd.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
-# include <signal.h>    //나머지
-# include <termios.h> //ㅌㅓ미널 속성
+# include <signal.h>
+# include <termios.h>
 
 int	g_exit_code;
 
@@ -92,23 +92,17 @@ void	parsing(t_list **list, char **line, t_info *info);
 int		ft_cd(char **cmd, t_info *info);
 int		ft_echo(char **cmd);
 void	free_env(t_env *head);
-//int	    ft_env(char	**env);
 int		ft_env(t_env *env);
 int		ft_exit(char **cmd, int flag);
 int		ft_export(char **cmd, t_info *info);
 int		ft_pwd(int fd, t_info *info);
 int		ft_unset(char **cmd, t_info *info);
-//parsing
 void	ft_change_env(char **line, t_info *info, int i);
 void	delete_quote(t_list *new, t_info *info);
 void	change_env_space(char **line, int start);
 void	ft_copy(char **line, char *value, int name_len, int start);
 void	ft_error(char *str);
 int		new_strcmp(const char *s1, const char *s2);
-//static int	check_sep(char s, char c, t_info *info, int flag);
-//static size_t	count_room(char const *s, char c, t_info *info);
-//static void	*ft_free(char **result);
-//static char	**sub_split(char **result, char const *s, char c, t_info *info);
 char	**new_split(char const *s, char c, t_info *info);
 void	change_env_export(t_info *info, char *name, char *value, int have_equl);
 int		check_cmd(char *cmd);
@@ -118,7 +112,8 @@ void	change_variable1(size_t *i, size_t *room);
 void	change_variable2(size_t *i, size_t *j, size_t *room);
 void	free_tmp(t_env tmp);
 int		check_cmd(char *cmd);
-//int		check_s1(char s1);
-//static int	ft_len(const char *s);
+t_list	*make_node(char **line, t_info *info);
+int		change_check(char **line, int *i, int doubleq);
+int		check_line_start(char **line, int start, char *tmp_line, int *i);
 
 #endif

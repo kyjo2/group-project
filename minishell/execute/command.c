@@ -108,11 +108,14 @@ int	command_check(t_list *list)
 	else
 	{
 		temp = find_path(list->envp);
+		if (!temp)
+			return (127);
 		list->cmd = get_cmd(temp, list->av[0]);
 		deep_free(temp);
 		if (!list->cmd)
 			return (127);
-		//free(list->cmd);
+		free(list->cmd);
+		list->cmd = NULL;
 	}
 	return (0);
 }

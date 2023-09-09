@@ -176,15 +176,18 @@ void	unlink_tmp_file(void)
 	int		i;
 	int		j;
 	char	*temp;
+	char	*temp_number;
 
 	i = 0;
 	while (1)
 	{
-		temp = ft_strjoin("temp_", ft_itoa(i));
+		temp_number = ft_itoa(i);
+		temp = ft_strjoin("temp_", temp_number);
+		free(temp_number);
 		if (open(temp, O_RDONLY) < 0)
 			break ;
-		free(temp);
 		i++;
+		free(temp);
 	}
 	free(temp);
 	j = 0;

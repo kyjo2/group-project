@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:42:22 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 16:02:41 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1)
 		exit(1);
-	rl_replace_line("", 1);
+	//rl_replace_line("", 1);
 	rl_redisplay();
 }
 

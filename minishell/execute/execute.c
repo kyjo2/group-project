@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:41:33 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 16:07:12 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	yes_fork(t_list *list, t_info *info)
 			exit(1);
 		exit(execute_cmd(list, info));
 	}
-	else
+	else if (pid != 0)
 	{
 		signal(SIGINT, SIG_IGN);
 		if (!list->next)

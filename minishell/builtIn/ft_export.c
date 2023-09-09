@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:27 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 13:59:49 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 16:03:10 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,10 @@ int	ft_export2(char **cmd, t_info *info, int i)
 
 int	ft_export(char **cmd, t_info *info)
 {
-	int		i;
-
 	if (!cmd[1])
 	{
 		declare_print(info);
 		return (0);
 	}
-	i = 0;
 	return (ft_export2(cmd, info, 0));
 }

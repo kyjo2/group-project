@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:26:46 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/09 16:09:43 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*get_cmd(char **path, char *cmd)
 
 	fd = access(cmd, X_OK);
 	if (!fd)
-		return (cmd);
+		return (ft_strdup(cmd));
 	path_cmd = ft_strjoin("/", cmd);
 	i = 0;
 	while (path[i])

@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 16:02:41 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/09 16:16:38 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	signal_setting(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	init(int argc, char *argv[], t_info *info, t_env *head)
+void	init(int argc, char *argv[], char **envp, t_info *info)
 {
 	struct termios	termios_new;
 
@@ -48,7 +48,8 @@ void	init(int argc, char *argv[], t_info *info, t_env *head)
 		exit(1);
 	}
 	info->question_mark = "0";
-	info->envp_head = head;
+	info->envp = envp;
+	info->envp_head = find_env(envp);
 	g_exit_code = 0;
 	info->pipe_flag = 1;
 	info->start = 0;
@@ -70,7 +71,6 @@ void	v(void)
 int	main(int argc, char **argv, char **envp)
 {
 	t_list			*list;
-	t_env			*head;
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
@@ -78,9 +78,7 @@ int	main(int argc, char **argv, char **envp)
 	//atexit(v);
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
-	info.envp = envp;
-	head = find_env(envp);
-	init(argc, argv, &info, head);
+	init(argc, argv, envp, &info);
 	while (1)
 	{
 		signal_setting();
@@ -95,6 +93,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(line);
 	}
-	free_env(head);
+	free_env(info.envp_head);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_old);
 }

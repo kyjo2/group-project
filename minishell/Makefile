@@ -6,7 +6,7 @@
 #    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/10 09:09:51 by kyjo             ###   ########.fr        #
+#    Updated: 2023/09/10 12:13:41 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,14 +47,15 @@ SRCS = main.c \
 	./builtin/ft_pwd.c \
 	./builtin/ft_unset.c \
 	./parsing/parsing.c \
-	./parsing/parsing2.c\
-	./parsing/parsing3.c\
-	./parsing/parsing4.c\
-	./parsing/parsing5.c\
-	./parsing/utils.c\
-	./parsing/new_split.c\
-	./parsing/new_split2.c\
-	./libft/ft_strcmp.c\
+	./parsing/parsing2.c \
+	./parsing/parsing3.c \
+	./parsing/parsing4.c \
+	./parsing/parsing5.c \
+	./parsing/utils.c \
+	./parsing/new_split.c \
+	./parsing/new_split2.c \
+	./libft/ft_perror.c \
+	./libft/ft_strcmp.c \
 	./libft/ft_itoa.c \
 
 

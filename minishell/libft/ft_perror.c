@@ -1,13 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_funtion.c                                       :+:      :+:    :+:   */
+/*   ft_perror.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 10:19:17 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 10:19:35 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 12:14:49 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell"
+#include "libft.h"
+#include <stdio.h>
+
+void	*ft_perror(char *massege, int exit_code)
+{
+	perror(massege);
+	exit(exit_code);
+}

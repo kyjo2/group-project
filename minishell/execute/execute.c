@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 11:04:31 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 12:10:42 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ void	yes_fork(t_list *list, t_info *info)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+		ft_perror("A fork error occurred", 1);
+	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
@@ -66,17 +68,14 @@ void	yes_fork(t_list *list, t_info *info)
 			exit(1);
 		exit(execute_cmd(list, info));
 	}
-	else if (pid != 0)
-	{
-		signal(SIGINT, SIG_IGN);
-		if (!list->next)
-			info->last_pid = pid;
-		if (list->ac != 0)
-			if (command_check(list, info) == 127 \
-				|| !ft_strncmp(list->av[0], "", 1))
-				printf("minishell: %s: command not found\n", list->av[0]);
-		close_fd(list, pid);
-	}
+	signal(SIGINT, SIG_IGN);
+	if (!list->next)
+		info->last_pid = pid;
+	if (list->ac != 0)
+		if (command_check(list, info) == 127 \
+			|| !ft_strncmp(list->av[0], "", 1))
+			printf("minishell: %s: command not found\n", list->av[0]);
+	close_fd(list, pid);
 	return ;
 }
 
@@ -84,7 +83,8 @@ static void	execute_fork(t_list *list, t_info *info)
 {
 	while (list)
 	{
-		pipe(list->pip);
+		if (pipe(list->pip) == -1)
+			ft_perror("A pipe error occurred", 1);
 		yes_fork(list, info);
 		list = list->next;
 		in_out(list);

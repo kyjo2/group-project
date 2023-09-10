@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 10:26:39 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 12:04:33 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ t_list	*make_node(char **line, t_info *info);
 int		change_check(char **line, int *i, int doubleq);
 int		check_line_start(char **line, int start, char *tmp_line, int *i);
 char	*ft_malloc(int size);
+void	*ft_perror(char *massege, int exit_code);
 
 #endif

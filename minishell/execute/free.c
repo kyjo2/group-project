@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 10:36:46 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 11:08:10 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	free_in_list(t_list *head)
 void	unlink_tmp_file(void)
 {
 	int		i;
-	int		j;
 	char	*temp;
 	char	*temp_number;
 
@@ -70,15 +69,14 @@ void	unlink_tmp_file(void)
 		free(temp);
 	}
 	free(temp);
-	j = 0;
-	while (j < i)
+	while (i >= 0)
 	{
-		temp_number = ft_itoa(j);
+		temp_number = ft_itoa(i);
 		temp = ft_strjoin("temp_", temp_number);
 		free(temp_number);
 		unlink(temp);
 		free(temp);
-		j++;
+		i--;
 	}
 }
 

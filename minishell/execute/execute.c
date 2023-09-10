@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 10:03:18 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 11:04:31 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	execute(t_list *list, t_info *info)
 	t_list	*head;
 
 	head = list;
+	signal(SIGINT, SIG_IGN);
 	if (syntax_error(list))
 		return (free_list(list));
 	in_out(list);

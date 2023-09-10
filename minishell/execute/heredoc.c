@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:06:53 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 11:05:07 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	fork_for_heredoc(t_list *list, int index)
 	id = fork();
 	if (!id)
 	{
+		signal(SIGINT, SIG_DFL);
 		get_input(list, index);
 		close(list->infile);
 		exit(0);

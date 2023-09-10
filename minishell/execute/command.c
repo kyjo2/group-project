@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 16:09:43 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/10 10:02:14 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ static char	*get_cmd(char **path, char *cmd)
 	return (NULL);
 }
 
-char	**find_path(char **envp)
+char	**find_path(t_env *head)
 {
 	char	*path;
 
-	while (*envp && ft_strncmp("PATH=", *envp, 5))
-		envp++;
-	if (!*envp)
+	while (head && ft_strcmp("PATH", head->name))
+		head = head->next;
+	if (!head)
 		return (NULL);
-	path = *envp + 5;
+	path = head->value;
 	return (ft_split(path, ':'));
 }
 
-int	other_cmd(t_list *list)
+int	other_cmd(t_list *list, t_info *info)
 {
 	char	**path;
 
-	path = find_path(list->envp);
+	path = find_path(info->envp_head);
 	if (!path)
 		return (127);
 	list->cmd = get_cmd(path, list->av[0]);
@@ -87,11 +87,11 @@ int	builtin_check(t_list *list)
 		return (0);
 }
 
-int	command_check(t_list *list)
+int	command_check(t_list *list, t_info *info)
 {
 	char	**temp;
 
-	temp = find_path(list->envp);
+	temp = find_path(info->envp_head);
 	if (!temp)
 		return (127);
 	list->cmd = get_cmd(temp, list->av[0]);

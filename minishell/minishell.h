@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 09:36:13 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 10:01:41 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ void	free_list(t_list *head);
 void	wait_process(t_info *info);
 void	deep_free(char **temp);
 int		in_out(t_list *list);
-int		command_check(t_list *list);
+int		command_check(t_list *list, t_info *info);
 int		builtin_check(t_list *list);
-int		other_cmd(t_list *list);
+int		other_cmd(t_list *list, t_info *info);
 void	redir(t_list *list);
 void	heredoc(t_list *list, int index);
 void	cut_av(t_list *list, char *str, int size);
 t_env	*find_env(char **ev);
-char	**find_path(char **envp);
+char	**find_path(t_env *head);
 void	execute(t_list *list, t_info *info);
 void	parsing(t_list **list, char **line, t_info *info);
 int		ft_cd(char **cmd, t_info *info);

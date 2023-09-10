@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:39:44 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 10:03:18 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	execute_cmd(t_list *list, t_info *info)
 		return (ft_exit(list->av, list->exist_pipe));
 	else
 	{
-		return (other_cmd(list));
+		return (other_cmd(list, info));
 	}
 }
 
@@ -72,7 +72,8 @@ void	yes_fork(t_list *list, t_info *info)
 		if (!list->next)
 			info->last_pid = pid;
 		if (list->ac != 0)
-			if (command_check(list) == 127 || !ft_strncmp(list->av[0], "", 1))
+			if (command_check(list, info) == 127 \
+				|| !ft_strncmp(list->av[0], "", 1))
 				printf("minishell: %s: command not found\n", list->av[0]);
 		close_fd(list, pid);
 	}

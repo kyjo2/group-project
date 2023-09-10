@@ -6,20 +6,11 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:39 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 13:48:41 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 10:03:47 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	delete_path(char **envp)
-{
-	while (*envp && ft_strncmp("PATH=", *envp, 5))
-		envp++;
-	if (!*envp)
-		return ;
-	(*envp)++;
-}
 
 void	delete_env(t_info *info, char *name)
 {
@@ -29,8 +20,6 @@ void	delete_env(t_info *info, char *name)
 	tmp = info->envp_head;
 	while (tmp)
 	{
-		if (!ft_strcmp(name, "PATH"))
-			delete_path(info->envp);
 		if (!ft_strcmp(tmp->name, name))
 		{
 			pre->next = tmp->next;

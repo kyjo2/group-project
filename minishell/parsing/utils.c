@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:39:40 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 16:41:16 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 10:20:08 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_info_flag(t_info *info)
@@ -55,4 +56,14 @@ void	ft_error(char *str)
 {
 	printf("%s error!!\n", str);
 	exit(1);
+}
+
+char	*ft_malloc(int size)
+{
+	char	*result;
+
+	result = malloc(sizeof(char) * size + 1);
+	if (!result)
+		exit(1);
+	return (result);
 }

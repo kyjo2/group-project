@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 16:16:38 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/10 09:36:53 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,39 +62,9 @@ void	init(int argc, char *argv[], char **envp, t_info *info)
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
-// void free_list_all(t_list* head)
-// {
-//     t_list* current;
-//     t_list* temp;
-//     current = head;
-//     while (current != NULL)
-//     {
-//         temp = current;
-//         current = current->next;
-//         free(temp);
-//     }
-// }
-
-void	free_list_all(t_list *list)
+void	v(void)
 {
-	t_list		*tmp;
-	int			i;
-
-	while (list->next != NULL)
-	{
-		i = 0;
-		tmp = list;
-		list = list->next;
-		while (tmp->av[i] != NULL)
-			free(tmp->av[i++]);
-		free(tmp->av);
-		free(tmp);
-	}
-	i = 0;
-	while (list->av[i] != NULL)
-		free(list->av[i++]);
-	free(list->av);
-	free(list);
+	system("leaks minishell");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -107,6 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	init(argc, argv, envp, &info);
+	atexit(v);
 	while (1)
 	{
 		signal_setting();
@@ -118,7 +89,6 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			parsing(&list, &line, &info);
 			execute(list, &info);
-			free_list_all(list);
 		}
 		free(line);
 	}

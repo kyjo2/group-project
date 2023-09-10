@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:37:20 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:36:52 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,6 @@ void	free_in_list(t_list *head)
 			close(head->infile);
 		if (head->outfile > 0)
 			close(head->outfile);
-		if (head->cmd)
-			free(head->cmd);
-		if (head->av)
-			deep_free(head->av);
 		head = head->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 14:00:21 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:36:51 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void	free_list(t_list *head)
 	{
 		temp = current;
 		current = current->next;
+		if (temp->cmd)
+			free(temp->cmd);
+		if (temp->av)
+			deep_free(temp->av);
 		free(temp);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:26:37 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 16:26:38 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 09:15:38 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	parsing(t_list **list, char **line, t_info *info)
 		{
 			if ((*line)[0] == '\0')
 				break ;
-			printf("!!!\n");
 			pipe_back_line = sub_parsing1(line, info, i);
 			new = make_node(&line[0], info);
 			if (sub_parsing2(info, new, &tmp, list) == 1)

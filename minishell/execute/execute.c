@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 16:07:12 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/10 09:39:44 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	execute(t_list *list, t_info *info)
 
 	head = list;
 	if (syntax_error(list))
-		return ;
+		return (free_list(list));
 	in_out(list);
 	if (!(list->next) && builtin_check(list) \
 		&& list->infile <= 0 && list->outfile <= 0)
@@ -110,7 +110,7 @@ void	execute(t_list *list, t_info *info)
 	else
 		execute_fork(list, info);
 	unlink_tmp_file();
-	free_in_list(head);
 	free_list(head);
+	free_in_list(head);
 	wait_process(info);
 }

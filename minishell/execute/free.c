@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:36:52 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 10:36:46 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ void	unlink_tmp_file(void)
 	j = 0;
 	while (j < i)
 	{
-		temp = ft_strjoin("temp_", ft_itoa(j));
+		temp_number = ft_itoa(j);
+		temp = ft_strjoin("temp_", temp_number);
+		free(temp_number);
 		unlink(temp);
 		free(temp);
 		j++;

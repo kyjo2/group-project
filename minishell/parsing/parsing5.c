@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing5.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:22:31 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 16:39:18 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 09:53:52 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 
 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(value)
 			+ ft_count_quote(line) + 1);
+	if (!tmp_line)
+		exit(1);
 	i = -1;
 	while (++i < start - 1)
 		tmp_line[i] = (*line)[i];

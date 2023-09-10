@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:42:57 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:56:23 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	init(int argc, char *argv[], char **envp, t_info *info)
 		printf("argument error!!\n");
 		exit(1);
 	}
-	info->question_mark = "0";
 	info->envp = envp;
 	info->envp_head = find_env(envp);
 	g_exit_code = 0;

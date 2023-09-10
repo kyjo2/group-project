@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:36:51 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:58:29 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_env	*new_env(void)
 	t_env	*new;
 
 	new = malloc(sizeof(t_env));
+	if (!new)
+		exit(1);
 	new->next = NULL;
 	return (new);
 }

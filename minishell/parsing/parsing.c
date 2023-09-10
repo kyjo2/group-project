@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:26:37 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 09:15:38 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:47:15 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*sub_parsing1(char **line, t_info *info, int i)
 	int		count;
 
 	pipe_back_line = malloc(sizeof(char) * ft_strlen(*line) + 1);
+	if (!pipe_back_line)
+		exit(1);
 	j = i;
 	count = 0;
 	if ((*line)[j] == '|')

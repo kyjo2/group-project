@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:27:17 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 16:27:17 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 09:53:11 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <minishell.h>
+
+#include "minishell.h"
 
 void	change_env_space2(char **line, int start, char *tmp_line, int *i)
 {
@@ -43,6 +44,8 @@ void	change_env_space(char **line, int start)
 	int		j;
 
 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + 3 + 1);
+	if (!tmp_line)
+		exit(1);
 	i = -1;
 	while (++i < start)
 		tmp_line[i] = (*line)[i];

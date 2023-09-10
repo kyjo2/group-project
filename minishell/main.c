@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:36:53 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/10 09:42:57 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,6 @@ void	init(int argc, char *argv[], char **envp, t_info *info)
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
-void	v(void)
-{
-	system("leaks minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_list			*list;
@@ -77,7 +72,6 @@ int	main(int argc, char **argv, char **envp)
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	init(argc, argv, envp, &info);
-	atexit(v);
 	while (1)
 	{
 		signal_setting();

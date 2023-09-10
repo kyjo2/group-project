@@ -6,7 +6,11 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/09/10 10:08:18 by kyjo             ###   ########.fr       */
+=======
+/*   Updated: 2023/09/10 10:18:38 by junggkim         ###   ########.fr       */
+>>>>>>> f0086b70bda436fdd05f57dc8efd662a6053afbb
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +118,6 @@ int		check_cmd(char *cmd);
 t_list	*make_node(char **line, t_info *info);
 int		change_check(char **line, int *i, int doubleq);
 int		check_line_start(char **line, int start, char *tmp_line, int *i);
+char	*ft_malloc(int size);
 
 #endif

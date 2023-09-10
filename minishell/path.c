@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 09:58:29 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 10:18:47 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_env	*find_env(char **ev)
 		i = 0;
 		while ((*ev)[i] != '=')
 			i++;
-		new->name = malloc(sizeof(char) * (i + 1));
+		new->name = ft_malloc(i);
 		ft_strlcpy(new->name, *ev, i + 1);
 		new->value = ft_strdup(&(*ev)[i + 1]);
 		new->have_equl = 1;

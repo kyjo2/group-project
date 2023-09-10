@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/09/10 10:01:41 by kyjo             ###   ########.fr       */
+=======
+/*   Updated: 2023/09/10 09:56:16 by junggkim         ###   ########.fr       */
+>>>>>>> 762dace9262bf085e9a753e9815c72cba31e4cd7
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +70,6 @@ typedef struct s_info
 	int				last_pid;
 	int				count_doubleq;
 	int				count_singleq;
-	char			*question_mark;
 	char			**envp;
 	struct s_env	*envp_head;
 }	t_info;

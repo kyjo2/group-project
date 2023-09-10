@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:00 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/06 20:55:28 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/10 09:47:55 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ void	check_n(char **cmd, int *i, int *n_flag)
 	}
 }
 
-// echo hello
-// echo -n hello
-// echo -nnnnn -n -nnnn hello -n
-// echo -nnnnnnnm hello
-// echo hello -n
 int	ft_echo(char **cmd)
 {
 	int	i;

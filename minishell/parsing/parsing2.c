@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:27:17 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 09:53:11 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/11 11:57:57 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,22 @@ void	change_env_space2(char **line, int start, char *tmp_line, int *i)
 
 	exit_code = ft_itoa(g_exit_code);
 	exit_code_len = ft_strlen(exit_code);
-	while ((*line)[start])
+	if ((*line)[start + 1] == '?')
 	{
-		if ((*line)[++start] == '?')
+		start++;
+		j = 0;
+		while (exit_code_len--)
+			tmp_line[(*i)++] = exit_code[j++];
+		while ((*line)[++start])
+			tmp_line[(*i)++] = (*line)[start];
+	}
+	else
+	{
+		while ((*line)[start++])
 		{
-			j = 0;
-			while (exit_code_len--)
-				tmp_line[(*i)++] = exit_code[j++];
-			while ((*line)[++start])
-				tmp_line[(*i)++] = (*line)[start];
-			break ;
+			if (check_line_start(line, start, tmp_line, i))
+				break ;
 		}
-		else if (check_line_start(line, start, tmp_line, i))
-			break ;
 	}
 	free(exit_code);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/10 12:13:41 by kyjo             ###   ########.fr        #
+#    Updated: 2023/09/13 21:04:31 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ SRCS = main.c \
 	./parsing/new_split2.c \
 	./libft/ft_perror.c \
 	./libft/ft_strcmp.c \
-	./libft/ft_itoa.c \
+	./libft/ft_itoa.c 
 
 
 OBJS = $(SRCS:.c=.o)

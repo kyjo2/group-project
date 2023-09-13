@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:22:31 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 09:53:52 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/13 20:51:13 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	ft_copy(char **line, char *value, int name_len, int start)
 	int		i;
 	size_t	j;
 
+	printf("value = %s ft_strlen = %zu\n", value, ft_strlen(value));
 	tmp_line = malloc(sizeof(char) * ft_strlen(*line) + ft_strlen(value)
 			+ ft_count_quote(line) + 1);
 	if (!tmp_line)

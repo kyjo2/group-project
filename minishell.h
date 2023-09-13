@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 12:04:33 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/13 21:16:51 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ int		change_check(char **line, int *i, int doubleq);
 int		check_line_start(char **line, int start, char *tmp_line, int *i);
 char	*ft_malloc(int size);
 void	*ft_perror(char *massege, int exit_code);
+char	*new_strdup(const char *s, t_env *tmp);
 
 #endif

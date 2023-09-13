@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:44:58 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/09 13:47:52 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/13 21:15:37 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,14 @@ void	change_env_export(t_info *info, char *name, char *value, int have_equl)
 			if (value)
 				tmp->value = ft_strdup(value);
 			else
-				tmp->value = 0;
+				tmp->value = ft_strdup("");
 		}
 		else
 		{
 			if (value)
-				tmp->value = ft_strdup(value);
-			tmp->have_equl = 1;
+				tmp->value = new_strdup(value, tmp);
+			else if (have_equl)
+				tmp->value = new_strdup("", tmp);
 		}
 	}
 }

@@ -6,34 +6,11 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:20:16 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/11 12:21:47 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:16:11 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// int	solo_dollar_check(char **line, t_info *info, int start)
-// {
-// 	int		i;
-// 	t_env	*tmp;
-// 	int		j;
-
-// 	tmp = info->envp_head;
-// 	i = start;
-// 	j = 0;
-// 	while ((*line)[j] == ' ')
-// 		j++;
-// 	if ((*line)[i + 1] == '?' || (*line)[j] != '$')
-// 		return (0);
-// 	i++;
-// 	while (tmp)
-// 	{
-// 		if (new_strcmp(*line + i, tmp->name) == 0)
-// 			return (0);
-// 		tmp = tmp->next;
-// 	}
-// 	return (0);
-// }
 
 void	change_change(char **line, t_info *info, int *i)
 {

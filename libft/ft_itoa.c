@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 22:04:02 by yul               #+#    #+#             */
-/*   Updated: 2022/11/13 15:02:19 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/13 23:12:51 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 	len = chk_len(n);
 	res = malloc(len + 1);
 	if (res == NULL)
-		return (NULL);
+		exit(1);
 	nbr = (long long)n;
 	if (nbr == 0)
 		res[0] = '0';

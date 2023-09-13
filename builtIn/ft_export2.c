@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:55:44 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/13 21:14:31 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/13 23:13:43 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*new_strdup(const char *s, t_env *tmp)
 	i = 0;
 	temp_s = malloc(size + 1);
 	if (temp_s == NULL)
-		return (NULL);
+		exit(1);
 	while (s[i])
 	{
 		temp_s[i] = s[i];

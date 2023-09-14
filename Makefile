@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
+#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/13 21:04:31 by junggkim         ###   ########.fr        #
+#    Updated: 2023/09/14 11:16:50 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,14 +64,14 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS) -I${HOME}/.brew/opt/readline/include -c $^ -o $@ -I./ 
+	$(CC) $(CFLAGS) -I/goinfre/kyjo/.brew/opt/readline/include -c $^ -o $@ -I./ 
 
 $(LIB) : $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -L${HOME}/.brew/opt/readline/lib -o $@
+	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -L/goinfre/kyjo/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

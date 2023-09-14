@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:17 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 13:53:27 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/14 10:52:04 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,8 @@ int	ft_exit2(char **cmd)
 	}
 }
 
-int	ft_exit(char **cmd, int flag)
+int	ft_exit(char **cmd)
 {
-	if (flag)
-		exit(0);
 	if (!cmd[1])
 	{
 		printf("exit\n");

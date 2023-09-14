@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/13 21:16:51 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/14 10:58:54 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		ft_cd(char **cmd, t_info *info);
 int		ft_echo(char **cmd);
 void	free_env(t_env *head);
 int		ft_env(t_env *env);
-int		ft_exit(char **cmd, int flag);
+int		ft_exit(char **cmd);
 int		ft_export(char **cmd, t_info *info);
 int		ft_pwd(int fd, t_info *info);
 int		ft_unset(char **cmd, t_info *info);

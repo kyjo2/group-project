@@ -39,7 +39,8 @@ static void	redir_outfile(t_list *list)
 void	redir(t_list *list)
 {
 	pipe_set(list);
-	redir_infile(list);
+	if (!builtin_check(list))
+		redir_infile(list);
 	redir_outfile(list);
 	return ;
 }

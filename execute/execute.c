@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/14 11:13:45 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/15 00:47:56 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	execute(t_list *list, t_info *info)
 	else
 		execute_fork(list, info);
 	unlink_tmp_file();
-	free_list(head);
 	free_in_list(head);
+	free_list(head);
 	wait_process(info);
 }

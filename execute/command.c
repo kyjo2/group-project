@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 10:02:14 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/15 00:43:31 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,11 @@ int	other_cmd(t_list *list, t_info *info)
 
 int	builtin_check(t_list *list)
 {
-	if (!ft_strcmp(list->av[0], "echo"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "cd"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "pwd"))
+	if (!ft_strcmp(list->av[0], "cd"))
 		return (1);
 	else if (!ft_strcmp(list->av[0], "export"))
 		return (1);
 	else if (!ft_strcmp(list->av[0], "unset"))
-		return (1);
-	else if (!ft_strcmp(list->av[0], "env"))
 		return (1);
 	else if (!ft_strcmp(list->av[0], "exit"))
 		return (1);

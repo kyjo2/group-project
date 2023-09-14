@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 11:08:10 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/15 00:50:04 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ void	wait_process(t_info *info)
 	while (temp != -1)
 	{
 		if (WIFSIGNALED(status))
+		{
 			ret = WTERMSIG(status);
+			if (ret == 2 || ret == 3)
+				ret += 128;
+		}
 		else
 			ret = WEXITSTATUS(status);
-		if (ret == 2 || ret == 3)
-			ret += 128;
-		if (ret == 255)
-			ret -= 128;
 		if (temp == info->last_pid)
 			g_exit_code = ret;
 		temp = wait(&status);
@@ -37,17 +37,20 @@ void	wait_process(t_info *info)
 
 void	free_in_list(t_list *head)
 {
-	while (head)
+	t_list	*temp;
+
+	temp = head;
+	while (temp)
 	{
-		if (head->pip[READ] > 0)
-			close(head->pip[READ]);
-		if (head->pip[WRITE] > 0)
-			close(head->pip[WRITE]);
-		if (head->infile > 0)
-			close(head->infile);
-		if (head->outfile > 0)
-			close(head->outfile);
-		head = head->next;
+		if (temp->pip[READ] > 0)
+			close(temp->pip[READ]);
+		if (temp->pip[WRITE] > 0)
+			close(temp->pip[WRITE]);
+		if (temp->infile > 0)
+			close(temp->infile);
+		if (temp->outfile > 0)
+			close(temp->outfile);
+		temp = temp->next;
 	}
 }
 

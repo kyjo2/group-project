@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 11:05:07 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/15 01:15:11 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ static int	fork_for_heredoc(t_list *list, int index)
 	{
 		waitpid(id, &status, 0);
 		if (WIFSIGNALED(status))
-			ret = 1;
+		{
+			if (WTERMSIG(status) == SIGINT)
+				ret = 1;
+		}
 	}
 	cut_av(list, "<<\0", 2);
 	return (ret);
@@ -84,7 +87,7 @@ void	heredoc(t_list *list, int index)
 		close(list->infile);
 	temp = get_random_name();
 	list->infile = open(temp, O_WRONLY | O_CREAT, 0644);
-	if (!fork_for_heredoc(list, index))
-		list->infile = open(temp, O_RDONLY);
+	if (fork_for_heredoc(list, index))
+		list->infile = -1;
 	free(temp);
 }

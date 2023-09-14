@@ -18,6 +18,8 @@ void	check_n(char **cmd, int *i, int *n_flag)
 
 	while (cmd[*i] && cmd[*i][0] == '-')
 	{
+		if (cmd[*i][1] == '\0')
+			break ;
 		j = 1;
 		while (cmd[*i][j] && cmd[*i][j] == 'n')
 			j++;

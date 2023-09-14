@@ -53,15 +53,17 @@ int	dir(char *path, t_info *info)
 int	ft_cd(char **cmd, t_info *info)
 {
 	char	pwd[4096];
+	int		tmp;
 
 	if (!cmd[1])
 		dir("~", info);
-	else if (dir(cmd[1], info) == -1)
+	tmp = dir(cmd[1], info);
+	if (tmp == -1)
 	{
 		printf("bash: cd: %s: No such file or directory\n", cmd[1]);
 		return (1);
 	}
-	else if (dir(cmd[1], info) == 1)
+	else if (tmp == 1)
 	{
 		printf("bash: cd: OLDPWD not set\n");
 		return (1);

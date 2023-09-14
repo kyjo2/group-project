@@ -64,7 +64,7 @@ bonus			:	$(BNS_OBJS)
 	touch bonus
 
 %.o				: %.c
-	gcc $(FLAGS) -c $^ -I./ -o $@
+	cc $(FLAGS) -c $^ -I./ -o $@
 
 clean			:
 	rm -f $(OBJS) $(BNS_OBJS)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 18:06:23 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/15 23:45:16 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static void	get_input(t_list *list, int index, t_info *info)
 		if (!line)
 			break ;
 		confirm_env(&line, info);
-		printf("line = %s\n", line);
 		if (!ft_strcmp(line, list->av[index + 1]))
 		{
 			free(line);
@@ -130,8 +129,13 @@ void	heredoc(t_list *list, int index, t_info *info)
 	if (list->infile > 0)
 		close(list->infile);
 	temp = get_random_name();
-	list->infile = open(temp, O_WRONLY | O_CREAT, 0644);
-	if (fork_for_heredoc(list, index, info))
+	list->infile = open(temp, O_RDWR | O_CREAT, 0644);
+	if (!fork_for_heredoc(list, index, info))
+		list->infile = open(temp, O_RDONLY);
+	else
+	{
 		list->infile = -1;
+		printf("\n");
+	}
 	free(temp);
 }

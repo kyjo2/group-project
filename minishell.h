@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/14 10:58:54 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/15 17:30:28 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ void	free_in_list(t_list *head);
 void	free_list(t_list *head);
 void	wait_process(t_info *info);
 void	deep_free(char **temp);
-int		in_out(t_list *list);
+int		in_out(t_list *list, t_info *info);
 int		command_check(t_list *list, t_info *info);
 int		builtin_check(t_list *list);
 int		other_cmd(t_list *list, t_info *info);
 void	redir(t_list *list);
-void	heredoc(t_list *list, int index);
+void	heredoc(t_list *list, int index, t_info *info);
 void	cut_av(t_list *list, char *str, int size);
 t_env	*find_env(char **ev);
 char	**find_path(t_env *head);

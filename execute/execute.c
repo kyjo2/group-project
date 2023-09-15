@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 00:47:56 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/15 17:30:53 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	execute_fork(t_list *list, t_info *info)
 			ft_perror("A pipe error occurred", 1);
 		yes_fork(list, info);
 		list = list->next;
-		in_out(list);
+		in_out(list, info);
 	}
 }
 
@@ -100,7 +100,7 @@ void	execute(t_list *list, t_info *info)
 	signal(SIGINT, SIG_IGN);
 	if (syntax_error(list))
 		return (free_list(list));
-	in_out(list);
+	in_out(list, info);
 	if (!(list->next) && builtin_check(list))
 	{
 		redir(list);

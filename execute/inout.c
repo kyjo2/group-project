@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inout.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 01:15:43 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/15 17:14:37 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	cut_av(t_list *list, char *str, int size)
 	list->ac -= 2;
 }
 
-static void	infile(t_list *list)
+static void	infile(t_list *list, t_info *info)
 {
 	int	i;
 
@@ -46,7 +46,7 @@ static void	infile(t_list *list)
 		while (list->av[i])
 		{
 			if (!ft_strcmp(list->av[i], "<<"))
-				heredoc(list, i);
+				heredoc(list, i, info);
 			else if (!ft_strcmp(list->av[i], "<"))
 				break ;
 			i++;
@@ -89,11 +89,11 @@ static void	outfile(t_list *list)
 	}
 }
 
-int	in_out(t_list *list)
+int	in_out(t_list *list, t_info *info)
 {
 	if (!list)
 		return (0);
-	infile(list);
+	infile(list, info);
 	outfile(list);
 	return (0);
 }

@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   new_split.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 20:34:58 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/08 20:35:02 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/15 22:23:46 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	check_sep(char s, char c, t_info *info, int flag)
@@ -26,6 +27,8 @@ static int	check_sep(char s, char c, t_info *info, int flag)
 		&& info->singleq_flag == 1 && flag == 1)
 		info->singleq_flag = 0;
 	else if (s == c && info->doubleq_flag == 0 && info->singleq_flag == 0)
+		return (1);
+	else if (s == 9 && info->doubleq_flag == 0 && info->singleq_flag == 0)
 		return (1);
 	else if (s == '\0')
 		return (1);

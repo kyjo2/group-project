@@ -6,11 +6,11 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 16:26:37 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 09:47:15 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/15 22:23:07 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
 int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 {

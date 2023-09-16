@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/16 23:12:53 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 00:00:46 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,25 @@ void	ft_handler(int signal)
 	rl_redisplay();
 }
 
-void	signal_setting(void)
+void	signal_setting(int flag)
 {
-	signal(SIGINT, ft_handler);
+	struct termios	termios_new;
+
+	tcgetattr(STDIN_FILENO, &termios_new);
+	if (flag)
+		termios_new.c_lflag &= ~(ECHOCTL);
+	else
+		termios_new.c_lflag &= ~(ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
+	if (flag)
+		signal(SIGINT, ft_handler);
+	else
+		signal(SIGINT,SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
 
 void	init(int argc, char *argv[], char **envp, t_info *info)
 {
-	struct termios	termios_new;
-
 	(void)argv;
 	if (argc != 1)
 	{
@@ -48,9 +57,6 @@ void	init(int argc, char *argv[], char **envp, t_info *info)
 	info->singleq_flag = 0;
 	info->count_doubleq = 0;
 	info->count_singleq = 0;
-	tcgetattr(STDIN_FILENO, &termios_new);
-	termios_new.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -65,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	init(argc, argv, envp, &info);
 	while (1)
 	{
-		signal_setting();
+		signal_setting(1);
 		line = readline("minishell $ ");
 		if (!line)
 			break ;

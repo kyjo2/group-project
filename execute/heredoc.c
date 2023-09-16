@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/16 23:28:22 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/16 23:58:13 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ static int	fork_for_heredoc(t_list *list, int index, t_info *info)
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		waitpid(id, &status, 0);
 		if (WIFSIGNALED(status))
 		{

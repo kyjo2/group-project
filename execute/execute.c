@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/16 23:33:49 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/16 23:59:41 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	yes_fork(t_list *list, t_info *info)
 			exit(1);
 		exit(execute_cmd(list, info));
 	}
-	signal(SIGINT, SIG_IGN);
+	signal_setting(0);
 	if (!list->next)
 		info->last_pid = pid;
 	if (list->ac != 0)

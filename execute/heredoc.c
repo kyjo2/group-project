@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 23:45:16 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/16 23:28:22 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	confirm_env(char **line, t_info *info)
 			}
 		}
 	}
-	delete_chekc_quote(line);
+	delete_check_quote(line);
 }
 
 static void	get_input(t_list *list, int index, t_info *info)
@@ -101,7 +101,7 @@ static int	fork_for_heredoc(t_list *list, int index, t_info *info)
 	return (ret);
 }
 
-void	heredoc(t_list *list, int index, t_info *info)
+int	heredoc(t_list *list, int index, t_info *info)
 {
 	char	*temp;
 
@@ -113,8 +113,10 @@ void	heredoc(t_list *list, int index, t_info *info)
 		list->infile = open(temp, O_RDONLY);
 	else
 	{
-		list->infile = -1;
+		g_exit_code = 1;
 		printf("\n");
+		return (1);
 	}
 	free(temp);
+	return (0);
 }

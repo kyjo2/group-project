@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:51:38 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/10 12:12:02 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/16 23:27:38 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	free_list(t_list *head)
 			deep_free(temp->av);
 		free(temp);
 	}
+	unlink_tmp_file();
 }
 
 void	free_env(t_env *head)

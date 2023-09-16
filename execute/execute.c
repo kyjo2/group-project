@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 17:30:53 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/16 23:33:49 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ static void	execute_fork(t_list *list, t_info *info)
 			ft_perror("A pipe error occurred", 1);
 		yes_fork(list, info);
 		list = list->next;
-		in_out(list, info);
+		if (in_out(list, info))
+			break ;
 	}
 }
 
@@ -100,18 +101,15 @@ void	execute(t_list *list, t_info *info)
 	signal(SIGINT, SIG_IGN);
 	if (syntax_error(list))
 		return (free_list(list));
-	in_out(list, info);
+	if (in_out(list, info))
+		return (free_list(list));
 	if (!(list->next) && builtin_check(list))
 	{
 		redir(list);
-		if (list->infile == -1)
-			g_exit_code = 1;
-		else
-			g_exit_code = execute_cmd(list, info);
+		g_exit_code = execute_cmd(list, info);
 	}
 	else
 		execute_fork(list, info);
-	unlink_tmp_file();
 	free_in_list(head);
 	free_list(head);
 	wait_process(info);

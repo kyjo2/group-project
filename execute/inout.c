@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inout.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 17:14:37 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/16 23:31:01 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	cut_av(t_list *list, char *str, int size)
 	list->ac -= 2;
 }
 
-static void	infile(t_list *list, t_info *info)
+static int	infile(t_list *list, t_info *info)
 {
 	int	i;
 
@@ -46,8 +46,9 @@ static void	infile(t_list *list, t_info *info)
 		while (list->av[i])
 		{
 			if (!ft_strcmp(list->av[i], "<<"))
-				heredoc(list, i, info);
-			else if (!ft_strcmp(list->av[i], "<"))
+				if (heredoc(list, i, info))
+					return (1);
+			if (!ft_strcmp(list->av[i], "<"))
 				break ;
 			i++;
 		}
@@ -60,6 +61,7 @@ static void	infile(t_list *list, t_info *info)
 			perror("The following error occurred");
 		cut_av(list, "<", 2);
 	}
+	return (0);
 }
 
 static void	outfile(t_list *list)
@@ -93,7 +95,8 @@ int	in_out(t_list *list, t_info *info)
 {
 	if (!list)
 		return (0);
-	infile(list, info);
+	if (infile(list, info))
+		return (1);
 	outfile(list);
 	return (0);
 }

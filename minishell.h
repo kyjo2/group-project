@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/15 23:39:37 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/16 23:22:39 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int		command_check(t_list *list, t_info *info);
 int		builtin_check(t_list *list);
 int		other_cmd(t_list *list, t_info *info);
 void	redir(t_list *list);
-void	heredoc(t_list *list, int index, t_info *info);
+int		heredoc(t_list *list, int index, t_info *info);
 void	cut_av(t_list *list, char *str, int size);
 t_env	*find_env(char **ev);
 char	**find_path(t_env *head);

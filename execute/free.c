@@ -96,3 +96,24 @@ void	deep_free(char **temp)
 	free(temp);
 	temp = NULL;
 }
+
+void	delete_check_quote(char **line)
+{
+	int		i;
+	int		k;
+
+	k = -1;
+	i = -1;
+	while ((*line)[++i])
+	{
+		if ((*line)[i] == 12 && ((*line)[i + 1] == '\''
+				|| (*line)[i + 1] == '\"'))
+		{
+			i++;
+			(*line)[++k] = (*line)[i];
+		}
+		else
+			(*line)[++k] = (*line)[i];
+	}
+	(*line)[++k] = '\0';
+}

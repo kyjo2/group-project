@@ -10,15 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
-#include <termios.h>
 #include "minishell.h"
 
 void	ft_handler(int signal)
@@ -27,7 +18,7 @@ void	ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1)
 		exit(1);
-	//rl_replace_line("", 1);
+	rl_replace_line("", 1);
 	rl_redisplay();
 }
 

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	sub_parsing2(t_info *info, t_list *new, t_list **tmp, t_list **list)
 {

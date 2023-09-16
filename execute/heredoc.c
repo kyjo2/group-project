@@ -31,27 +31,6 @@ static char	*get_random_name(void)
 	}
 }
 
-void	delete_back_slash(char **line)
-{
-	int		i;
-	int		k;
-
-	k = -1;
-	i = -1;
-	while ((*line)[++i])
-	{
-		if ((*line)[i] == '\\' && ((*line)[i + 1] == '\''
-				|| (*line)[i + 1] == '\"'))
-		{
-			i++;
-			(*line)[++k] = (*line)[i];
-		}
-		else
-			(*line)[++k] = (*line)[i];
-	}
-	(*line)[++k] = '\0';
-}
-
 void	confirm_env(char **line, t_info *info)
 {
 	int	i;
@@ -70,7 +49,7 @@ void	confirm_env(char **line, t_info *info)
 			}
 		}
 	}
-	delete_back_slash(line);
+	delete_chekc_quote(line);
 }
 
 static void	get_input(t_list *list, int index, t_info *info)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	ft_count_quote(char **line)
 {
@@ -35,7 +35,7 @@ void	ft_copy2(char *tmp_line, char *value, int *i, size_t j)
 	{
 		if (value[j] == '\'' || value[j] == '\"')
 		{
-			tmp_line[(*i)++] = '\\';
+			tmp_line[(*i)++] = 12;
 			if (value[j] == '\'')
 				tmp_line[(*i)++] = '\'';
 			else if (value[j] == '\"')
@@ -45,7 +45,7 @@ void	ft_copy2(char *tmp_line, char *value, int *i, size_t j)
 		else if (value[j + 1] == '\'' || value[j + 1] == '\"')
 		{
 			tmp_line[(*i)] = value[j];
-			tmp_line[++(*i)] = '\\';
+			tmp_line[++(*i)] = 12;
 			(*i)++;
 			j++;
 			tmp_line[(*i)++] = value[j++];

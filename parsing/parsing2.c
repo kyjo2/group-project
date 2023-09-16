@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	change_env_space2(char **line, int start, char *tmp_line, int *i)
 {
@@ -129,7 +129,7 @@ void	delete_quote(t_list *new, t_info *info)
 		k = -1;
 		while (new->av[i][++j])
 		{
-			if (new->av[i][j] == '\\' && (new->av[i][j + 1] == '\''
+			if (new->av[i][j] == 12 && (new->av[i][j + 1] == '\''
 				|| new->av[i][j + 1] == '\"'))
 			{
 				j++;

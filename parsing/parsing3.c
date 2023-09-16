@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	change_change(char **line, t_info *info, int *i)
 {
@@ -45,7 +45,7 @@ void	check_open_quote(char **line, t_info *info)
 	i = -1;
 	while ((*line)[++i])
 	{
-		if ((*line)[i] == '\\' && ((*line)[i + 1] == '\''
+		if ((*line)[i] == 12 && ((*line)[i + 1] == '\''
 			|| (*line)[i + 1] == '\"'))
 				i++;
 		else if ((*line)[i] == '\"' && info->doubleq_flag == 0

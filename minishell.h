@@ -117,5 +117,6 @@ int		check_line_start(char **line, int start, char *tmp_line, int *i);
 char	*ft_malloc(int size);
 void	*ft_perror(char *massege, int exit_code);
 char	*new_strdup(const char *s, t_env *tmp);
+void	delete_check_quote(char **line);
 
 #endif

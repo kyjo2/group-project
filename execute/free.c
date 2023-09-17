@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 12:24:11 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/17 12:44:09 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	wait_sig(int ret, int flag)
 	if (ret == 2 && flag)
 		printf("^C\n");
 	if (ret == 3 && flag)
-		printf("^\\Quit\n");
+		printf("^\\Quit: 3\n");
 }
 
 void	wait_process(t_info *info)

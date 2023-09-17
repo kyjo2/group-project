@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/15 00:43:31 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 19:57:28 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static char	*get_cmd(char **path, char *cmd)
 {
-	int		i;
 	int		fd;
 	char	*path_cmd;
 	char	*tmp;
@@ -22,11 +21,12 @@ static char	*get_cmd(char **path, char *cmd)
 	fd = access(cmd, X_OK);
 	if (!fd)
 		return (ft_strdup(cmd));
+	if (!path)
+		return (NULL);
 	path_cmd = ft_strjoin("/", cmd);
-	i = 0;
-	while (path[i])
+	while (*path)
 	{
-		tmp = ft_strjoin(path[i], path_cmd);
+		tmp = ft_strjoin(*path, path_cmd);
 		fd = access(tmp, X_OK);
 		if (!fd)
 		{
@@ -35,7 +35,7 @@ static char	*get_cmd(char **path, char *cmd)
 		}
 		close(fd);
 		free(tmp);
-		i++;
+		path++;
 	}
 	free(path_cmd);
 	return (NULL);
@@ -58,10 +58,9 @@ int	other_cmd(t_list *list, t_info *info)
 	char	**path;
 
 	path = find_path(info->envp_head);
-	if (!path)
-		return (127);
 	list->cmd = get_cmd(path, list->av[0]);
-	deep_free(path);
+	if (path)
+		deep_free(path);
 	if (!list->cmd)
 		return (127);
 	return (execve(list->cmd, list->av, list->envp));
@@ -77,6 +76,12 @@ int	builtin_check(t_list *list)
 		return (1);
 	else if (!ft_strcmp(list->av[0], "exit"))
 		return (1);
+	else if (!ft_strcmp(list->av[0], "echo"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "env"))
+		return (1);
+	else if (!ft_strcmp(list->av[0], "pwd"))
+		return (1);
 	else
 		return (0);
 }
@@ -86,10 +91,9 @@ int	command_check(t_list *list, t_info *info)
 	char	**temp;
 
 	temp = find_path(info->envp_head);
-	if (!temp)
-		return (127);
 	list->cmd = get_cmd(temp, list->av[0]);
-	deep_free(temp);
+	if (temp)
+		deep_free(temp);
 	if (!list->cmd)
 		return (127);
 	free(list->cmd);

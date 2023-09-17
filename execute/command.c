@@ -6,7 +6,7 @@
 /*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 19:57:28 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 20:54:16 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 static char	*get_cmd(char **path, char *cmd)
 {
-	int		fd;
 	char	*path_cmd;
 	char	*tmp;
 
-	fd = access(cmd, X_OK);
-	if (!fd)
+	if (!check_file(cmd))
 		return (ft_strdup(cmd));
 	if (!path)
 		return (NULL);
@@ -27,13 +25,11 @@ static char	*get_cmd(char **path, char *cmd)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, path_cmd);
-		fd = access(tmp, X_OK);
-		if (!fd)
+		if (!check_file(tmp))
 		{
 			free(path_cmd);
 			return (tmp);
 		}
-		close(fd);
 		free(tmp);
 		path++;
 	}

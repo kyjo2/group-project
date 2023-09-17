@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   etc.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 12:23:59 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 12:26:03 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/17 20:52:41 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	check_file(char *filename)
+{
+	int		fd;
+	char	buffer;
+
+	fd = access(filename, X_OK);
+	if (fd)
+		return (1);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (1);
+	if (read(fd, &buffer, 0) == -1)
+		return (1);
+	return (0);
+}
 
 void	unlink_tmp_file(void)
 {

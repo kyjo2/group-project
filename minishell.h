@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/17 00:00:04 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 12:12:51 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ typedef struct s_info
 	struct s_env	*envp_head;
 }	t_info;
 
-void	signal_setting(int flag);
 int		check_oldpwd(char *path, t_info *info);
 int		syntax_error(t_list *cmd_head);
 void	unlink_tmp_file(void);

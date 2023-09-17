@@ -3,29 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:09:00 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/16 23:27:28 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 12:24:11 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	wait_sig(int ret, int flag)
+{
+	if (ret == 2 && flag)
+		printf("^C\n");
+	if (ret == 3 && flag)
+		printf("^\\Quit\n");
+}
 
 void	wait_process(t_info *info)
 {
 	pid_t	temp;
 	int		status;
 	int		ret;
+	int		flag;
 
+	flag = 1;
 	temp = wait(&status);
 	while (temp != -1)
 	{
 		if (WIFSIGNALED(status))
 		{
 			ret = WTERMSIG(status);
+			wait_sig(ret, flag);
 			if (ret == 2 || ret == 3)
+			{
 				ret += 128;
+				flag = 0;
+			}
 		}
 		else
 			ret = WEXITSTATUS(status);
@@ -51,35 +65,6 @@ void	free_in_list(t_list *head)
 		if (temp->outfile > 0)
 			close(temp->outfile);
 		temp = temp->next;
-	}
-}
-
-void	unlink_tmp_file(void)
-{
-	int		i;
-	char	*temp;
-	char	*temp_number;
-
-	i = 0;
-	while (1)
-	{
-		temp_number = ft_itoa(i);
-		temp = ft_strjoin("temp_", temp_number);
-		free(temp_number);
-		if (open(temp, O_RDONLY) < 0)
-			break ;
-		i++;
-		free(temp);
-	}
-	free(temp);
-	while (i >= 0)
-	{
-		temp_number = ft_itoa(i);
-		temp = ft_strjoin("temp_", temp_number);
-		free(temp_number);
-		unlink(temp);
-		free(temp);
-		i--;
 	}
 }
 

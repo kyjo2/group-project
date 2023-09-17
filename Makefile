@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yul <yul@student.42.fr>                    +#+  +:+       +#+         #
+#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/17 00:01:31 by yul              ###   ########.fr        #
+#    Updated: 2023/09/17 12:24:33 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c \
 	path.c \
+	./execute/etc.c \
 	./execute/execute.c \
 	./execute/heredoc.c \
 	./execute/command.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 00:00:46 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/17 12:12:48 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,18 @@ void	ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1)
 		exit(1);
-	//rl_replace_line("", 1);
+	rl_replace_line("", 1);
 	rl_redisplay();
 }
 
-void	signal_setting(int flag)
+void	signal_setting(void)
 {
 	struct termios	termios_new;
 
 	tcgetattr(STDIN_FILENO, &termios_new);
-	if (flag)
-		termios_new.c_lflag &= ~(ECHOCTL);
-	else
-		termios_new.c_lflag &= ~(ECHO);
+	termios_new.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
-	if (flag)
-		signal(SIGINT, ft_handler);
-	else
-		signal(SIGINT,SIG_IGN);
+	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -71,7 +65,7 @@ int	main(int argc, char **argv, char **envp)
 	init(argc, argv, envp, &info);
 	while (1)
 	{
-		signal_setting(1);
+		signal_setting();
 		line = readline("minishell $ ");
 		if (!line)
 			break ;

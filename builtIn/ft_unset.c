@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:39 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/10 10:05:52 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/19 16:14:31 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ int	unset_check_cmd(char *cmd)
 int	ft_unset(char **cmd, t_info *info)
 {
 	int		i;
+	int		return_flag;
 
+	return_flag = 0;
 	if (!cmd[1])
 		return (0);
 	i = 0;
@@ -61,10 +63,10 @@ int	ft_unset(char **cmd, t_info *info)
 			|| !unset_check_cmd(cmd[i]))
 		{
 			printf("bash: unset: `%s': not a valid identifier\n", cmd[i]);
-			return (1);
+			return_flag = 1;
 		}
 		else
 			delete_env(info, cmd[i]);
 	}
-	return (0);
+	return (return_flag);
 }

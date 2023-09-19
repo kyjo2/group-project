@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:18:52 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/09 13:48:05 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/19 16:45:59 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int	dir(char *path, t_info *info)
 		if ((check_oldpwd("OLDPWD", info)))
 			return (1);
 		else
+		{
 			tmp = ft_strdup(check_env("OLDPWD", info));
+			printf("%s\n", tmp);
+		}
 	}
 	else
 		tmp = ft_strdup(path);
@@ -56,7 +59,7 @@ int	ft_cd(char **cmd, t_info *info)
 	int		tmp;
 
 	if (!cmd[1])
-		dir("~", info);
+		return (dir("~", info));
 	tmp = dir(cmd[1], info);
 	if (tmp == -1)
 	{

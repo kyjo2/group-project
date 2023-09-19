@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:19:27 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/13 21:09:11 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/19 16:12:20 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,15 @@ int	pick_name_val(t_env *tmp, char *cmd)
 int	ft_export2(char **cmd, t_info *info, int i)
 {
 	t_env	tmp;
+	int		return_flag;
 
+	return_flag = 0;
 	while (cmd[++i])
 	{
 		if ((cmd[i][0] != '_' && !ft_isalpha(cmd[i][0])) || !check_cmd(cmd[i]))
 		{
 			printf("bash: export: `%s': not a valid identifier\n", cmd[i]);
-			return (1);
+			return_flag = 1;
 		}
 		else if (ft_strrchr(cmd[i], '=') == 0)
 			change_env_export(info, cmd[i], 0, 0);
@@ -97,7 +99,7 @@ int	ft_export2(char **cmd, t_info *info, int i)
 			free_tmp(tmp);
 		}
 	}
-	return (0);
+	return (return_flag);
 }
 
 int	ft_export(char **cmd, t_info *info)

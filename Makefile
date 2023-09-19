@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/17 12:24:33 by kyjo             ###   ########.fr        #
+#    Updated: 2023/09/19 17:08:32 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,10 +48,10 @@ SRCS = main.c \
 	./builtin/ft_pwd.c \
 	./builtin/ft_unset.c \
 	./parsing/parsing.c \
-	./parsing/parsing2.c \
-	./parsing/parsing3.c \
-	./parsing/parsing4.c \
-	./parsing/parsing5.c \
+	./parsing/change_check.c \
+	./parsing/ft_copy.c \
+	./parsing/make_node.c \
+	./parsing/make_node2.c \
 	./parsing/utils.c \
 	./parsing/new_split.c \
 	./parsing/new_split2.c \

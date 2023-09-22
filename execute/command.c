@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:53:42 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 20:54:16 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/22 13:05:29 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	other_cmd(t_list *list, t_info *info)
 		deep_free(path);
 	if (!list->cmd)
 		return (127);
+	if (list->infile == -1 || list->outfile == -1)
+		return (1);
 	return (execve(list->cmd, list->av, list->envp));
 }
 

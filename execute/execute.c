@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/22 12:17:34 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/22 13:06:48 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	no_fork(t_list *list, t_info *info)
 	int	in_fd;
 	int	out_fd;
 
+	if (in_out(list, info))
+		return ;
 	in_fd = dup(STDIN_FILENO);
 	out_fd = dup(STDOUT_FILENO);
 	if (in_fd == -1 || out_fd == -1)
@@ -84,12 +86,12 @@ static void	execute_fork(t_list *list, t_info *info)
 {
 	while (list)
 	{
+		if (in_out(list, info))
+			break ;
 		if (pipe(list->pip) == -1)
 			ft_putstr_fd("A pipe error occurred\n", 2);
 		yes_fork(list, info);
 		list = list->next;
-		if (in_out(list, info))
-			break ;
 	}
 }
 
@@ -100,8 +102,6 @@ void	execute(t_list *list, t_info *info)
 	head = list;
 	signal(SIGINT, SIG_IGN);
 	if (syntax_error(list))
-		return (free_list(list));
-	if (in_out(list, info))
 		return (free_list(list));
 	if (!(list->next) && builtin_check(list))
 		no_fork(list, info);

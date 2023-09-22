@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inout.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 19:46:41 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/22 12:17:19 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	infile(t_list *list, t_info *info)
 			close(list->infile);
 		list->infile = open(list->av[i + 1], O_RDONLY);
 		if (list->infile == -1)
-			ft_putstr_fd("The following error occurred", 2);
+			ft_putstr_fd("The following error occurred\n", 2);
 		cut_av(list, "<", 2);
 	}
 	return (0);
@@ -71,7 +71,7 @@ static void	outfile_2(t_list *list, int i)
 	list->outfile = open(list->av[i + 1] \
 		, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (list->outfile == -1)
-		ft_putstr_fd("The following error occurred", 2);
+		ft_putstr_fd("The following error occurred\n", 2);
 	cut_av(list, ">", 2);
 }
 
@@ -89,7 +89,7 @@ static void	outfile(t_list *list)
 			list->outfile = open(list->av[i + 1] \
 				, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (list->outfile == -1)
-				ft_putstr_fd("The following error occurred", 2);
+				ft_putstr_fd("The following error occurred\n", 2);
 			cut_av(list, ">>", 2);
 			i = 0;
 		}

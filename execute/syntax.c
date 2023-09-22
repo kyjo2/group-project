@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:10:10 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 19:45:37 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/22 12:03:18 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	syntax_print(void)
 {
 	g_exit_code = 258;
-	ft_putstr_fd("syntax error", 2);
+	ft_putstr_fd("syntax error\n", 2);
 	return (1);
 }
 

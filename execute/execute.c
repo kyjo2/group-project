@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 13:39:09 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 19:45:10 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/22 12:17:34 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,6 @@ int	execute_cmd(t_list *list, t_info *info)
 	{
 		return (other_cmd(list, info));
 	}
-}
-
-void	close_fd(t_list *list, pid_t pid)
-{
-	if (pid == 0)
-	{
-		if (list->pip[0] > 0)
-			list->pip[0] = close(list->pip[0]);
-	}
-	else
-	{
-		if (list->pip[1] > 0)
-			list->pip[1] = close(list->pip[1]);
-	}
-	return ;
 }
 
 void	yes_fork(t_list *list, t_info *info)
@@ -80,12 +65,27 @@ void	yes_fork(t_list *list, t_info *info)
 	return ;
 }
 
+void	no_fork(t_list *list, t_info *info)
+{
+	int	in_fd;
+	int	out_fd;
+
+	in_fd = dup(STDIN_FILENO);
+	out_fd = dup(STDOUT_FILENO);
+	if (in_fd == -1 || out_fd == -1)
+		ft_putstr_fd("A dup error occurred\n", 2);
+	redir(list);
+	g_exit_code = execute_cmd(list, info);
+	if (dup2(in_fd, STDIN_FILENO) == -1 || dup2(out_fd, STDOUT_FILENO) == -1)
+		ft_putstr_fd("A dup2 error occurred\n", 2);
+}
+
 static void	execute_fork(t_list *list, t_info *info)
 {
 	while (list)
 	{
 		if (pipe(list->pip) == -1)
-			ft_putstr_fd("A pipe error occurred", 2);
+			ft_putstr_fd("A pipe error occurred\n", 2);
 		yes_fork(list, info);
 		list = list->next;
 		if (in_out(list, info))
@@ -96,8 +96,6 @@ static void	execute_fork(t_list *list, t_info *info)
 void	execute(t_list *list, t_info *info)
 {
 	t_list	*head;
-	int		fd;
-	int		fd2;
 
 	head = list;
 	signal(SIGINT, SIG_IGN);
@@ -106,14 +104,7 @@ void	execute(t_list *list, t_info *info)
 	if (in_out(list, info))
 		return (free_list(list));
 	if (!(list->next) && builtin_check(list))
-	{
-		if ((fd = dup(STDOUT_FILENO)) == -1 || (fd2 = dup(STDIN_FILENO)) == -1)
-			ft_putstr_fd("A dup error occurred", 2);
-		redir(list);
-		g_exit_code = execute_cmd(list, info);
-		if (dup2(fd, STDOUT_FILENO) == -1 || dup2(fd2, STDIN_FILENO) == -1)
-			ft_putstr_fd("A dup2 error occurred", 2);
-	}
+		no_fork(list, info);
 	else
 		execute_fork(list, info);
 	free_in_list(head);

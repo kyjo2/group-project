@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   etc.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 12:23:59 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/17 20:52:41 by yul              ###   ########.fr       */
+/*   Updated: 2023/09/22 12:12:40 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	close_fd(t_list *list, pid_t pid)
+{
+	if (pid == 0)
+	{
+		if (list->pip[0] > 0)
+			list->pip[0] = close(list->pip[0]);
+	}
+	else
+	{
+		if (list->pip[1] > 0)
+			list->pip[1] = close(list->pip[1]);
+	}
+	return ;
+}
 
 int	check_file(char *filename)
 {

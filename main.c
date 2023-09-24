@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/22 12:00:42 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/24 11:13:34 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ft_handler(int signal)
 {
+	g_exit_code = 1;
 	if (signal == SIGINT)
 		printf("\n");
 	if (rl_on_new_line() == -1)

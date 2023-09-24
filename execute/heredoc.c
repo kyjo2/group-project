@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 13:31:26 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/22 13:17:44 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/24 11:25:17 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	heredoc(t_list *list, int index, t_info *info)
 	{
 		g_exit_code = 1;
 		printf("\n");
+		free(temp);
 		return (1);
 	}
 	free(temp);

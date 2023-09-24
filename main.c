@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/24 11:13:34 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/24 23:57:57 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_handler(int signal)
 		printf("\n");
 	if (rl_on_new_line() == -1)
 		exit(1);
-	rl_replace_line("", 1);
+	//rl_replace_line("", 1);
 	rl_redisplay();
 }
 
@@ -60,7 +60,9 @@ int	main(int argc, char **argv, char **envp)
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
-
+	t_list	*tmp;
+	int	i;
+	
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
 	init(argc, argv, envp, &info);
@@ -74,6 +76,14 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			parsing(&list, &line, &info);
+			tmp = list;
+			while (tmp)
+			{
+				i = -1;
+				while (tmp->av[++i])
+					printf("line->av[%d] = %s\n", i, tmp->av[i]);
+				tmp = tmp->next;
+			}					
 			execute(list, &info);
 		}
 		free(line);

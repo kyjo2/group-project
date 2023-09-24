@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 20:34:58 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/15 22:23:46 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:04:26 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,14 @@ static int	check_sep(char s, char c, t_info *info, int flag)
 		return (1);
 	else if (s == 9 && info->doubleq_flag == 0 && info->singleq_flag == 0)
 		return (1);
+	// else if (redir_check(s, info, flag))
+	// 	return (1);
 	else if (s == '\0')
 		return (1);
 	return (0);
 }
 
-static size_t	count_room(char const *s, char c, t_info *info)
+static size_t	count_room(char *s, char c, t_info *info)
 {
 	size_t	count;
 	size_t	i;
@@ -66,7 +68,7 @@ static void	*ft_free(char **result)
 	return (NULL);
 }
 
-static char	**sub_split(char **result, char const *s, char c, t_info *info)
+static char	**sub_split(char **result, char *s, char c, t_info *info)
 {
 	size_t	i;
 	size_t	j;
@@ -94,14 +96,21 @@ static char	**sub_split(char **result, char const *s, char c, t_info *info)
 	return (result);
 }
 
-char	**new_split(char const *s, char c, t_info *info)
+char	**new_split(char *s, char c, t_info *info)
 {
 	char	**result;
 	size_t	room;
-
+	int		count_redir;
+	char	*tmp;
+	
 	result = NULL;
 	if (!s)
 		return (NULL);
+	count_redir = ft_count_redir(s) * 2;
+	tmp = malloc(sizeof(char) * ft_strlen(s) + count_redir + 1);
+	if (!tmp)
+		exit(1);
+	line_for_redir(&s, info, tmp);
 	room = count_room(s, c, info);
 	result = (char **)malloc(sizeof(char *) * (room + 1));
 	if (!(result))

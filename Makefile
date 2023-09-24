@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/24 13:52:53 by kyjo             ###   ########.fr        #
+#    Updated: 2023/09/24 23:50:41 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRCS = main.c \
 	./parsing/ft_copy.c \
 	./parsing/make_node.c \
 	./parsing/make_node2.c \
+	./parsing/line_for_redir_util.c \
 	./parsing/utils.c \
 	./parsing/new_split.c \
 	./parsing/new_split2.c \

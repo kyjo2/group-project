@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 16:44:36 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/24 11:19:39 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/24 23:48:39 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	change_env_space(char **line, int start);
 void	ft_copy(char **line, char *value, int name_len, int start);
 void	ft_error(char *str);
 int		new_strcmp(const char *s1, const char *s2);
-char	**new_split(char const *s, char c, t_info *info);
+char	**new_split(char *s, char c, t_info *info);
 void	change_env_export(t_info *info, char *name, char *value, int have_equl);
 int		check_cmd(char *cmd);
 char	*ft_itoa(int n);
@@ -120,5 +120,9 @@ void	*ft_perror(char *massege, int exit_code);
 char	*new_strdup(const char *s, t_env *tmp);
 void	delete_check_quote(char **line);
 int		check_file(char *filename);
+void	line_for_redir(char **s, t_info *info, char *tmp);
+void    change_tmp_right(char **s, char *tmp, int *i, int *j);
+void    change_tmp_left(char **s, char *tmp, int *i, int *j);
+int		ft_count_redir(char *s);
 
 #endif

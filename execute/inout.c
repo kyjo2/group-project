@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 10:16:05 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/24 11:24:35 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/24 13:55:53 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	infile(t_list *list, t_info *info)
 	while (1)
 	{
 		i = 0;
-		while (list->av[i] || !ft_strcmp(list->av[i], "<"))
+		while (list->av[i] && ft_strcmp(list->av[i], "<"))
 		{
 			if (!ft_strcmp(list->av[i], "<<"))
 			{

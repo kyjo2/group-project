@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
+#    By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/19 17:08:32 by junggkim         ###   ########.fr        #
+#    Updated: 2023/09/24 13:52:53 by kyjo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,7 @@ $(LIB) : $(OBJS)
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -L/goinfre/kyjo/.brew/opt/readline/lib -o $@
+	$(CC) $(CFLAGS) -fsanitize=address -g3 $(LIBFT) $(MINI) $(READ) -L/goinfre/kyjo/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

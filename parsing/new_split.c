@@ -6,7 +6,7 @@
 /*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 20:34:58 by junggkim          #+#    #+#             */
-/*   Updated: 2023/09/25 00:04:26 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/26 00:34:59 by junggkim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ char	**new_split(char *s, char c, t_info *info)
 	if (!(result))
 		return (NULL);
 	result = sub_split(result, s, c, info);
+	free(s);
 	return (result);
 }

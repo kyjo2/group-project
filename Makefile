@@ -6,7 +6,7 @@
 #    By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 12:10:36 by kyjo              #+#    #+#              #
-#    Updated: 2023/09/24 23:50:41 by junggkim         ###   ########.fr        #
+#    Updated: 2023/09/26 00:33:53 by junggkim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ $(LIB) : $(OBJS)
 
 $(NAME) : $(LIB)
 	make -C ./libft all
-	$(CC) $(CFLAGS) -fsanitize=address -g3 $(LIBFT) $(MINI) $(READ) -L/goinfre/kyjo/.brew/opt/readline/lib -o $@
+	$(CC) $(CFLAGS) $(LIBFT) $(MINI) $(READ) -L/goinfre/kyjo/.brew/opt/readline/lib -o $@
 
 clean :
 	make -C ./libft clean

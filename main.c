@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yul <yul@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/25 13:32:48 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/26 00:36:51 by yul              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ int	main(int argc, char **argv, char **envp)
 	t_info			info;
 	struct termios	termios_old;
 	char			*line;
-	t_list	*tmp;
-	int	i;
 	
 	tcgetattr(STDIN_FILENO, &termios_old);
 	line = NULL;
@@ -76,15 +74,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			parsing(&list, &line, &info);
-			tmp = list;
-			while (tmp)
-			{
-				i = -1;
-				while (tmp->av[++i])
-					printf("line->av[%d] = %s\n", i, tmp->av[i]);
-				printf("ac : %d\n ", tmp->ac);
-				tmp = tmp->next;
-			}					
 			execute(list, &info);
 		}
 		free(line);

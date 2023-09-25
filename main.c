@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junggkim <junggkim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:27:14 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/24 23:57:57 by junggkim         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:32:48 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	main(int argc, char **argv, char **envp)
 				i = -1;
 				while (tmp->av[++i])
 					printf("line->av[%d] = %s\n", i, tmp->av[i]);
+				printf("ac : %d\n ", tmp->ac);
 				tmp = tmp->next;
 			}					
 			execute(list, &info);

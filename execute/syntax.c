@@ -6,7 +6,7 @@
 /*   By: kyjo <kyjo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:10:10 by kyjo              #+#    #+#             */
-/*   Updated: 2023/09/22 12:03:18 by kyjo             ###   ########.fr       */
+/*   Updated: 2023/09/25 13:40:53 by kyjo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ static int	syntax_red(t_list *a, int i)
 	{
 		if (i + 1 == a->ac)
 			return (1);
-		if (!ft_strncmp(a->av[i + 1], "<", 1) \
-		|| !ft_strncmp(a->av[i + 1], ">", 1) \
+		if (!ft_strcmp(a->av[i + 1], "<") \
+		|| !ft_strcmp(a->av[i + 1], ">") \
 		|| !ft_strncmp(a->av[i + 1], "(", 1) \
-		|| !ft_strncmp(a->av[i + 1], ")", 1) \
-		|| !ft_strncmp(a->av[i + 1], "|", 1))
+		|| !ft_strncmp(a->av[i + 1], ")", 1))
 			return (1);
 	}
 	return (0);
